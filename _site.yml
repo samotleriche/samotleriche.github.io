@@ -11,5 +11,6 @@ navbar:
       href: wepage2.html
 output:
   html_document:
-    theme: paper
+    theme: cosmo
+    
 
