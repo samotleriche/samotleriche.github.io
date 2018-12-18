@@ -1,8 +1,12 @@
-name: "my-website"
+name: "samotleriche.github.io"
+output_dir: "docs"
 navbar:
   title: "My Website"
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: about.html
+    - text: "webpage"
+      href: web-page.html
+output:
+  html_document:
+  theme: cosmo
