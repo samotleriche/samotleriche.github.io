@@ -8,6 +8,3 @@ navbar:
       href: web-page.html
     - text: "wepage2"
       href: supp.html
-output:
-  html_document:
-  theme: cosmo
