@@ -9,6 +9,8 @@ if (!require("tidyverse")) install.packages("tidyverse")
 library(tidyverse)
 if (!require("plotly")) install.packages("plotly")
 library(plotly)
+if (!require("sqldf")) install.packages("sqldf")
+library(sqldf)
 ```
 
 ```{r}
@@ -17,11 +19,12 @@ library(plotly)
 
 
 ```{r, echo=FALSE}
+
 p <- ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
             geom_bar(position = "dodge")
 ggplotly(p)
 ```
-```{r}
+```{r, echo=FALSE}
 p = ggplot(diamonds, aes(x=price)) + 
     geom_density(aes(fill=color), alpha = 0.5) +
     ggtitle("Kernel Density by Group")
@@ -29,6 +32,20 @@ p = ggplot(diamonds, aes(x=price)) +
 ggplotly(p)
 ```
 
+```{r, echo = FALSE}
+kd = with(MASS::geyser, MASS::kde2d(duration, waiting, n =50))
+p = plot_ly(x = kd$x, y = kd$y, z = kd$z) %>% add_surface()
+p
+```
+```{r, echo = FALSE}
+
+
+popdata = population[population$population > 200000000,]
+
+p <- plot_ly(popdata, x = ~population, color = ~country, type = "box")
+
+p
+```
 
 ```{r}
 library(leaflet)
