@@ -1,5 +1,16 @@
 ---
 title: "Home1"
 ---
+```{r, include=FALSE}
+#rmarkdown::render_site()
+if (!require("plotly")) install.packages("plotly")
+install.packages("plotly")
+```
 
 can this work please?
+```{r, include=false}
+p <- ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
+            geom_bar(position = "dodge")
+ggplotly(p)
+```
+
