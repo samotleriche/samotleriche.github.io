@@ -1,16 +1,67 @@
 ---
-title: "Home1"
+title: "Examples of htmlwidgets made in R"
 ---
-```{r, include=FALSE}
+```{r include=FALSE}
 #rmarkdown::render_site()
+if (!require("leaflet")) install.packages("leaflet")
+library(leaflet)
+if (!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
 if (!require("plotly")) install.packages("plotly")
-install.packages("plotly")
+library(plotly)
 ```
 
-can this work please?
-```{r, include=false}
+```{r}
+library(plotly)
+```
+
+
+```{r, echo=FALSE}
 p <- ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
             geom_bar(position = "dodge")
 ggplotly(p)
+```
+```{r}
+p = ggplot(diamonds, aes(x=price)) + 
+    geom_density(aes(fill=color), alpha = 0.5) +
+    ggtitle("Kernel Density by Group")
+
+ggplotly(p)
+```
+
+
+```{r}
+library(leaflet)
+```
+
+```{r, echo=FALSE}
+rand_lng <- function(n = 2) rnorm(n, -106.6197812, .005)
+rand_lat <- function(n = 2) rnorm(n, 35.0863187, .005)
+
+x = rand_lng()
+y = rand_lat()
+
+Rlogo <- file.path("imgs","unmlogo.jpeg")
+m <- leaflet() %>% addTiles()
+# a map with the default OSM tile layer
+m %>% fitBounds(0, 40, 10, 50) %>%
+      setView(-106.6197812, 35.0853187, zoom = 16) %>%
+      addPopups(-106.6197812, 35.0863187, "Here is the <b>Anderson School of Management</b>, UNM") %>%
+      addPopups(x, y, "Random popups") %>%
+      addMarkers(x, y) %>%
+      addMarkers(
+              x, y, popup = paste("A random letter", sample(LETTERS, 10))
+            ) %>% 
+      addMarkers(
+  -106.6180812, 35.0843187, icon = list(
+    iconUrl = Rlogo, iconSize = c(50, 38)
+  ), popup = "UNM"
+) %>% 
+  addCircles(x, y, radius = runif(2, 2, 75)) %>%
+  addPolylines(x, y) %>%
+  clearBounds()
+  
+
+
 ```
 
