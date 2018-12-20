@@ -1,6 +1,99 @@
 ---
-title: "webpage"
-runtime: shiny
+title: "Text Analysis"
 ---
 
-Helllo
+```{r}
+#if (!require("devtools")) install.packages("devtools")
+#install.packages("devtools")
+
+#devtools::install_github("josiahparry/geniusR")
+```
+
+```{r}
+if (!require("geniusR")) install.packages("geniusR")
+library(geniusR)
+if (!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
+
+
+```
+
+```{r}
+swift = genius_album(artist = "Taylor Swift", album = "Reputation")
+riri = genius_album(artist = "Rihanna", album = "Anti")
+```
+
+```{r}
+library(tidytext)
+tidy_swift = swift %>%
+  unnest_tokens(word, lyric) %>%
+  anti_join(stop_words) %>%
+  count(word, sort = TRUE)
+
+tidy_riri = riri %>%
+  unnest_tokens(word, lyric) %>%
+  anti_join(stop_words) %>%
+  count(word, sort = TRUE)
+
+```
+
+
+```{r}
+tidy_swift = tidy_swift %>%
+  rename(swift_n = n) %>%
+  mutate(swift_prop = swift_n/sum(swift_n))
+
+tidy_riri = tidy_riri %>%
+  rename(riri_n = n) %>%
+  mutate(riri_prop = riri_n/sum(riri_n))
+```
+
+```{r}
+compare_words = tidy_swift %>%
+  full_join(tidy_riri, by = "word")
+
+summary(compare_words)
+```
+
+```{r}
+ggplot(compare_words, aes(swift_prop, riri_prop)) +
+  geom_abline() +
+  geom_text(aes(label=word), check_overlap = TRUE, vjust=1.5) +
+  labs(y="Rihanna", x="Taylor Swift") + theme_classic()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
