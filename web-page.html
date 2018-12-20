@@ -11,7 +11,7 @@
 
 
 
-<title>webpage</title>
+<title>Text Analysis</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -157,7 +157,7 @@ $(document).ready(function () {
 <!-- tabsets -->
 <script>
 $(document).ready(function () {
-  window.buildTabsets("section-TOC");
+  window.buildTabsets("TOC");
 });
 </script>
 
@@ -197,16 +197,71 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="section-header">
+<div class="fluid-row" id="header">
 
 
 
-<h1 class="title toc-ignore">webpage</h1>
+<h1 class="title toc-ignore">Text Analysis</h1>
 
 </div>
 
 
-<p>Helllo</p>
+<pre class="r"><code>#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
+#install.packages(&quot;devtools&quot;)
+
+#devtools::install_github(&quot;josiahparry/geniusR&quot;)</code></pre>
+<pre class="r"><code>if (!require(&quot;geniusR&quot;)) install.packages(&quot;geniusR&quot;)
+library(geniusR)
+if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
+library(tidyverse)</code></pre>
+<pre class="r"><code>swift = genius_album(artist = &quot;Taylor Swift&quot;, album = &quot;Reputation&quot;)</code></pre>
+<pre><code>## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)</code></pre>
+<pre class="r"><code>riri = genius_album(artist = &quot;Rihanna&quot;, album = &quot;Anti&quot;)</code></pre>
+<pre><code>## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)</code></pre>
+<pre class="r"><code>library(tidytext)
+tidy_swift = swift %&gt;%
+  unnest_tokens(word, lyric) %&gt;%
+  anti_join(stop_words) %&gt;%
+  count(word, sort = TRUE)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>tidy_riri = riri %&gt;%
+  unnest_tokens(word, lyric) %&gt;%
+  anti_join(stop_words) %&gt;%
+  count(word, sort = TRUE)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>tidy_swift = tidy_swift %&gt;%
+  rename(swift_n = n) %&gt;%
+  mutate(swift_prop = swift_n/sum(swift_n))
+
+tidy_riri = tidy_riri %&gt;%
+  rename(riri_n = n) %&gt;%
+  mutate(riri_prop = riri_n/sum(riri_n))</code></pre>
+<pre class="r"><code>compare_words = tidy_swift %&gt;%
+  full_join(tidy_riri, by = &quot;word&quot;)
+
+summary(compare_words)</code></pre>
+<pre><code>##      word              swift_n        swift_prop          riri_n       
+##  Length:968         Min.   : 1.00   Min.   :0.00050   Min.   :  1.000  
+##  Class :character   1st Qu.: 1.00   1st Qu.:0.00050   1st Qu.:  1.000  
+##  Mode  :character   Median : 1.00   Median :0.00050   Median :  1.000  
+##                     Mean   : 3.04   Mean   :0.00152   Mean   :  3.446  
+##                     3rd Qu.: 3.00   3rd Qu.:0.00150   3rd Qu.:  3.000  
+##                     Max.   :46.00   Max.   :0.02303   Max.   :186.000  
+##                     NA&#39;s   :311     NA&#39;s   :311       NA&#39;s   :529      
+##    riri_prop     
+##  Min.   :0.0007  
+##  1st Qu.:0.0007  
+##  Median :0.0007  
+##  Mean   :0.0023  
+##  3rd Qu.:0.0020  
+##  Max.   :0.1229  
+##  NA&#39;s   :529</code></pre>
+<pre class="r"><code>ggplot(compare_words, aes(swift_prop, riri_prop)) +
+  geom_abline() +
+  geom_text(aes(label=word), check_overlap = TRUE, vjust=1.5) +
+  labs(y=&quot;Rihanna&quot;, x=&quot;Taylor Swift&quot;) + theme_classic()</code></pre>
+<pre><code>## Warning: Removed 840 rows containing missing values (geom_text).</code></pre>
+<p><img src="web-page_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 
 
 
