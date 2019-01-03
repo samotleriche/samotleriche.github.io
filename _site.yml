@@ -9,6 +9,8 @@ navbar:
       href: web-page.html
     - text: "wepage2"
       href: wepage2.html
+    - text: "Data Analysis in R"
+      href: DataAnalysis.html
 output:
   html_document:
     theme: cosmo

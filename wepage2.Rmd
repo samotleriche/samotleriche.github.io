@@ -1,5 +1,5 @@
 ---
-title: "Nasa Data"
+title: "R for Data Science"
 ---
 
 ```{r setup, include=FALSE}
@@ -9,57 +9,606 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r echo = FALSE, include=FALSE}
-if (!require("harrypotter")) install.packages("harrypotter")
-library(harrypotter)
-if (!require("tidytext")) install.packages("tidytext")
-library(tidytext)
-if (!require("tidytext")) install.packages("tidytext")
-library(shiny)
-if (!require("shinydashboard")) install.packages("shinydashboard")
-require(shinydashboard)
-if (!require("ggplot2")) install.packages("ggplot2")
-library(ggplot2)
-if (!require("dplyr")) install.packages("dplyr")
-library(dplyr)
-if (!require("shiny")) install.packages("shiny")
-library(shiny)
+if (!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
 
 ```
 
-## Including Plots
+## Varied uses of ggplot2
 
 ```{r echo = FALSE}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(shape = 21, color="white", stroke = 2, size = 3, aes(group = class, fill = drv)) +
+  geom_smooth(se = FALSE)
+```
 
-get_sentiments("afinn")
+```{r echo = FALSE}
+ggplot(mpg, aes(reorder(class, hwy, FUN = median), hwy)) +
+  geom_boxplot(fill = "grey", color="black", outlier.colour = "red", varwidth = TRUE) +
+  labs(x = "car class", y = "highway mileage") +
+  coord_flip()
+```
+```{r echo = FALSE}
+bar <- ggplot(mpg) +
+  geom_bar(aes(class, fill = class), width = 1, show.legend = FALSE)
+
+bar + coord_polar()
+bar + coord_flip()
+```
+```{r}
+
+```
+
+
+
+```{r echo = FALSE}
+if (!require("maps")) install.packages("maps")
+us <- map_data("usa")
+
+ggplot(us, aes(long,lat,group=group)) +
+  geom_polygon(fill="white",color="black") +
+  coord_quickmap()
+```
+
+# Data Transformations
+```{r}
+# filter(mpg, model == "a4" & year > 2000)
+# select(mpg, model:cyl)
+# select(mpg, -(model:cyl))
+# arrange(mpg, year, cty)
+# mutate(mpg, ctyvshwy = cty - hwy)
+# mutate(mpg, ctyvshwy = cty - hwy) %>% select(model, cty, hwy, ctyvshwy) %>% filter(ctyvshwy > -3)
+# transmute(mpg, )
+```
+
+```{r}
+if (!require("nycflights13")) install.packages("nycflights13")
+library(nycflights13)
+
+delays <- flights %>% 
+  group_by(dest) %>% 
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)
+  ) %>% 
+  filter(count > 20, dest != "HNL")
+
+ggplot(delays, aes(dist, delay)) +
+  geom_point(aes(size = count), alpha = 1/3) +
+  geom_smooth(se = FALSE, span = 0.6)
+
+```
+
+```{r}
+# group_by(mpg, manufacturer) %>% summarise(count = n(), mean_hwy = median(hwy, na.rm = TRUE), mean_cty = mean(cty, na.rm = TRUE), diff = mean(hwy) - mean(cty)) %>% arrange(desc(mean_hwy)) %>% filter(count %in% c(1,3,6,9) | count > 15)
+```
+
+```{r echo=FALSE}
+batting <- as.tibble(Lahman::Batting)
+
+batters <- batting %>% 
+  group_by(playerID) %>% 
+  summarise(
+    hr = sum(HR),
+    ba = sum(H, na.rm = TRUE) / sum(AB, na.rm = TRUE),
+    ab = sum(AB, na.rm = TRUE)
+  )
+
+batters %>% 
+  filter(ab > 100) %>% 
+  ggplot(mapping = aes(x = ba, y = hr)) +
+    geom_point() + 
+    geom_smooth(se = FALSE) +
+    coord_cartesian(ylim = c(0,100))
+```
+
+
+```{r}
+# var = mtcars %>% group_by(cyl) %>% summarise(count = n(), mean_mpg = mean(mpg), mean_hp = mean(hp), median_wt = median(wt))
+
+# ggplot(var, aes(cyl,mean_mpg)) + geom_point(aes(size = mean_hp, color = median_wt))
 
 
 ```
 
-```{r, include=FALSE}
-titles <- c("Philosopher's Stone", "Chamber of Secrets", "Prisoner of Azkaban",
-            "Goblet of Fire", "Order of the Phoenix", "Half-Blood Prince",
-            "Deathly Hallows")
 
-books <- list(philosophers_stone, chamber_of_secrets, prisoner_of_azkaban,
-           goblet_of_fire, order_of_the_phoenix, half_blood_prince,
-           deathly_hallows)
-  
-series <- tibble()
 
-for(i in seq_along(titles)) {
-        
-        clean <- tibble(chapter = seq_along(books[[i]]),
-                        text = books[[i]]) %>%
-             unnest_tokens(word, text) %>%
-             mutate(book = titles[i]) %>%
-             select(book, everything())
+```{r echo=FALSE}
 
-        series <- rbind(series, clean)
+ggplot(diamonds, aes(price, ..density..)) + 
+  geom_freqpoly(aes(colour = cut), binwidth = 500)
+``` 
+
+
+```{r echo=FALSE}
+diamonds %>% 
+  count(color, cut) %>%  
+  ggplot(aes(color, cut)) +
+    geom_tile(aes(fill = n))
+```
+
+```{r echo=FALSE}
+if (!require("hexbin")) install.packages("hexbin")
+library(hexbin)
+
+smaller <- diamonds %>% 
+  filter(carat < 3)
+
+ggplot(data = smaller) +
+  geom_hex(mapping = aes(x = carat, y = price))
+```
+
+```{r echo=FALSE}
+ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
+  geom_boxplot(mapping = aes(group = cut_number(carat, 20)))
+```
+
+
+```{r}
+tb <- tribble(
+  ~index, ~size, ~wt,
+  "1",5,10.1,
+  "2",3,11.4,
+  "3",2,9.98
+)
+
+tibble(
+  a = lubridate::now() + runif(1e3) * 86400,
+  b = lubridate::today() + runif(1e3) * 30,
+  c = 1:1e3,
+  d = runif(1e3),
+  e = sample(letters, 1e3, replace = TRUE)
+)
+```
+
+```{r}
+df <- tibble(
+  x = runif(5),
+  y = rnorm(5)
+)
+df
+
+
+ggplot(df,aes(x, y)) +
+  geom_point(aes(color = x))
+
+```
+
+
+```{r}
+df$x
+df[["x"]]
+df[[1]]
+
+df %>% .$x
+df %>% .[["x"]]
+```
+
+# Reading Files
+```{r}
+read_csv("first line\n1,2,3\n4,.,6\n1,0,1", skip = 1, col_names = c("x", "y", "z"), na = ".")
+
+```
+# Parsing a Vector
+
+```{r}
+str(parse_logical(c(1,0,1)))
+
+str(parse_date(c("2010-01-01", '2019-01-01', '1990-01-01','.'), na = "."))
+
+str(parse_character(c("a","b")))
+```
+
+
+```{r}
+parse_double("1,23", locale = locale(decimal_mark = ","))
+
+parse_number(c("$100","20%","40 dollars", "#50"))
+```
+
+```{r}
+charToRaw("Leriche")
+charToRaw(".")
+t <- charToRaw("b")
+rawToChar(t)
+```
+
+```{r}
+library(hms)
+parse_time("01:10 am")
+
+guess_parser("2018-10-04")
+```
+
+#Exporting/Importing Files
+
+```{r}
+# write_excel_csv()
+
+# write_csv(data, "filename.csv")
+
+# readxl()
+
+# haven()  reads spss, stata and SAS files.
+```
+```{r}
+
+# gather()
+
+table4a <- tribble(
+  ~"country",~`1999`,~`2000`,
+  "USA", 444, 888,
+  "BRA", 232, 458
+)
+
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+```
+ 
+```{r}
+# spread()
+
+table2 <- tribble(
+  ~"country",~"year",~"type",~"count",
+  "USA", 1999, "cases", 759,
+  "USA", 1999, "population", 87432,
+ "USA", 2000, "cases", 888,
+  "USA", 2000, "population", 499843
+)
+
+table2
+
+(table2 %>%
+  spread(key = type, value = count))
+
+
+```
+
+```{r}
+# separate()
+
+table3 <- tribble(
+  ~"country",~"year",~"rate",
+  "USA", 2000, "586/58943",
+  "USA", 2001, "588/76633",
+  "FRA", 2001, "45323/12345"
+)
+
+table5 <- table3 %>%
+  separate(rate, into = c("cases","population"), convert = TRUE) %>%
+  separate(year, into = c("century", "year"), sep = 2)
+```
+
+```{r}
+# unite(new, century, year)
+
+table5 %>%
+  unite(new, century, year, sep = "")
+
+
+```
+
+```{r}
+stocks <- tibble(
+  year   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+  qtr    = c(   1,    2,    3,    4,    2,    3,    4),
+  return = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
+)
+
+stocks %>%
+  spread(qtr, return)
+
+stocks %>%
+  spread(year, return) %>%
+  gather(year, return, `2015`:`2016`, na.rm = TRUE)
+```
+
+```{r}
+# complete()
+
+stocks %>%
+  complete(year, qtr)
+```
+
+```{r}
+treatment <- tribble(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+
+treatment %>%
+  fill(person)
+```
+
+```{r}
+who1 <- who %>%
+  gather(new_sp_m014:newrel_f65, key = "key", value = "cases", na.rm = TRUE)
+
+who1 %>%
+  count(key)
+
+```
+```{r}
+who2 <- who1 %>%
+  mutate(key = stringr::str_replace(key, "newrel", "new_rel"))
+
+who2
+
+who3 <- who2 %>%
+  separate(key,c("new","type","sexage"), sep = "_")
+
+who3
+
+who3 %>%
+  count(new)
+
+who4 <- who3 %>%
+  select(-new, -iso2, -iso3)
+
+who5 <- who4 %>%
+  separate(sexage, c("sex","age"), sep = 1)
+
+who5
+
+
+```
+
+
+```{r}
+planes %>%
+  count(tailnum) %>%
+  filter(n>1)
+```
+
+```{r}
+weather %>%
+  count(year, month, day, hour, origin) %>%
+  filter(n>1)
+
+flights2 <- flights %>%
+  select(year:day, hour, origin, dest, tailnum, carrier)
+
+flights2 
+
+flights2 %>%
+  select(-origin, -dest) %>%
+  left_join(airlines, by = "carrier")
+
+flights2 %>%
+  select(-origin, -dest) %>%
+  mutate(name = airlines$name[match(carrier, airlines$carrier)])
+```
+
+```{r}
+flights2 %>%
+  left_join(airports, c("dest" = "faa")) %>%
+  arrange(origin)
+
+flights2 %>%
+  left_join(airports, c("origin" = "faa")) %>%
+  arrange(origin)
+
+
+```
+```{r}
+airports %>%
+  semi_join(flights, c("faa" = "dest")) %>%
+  filter(lon > -140) %>%
+  ggplot(aes(lon, lat)) +
+    borders("state") +
+    geom_point(aes(color = alt)) +
+    coord_quickmap()
+```
+
+```{r}
+(top_dest <- flights %>%
+  count(dest, sort = TRUE) %>%
+  head(10))
+
+
+top_dest <- flights %>%
+  count(dest, sort = TRUE) %>%
+  left_join(airports, c("dest" = "faa"))
+
+top_dest
+
+
+flights %>%
+  filter(dest %in% top_dest$dest)
+```
+
+#Strings
+```{r}
+x <- "\u00b5"
+x
+
+string <- c("x","y","z")
+string
+
+str_c("x","y","z")
+
+str_c("x","y","z", sep = ", ")
+
+
+```
+
+```{r}
+name <- "Tomas"
+time_of_day <- "morning"
+birthday <- FALSE
+
+str_c(
+  "Good ", time_of_day, " ", name,
+  if (birthday) " and HAPPY BIRTHDAY",
+  "."
+)
+
+
+str_c(c("x", "y", "z"), collapse = ":")
+
+
+
+x <- c("Apple", "Banana", "Pear")
+str_sub(x, 1, 2)
+str_sub(x, -3, -1)
+
+str_sub(x, 1, 1) <- str_to_lower(str_sub(x, 1, 1))
+x
+
+x <- c("x","d","y","u","q","a","b")
+
+str_sort(x)
+
+x <- c("xylophone","apples","pears","chicken","pork","ate","bee")
+
+str_view(x, "a")
+```
+
+#Determine Matches
+```{r}
+writeLines(x)
+
+str_detect(x, "e")
+
+sum(str_detect(words, "[aeiou]$"))
+
+mean(str_detect(words, "[aeiou]$"))
+
+no_vowels_1 <- !str_detect(words, "[aeiou]")
+
+no_vowels_2 <- str_detect(words, "^[^aeiou]+$")
+identical(no_vowels_1, no_vowels_2)
+```
+
+#Models
+```{r}
+if (!require("modelr")) install.packages("modelr")
+library(modelr)
+options(na.action = na.warn)
+
+ggplot(sim1, aes(x, y)) +
+  geom_point()
+
+models <- tibble(
+  a1 = runif(250, -20, 40),
+  a2 = runif(250, -5, 5)
+)
+
+ggplot(sim1,aes(x,y)) +
+  geom_abline(aes(intercept=a1,slope=a2), models, alpha = 1/4) +
+  geom_point()
+
+```
+
+
+```{r}
+model1 <- function(a, data) {
+  a[1] + data$x * a[2]
 }
 
-# set factor to keep books in order of publication
-series$book <- factor(series$book, levels = rev(titles))
-
-series
+model1(c(5,5), sim1)
 ```
+
+#Root-mean-squared deviation
+```{r}
+measure_dist <- function(mod, data) {
+  diff <- data$y - model1(mod, data)
+  diff^2 %>%
+    mean() %>%
+    sqrt()
+}
+measure_dist(c(5,5), sim1)
+```
+
+
+```{r include=FALSE}
+measure_dist <- function(mod, data) {
+  diff <- data$y - model1(mod, data)
+  diff^2 %>%
+    mean() %>%
+    sqrt()
+}
+measure_dist(c(5,5), sim1)
+
+best <- optim(c(0,0), measure_dist, data = sim1)
+best$par
+
+ggplot(sim1, aes(x,y)) +
+  geom_point(size = 2, color = "grey30") +
+  geom_abline(intercept = best$par[1], slope = best$par[2])
+```
+#Fitting linear models with lm()
+```{r}
+sim1_mod <- lm(y ~ x, data = sim1)
+
+coef(sim1_mod)
+```
+
+
+```{r}
+sim1a <- tibble(
+  x = rep(1:10, each = 3),
+  y = x * 1.5 + 6 + rt(length(x), df = 2)
+)
+
+sim1a_mod <- lm(y ~ x, data = sim1a)
+
+coef(sim1a_mod)
+```
+
+```{r}
+grid <- sim1 %>%
+  data_grid(x)
+grid
+
+grid <- grid %>%
+  add_predictions(sim1_mod)
+grid
+```
+
+```{r echo=TRUE}
+primary <- function(x) {
+  if (min(x %% 2:(x-1)) > 0) {
+    return(x)
+  }else{
+    return(0)
+  }
+}
+
+array = c(1:1000)
+
+count = 0
+
+for (x in array) {
+  if (x == 1) {
+    next
+  }
+  if (primary(x) > 0) {
+    print(x)
+    count = count + 1
+  }
+  
+}
+count
+
+```
+
+
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
 
