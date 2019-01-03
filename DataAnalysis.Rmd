@@ -1,0 +1,131 @@
+---
+title: "Data Analysis"
+---
+
+# Data Analysis Fundamentals
+
+```{r test rpart, include=FALSE}
+library(rpart)
+# Set random seed. Don't remove this line.
+set.seed(1)
+
+# Shuffle the dataset, call the result shuffled
+n <- nrow(kyphosis)
+shuffled <- kyphosis[sample(n),]
+
+# Split the data in train and test
+train_indices <- 1:round(0.7*n)
+train <- shuffled[train_indices,]
+test_indices <- (round(0.7*n)+1):n
+test <- shuffled[test_indices, ]
+
+# Fill in the model that has been learned.
+tree <- rpart(Kyphosis ~ Start, train, method = "class")
+
+# Predict the outcome on the test set with tree: pred
+pred = predict(tree, test, type = "class")
+
+# Calculate the confusion matrix: conf
+conf = table(test$Kyphosis, pred)
+
+# Print this confusion matrix
+print(conf)
+
+accur <- sum(diag(conf))/sum(conf)
+
+print(accur)
+
+```
+#Cross Validation
+```{r}
+
+# FROM: Dua, D. and Karra Taniskidou, E. (2017). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+spamData = read.csv('spamData.csv')
+
+names(spamData) <- c("make","address","all","3d","our","over","remove","internet","order","mail","receive","will","people","report","addresses","free","business","email","you","credit","your","font","000","money","hp","hpl","george","650","lab","labs","telnet","857","data","415","85","technology","1999","parts","pm","direct","cs","meeting","original","project","re","edu","table","conference",";:","(:","[:","!:","$:","#:","avg_cap_length","longest_cap_length","total_cap_length","spam_label")
+
+
+n <- nrow(spamData)
+shuffled <- spamData[sample(n),]
+
+
+set.seed(1)
+
+# Initialize the accs vector
+accs <- rep(0,6)
+
+for (i in 1:6) {
+  # These indices indicate the interval of the test set
+  indices <- (((i-1) * round((1/6)*nrow(shuffled))) + 1):((i*round((1/6) * nrow(shuffled))))
+  
+  # Exclude them from the train set
+  train <- shuffled[-indices,]
+  
+  # Include them in the test set
+  test <- shuffled[indices,]
+  
+  # A model is learned using each training set
+  tree <- rpart(spam_label ~ ., train, method = "class")
+  
+  # Make a prediction on the test set using tree
+  pred <- predict(tree, test, type = "class")
+  
+  # Assign the confusion matrix to conf
+  conf <- table(test$spam_label, pred)
+  
+  # Assign the accuracy of this model to the ith index in accs
+  accs[i] <- sum(diag(conf))/sum(conf)
+}
+
+print(accs)
+print(mean(accs))
+
+# Print out the mean of accs
+```
+
+Bias and variance are main challenges of machine learning.
+bias are wrong assumptions. variance is due to sampling.
+
+irriducilbe error: noise, shouldn't be minimized.
+reducible error: bias and variance.
+
+```{r}
+# Example of assigning levels to a predictor
+
+#spam_classifier <- function(x){
+#  prediction <- rep(NA, length(x))
+#  prediction[x > 4] <- 1
+#  prediction[x <= 4] <- 0
+#  return(factor(prediction, levels = c("1", "0")))
+#}
+```
+
+#Decision Tree
+```{r}
+if (!require("rpart.plot")) install.packages("rpart.plot")
+library(rpart.plot)
+if (!require("RColorBrewer")) install.packages("RColorBrewer")
+library(RColorBrewer)
+if (!require("rattle")) install.packages("rattle")
+library(rattle)
+
+
+train_indices <- 1:round(0.7*n)
+train <- shuffled[train_indices,]
+test_indices <- (round(0.7*n)+1):n
+test <- shuffled[test_indices, ]
+
+tree <- rpart(spam_label ~ ., train, method = "class")
+
+
+pred <- predict(tree, test, type = "class")
+
+conf = table(test$spam_label ,pred)
+
+acc = sum(diag(conf))/sum(conf)
+
+print(acc)
+print(conf)
+
+fancyRpartPlot(tree)
+```

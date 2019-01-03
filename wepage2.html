@@ -11,7 +11,7 @@
 
 
 
-<title>Nasa Data</title>
+<title>R for Data Science</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,6 +22,9 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<link href="site_libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+<script src="site_libs/str_view-binding-1.3.1/str_view.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -189,6 +192,9 @@ $(document).ready(function () {
 <li>
   <a href="wepage2.html">wepage2</a>
 </li>
+<li>
+  <a href="DataAnalysis.html">Data Analysis in R</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -201,27 +207,881 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Nasa Data</h1>
+<h1 class="title toc-ignore">R for Data Science</h1>
 
 </div>
 
 
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<pre><code>## # A tibble: 2,476 x 2
-##    word       score
-##    &lt;chr&gt;      &lt;int&gt;
-##  1 abandon       -2
-##  2 abandoned     -2
-##  3 abandons      -2
-##  4 abducted      -2
-##  5 abduction     -2
-##  6 abductions    -2
-##  7 abhor         -3
-##  8 abhorred      -3
-##  9 abhorrent     -3
-## 10 abhors        -3
-## # ... with 2,466 more rows</code></pre>
+<div id="varied-uses-of-ggplot2" class="section level2">
+<h2>Varied uses of ggplot2</h2>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-3-1.png" width="672" /> <img src="wepage2_files/figure-html/unnamed-chunk-4-1.png" width="672" /><img src="wepage2_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre><code>## Loading required package: maps</code></pre>
+<pre><code>## 
+## Attaching package: &#39;maps&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     map</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="data-transformations" class="section level1">
+<h1>Data Transformations</h1>
+<pre class="r"><code># filter(mpg, model == &quot;a4&quot; &amp; year &gt; 2000)
+# select(mpg, model:cyl)
+# select(mpg, -(model:cyl))
+# arrange(mpg, year, cty)
+# mutate(mpg, ctyvshwy = cty - hwy)
+# mutate(mpg, ctyvshwy = cty - hwy) %&gt;% select(model, cty, hwy, ctyvshwy) %&gt;% filter(ctyvshwy &gt; -3)
+# transmute(mpg, )</code></pre>
+<pre class="r"><code>if (!require(&quot;nycflights13&quot;)) install.packages(&quot;nycflights13&quot;)</code></pre>
+<pre><code>## Loading required package: nycflights13</code></pre>
+<pre><code>## 
+## Attaching package: &#39;nycflights13&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:rattle&#39;:
+## 
+##     weather</code></pre>
+<pre class="r"><code>library(nycflights13)
+
+delays &lt;- flights %&gt;% 
+  group_by(dest) %&gt;% 
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)
+  ) %&gt;% 
+  filter(count &gt; 20, dest != &quot;HNL&quot;)
+
+ggplot(delays, aes(dist, delay)) +
+  geom_point(aes(size = count), alpha = 1/3) +
+  geom_smooth(se = FALSE, span = 0.6)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code># group_by(mpg, manufacturer) %&gt;% summarise(count = n(), mean_hwy = median(hwy, na.rm = TRUE), mean_cty = mean(cty, na.rm = TRUE), diff = mean(hwy) - mean(cty)) %&gt;% arrange(desc(mean_hwy)) %&gt;% filter(count %in% c(1,3,6,9) | count &gt; 15)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code># var = mtcars %&gt;% group_by(cyl) %&gt;% summarise(count = n(), mean_mpg = mean(mpg), mean_hp = mean(hp), median_wt = median(wt))
+
+# ggplot(var, aes(cyl,mean_mpg)) + geom_point(aes(size = mean_hp, color = median_wt))</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre><code>## Loading required package: hexbin</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre class="r"><code>tb &lt;- tribble(
+  ~index, ~size, ~wt,
+  &quot;1&quot;,5,10.1,
+  &quot;2&quot;,3,11.4,
+  &quot;3&quot;,2,9.98
+)
+
+tibble(
+  a = lubridate::now() + runif(1e3) * 86400,
+  b = lubridate::today() + runif(1e3) * 30,
+  c = 1:1e3,
+  d = runif(1e3),
+  e = sample(letters, 1e3, replace = TRUE)
+)</code></pre>
+<pre><code>## # A tibble: 1,000 x 5
+##    a                   b              c       d e    
+##    &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
+##  1 2019-01-03 22:47:12 2019-01-22     1 0.780   y    
+##  2 2019-01-04 00:20:53 2019-01-22     2 0.747   z    
+##  3 2019-01-03 14:22:36 2019-01-31     3 0.351   s    
+##  4 2019-01-04 00:53:51 2019-01-20     4 0.547   j    
+##  5 2019-01-03 16:09:47 2019-01-04     5 0.293   k    
+##  6 2019-01-03 22:03:13 2019-02-01     6 0.767   n    
+##  7 2019-01-04 00:02:20 2019-01-24     7 0.604   t    
+##  8 2019-01-03 18:44:44 2019-01-31     8 0.00428 d    
+##  9 2019-01-04 12:23:46 2019-01-23     9 0.0183  v    
+## 10 2019-01-03 19:31:02 2019-01-21    10 0.544   j    
+## # ... with 990 more rows</code></pre>
+<pre class="r"><code>df &lt;- tibble(
+  x = runif(5),
+  y = rnorm(5)
+)
+df</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##       x      y
+##   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.467  0.953
+## 2 0.417 -1.22 
+## 3 0.605  2.11 
+## 4 0.295  0.550
+## 5 0.984 -0.397</code></pre>
+<pre class="r"><code>ggplot(df,aes(x, y)) +
+  geom_point(aes(color = x))</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>df$x</code></pre>
+<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre class="r"><code>df[[&quot;x&quot;]]</code></pre>
+<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre class="r"><code>df[[1]]</code></pre>
+<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre class="r"><code>df %&gt;% .$x</code></pre>
+<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre class="r"><code>df %&gt;% .[[&quot;x&quot;]]</code></pre>
+<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+</div>
+<div id="reading-files" class="section level1">
+<h1>Reading Files</h1>
+<pre class="r"><code>read_csv(&quot;first line\n1,2,3\n4,.,6\n1,0,1&quot;, skip = 1, col_names = c(&quot;x&quot;, &quot;y&quot;, &quot;z&quot;), na = &quot;.&quot;)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##       x     y     z
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1     1     2     3
+## 2     4    NA     6
+## 3     1     0     1</code></pre>
+</div>
+<div id="parsing-a-vector" class="section level1">
+<h1>Parsing a Vector</h1>
+<pre class="r"><code>str(parse_logical(c(1,0,1)))</code></pre>
+<pre><code>##  logi [1:3] TRUE FALSE TRUE</code></pre>
+<pre class="r"><code>str(parse_date(c(&quot;2010-01-01&quot;, &#39;2019-01-01&#39;, &#39;1990-01-01&#39;,&#39;.&#39;), na = &quot;.&quot;))</code></pre>
+<pre><code>##  Date[1:4], format: &quot;2010-01-01&quot; &quot;2019-01-01&quot; &quot;1990-01-01&quot; NA</code></pre>
+<pre class="r"><code>str(parse_character(c(&quot;a&quot;,&quot;b&quot;)))</code></pre>
+<pre><code>##  chr [1:2] &quot;a&quot; &quot;b&quot;</code></pre>
+<pre class="r"><code>parse_double(&quot;1,23&quot;, locale = locale(decimal_mark = &quot;,&quot;))</code></pre>
+<pre><code>## [1] 1.23</code></pre>
+<pre class="r"><code>parse_number(c(&quot;$100&quot;,&quot;20%&quot;,&quot;40 dollars&quot;, &quot;#50&quot;))</code></pre>
+<pre><code>## [1] 100  20  40  50</code></pre>
+<pre class="r"><code>charToRaw(&quot;Leriche&quot;)</code></pre>
+<pre><code>## [1] 4c 65 72 69 63 68 65</code></pre>
+<pre class="r"><code>charToRaw(&quot;.&quot;)</code></pre>
+<pre><code>## [1] 2e</code></pre>
+<pre class="r"><code>t &lt;- charToRaw(&quot;b&quot;)
+rawToChar(t)</code></pre>
+<pre><code>## [1] &quot;b&quot;</code></pre>
+<pre class="r"><code>library(hms)
+parse_time(&quot;01:10 am&quot;)</code></pre>
+<pre><code>## 01:10:00</code></pre>
+<pre class="r"><code>guess_parser(&quot;2018-10-04&quot;)</code></pre>
+<pre><code>## [1] &quot;date&quot;</code></pre>
+</div>
+<div id="exportingimporting-files" class="section level1">
+<h1>Exporting/Importing Files</h1>
+<pre class="r"><code># write_excel_csv()
+
+# write_csv(data, &quot;filename.csv&quot;)
+
+# readxl()
+
+# haven()  reads spss, stata and SAS files.</code></pre>
+<pre class="r"><code># gather()
+
+table4a &lt;- tribble(
+  ~&quot;country&quot;,~`1999`,~`2000`,
+  &quot;USA&quot;, 444, 888,
+  &quot;BRA&quot;, 232, 458
+)
+
+table4a %&gt;% 
+  gather(`1999`, `2000`, key = &quot;year&quot;, value = &quot;cases&quot;)</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   country year  cases
+##   &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
+## 1 USA     1999    444
+## 2 BRA     1999    232
+## 3 USA     2000    888
+## 4 BRA     2000    458</code></pre>
+<pre class="r"><code># spread()
+
+table2 &lt;- tribble(
+  ~&quot;country&quot;,~&quot;year&quot;,~&quot;type&quot;,~&quot;count&quot;,
+  &quot;USA&quot;, 1999, &quot;cases&quot;, 759,
+  &quot;USA&quot;, 1999, &quot;population&quot;, 87432,
+ &quot;USA&quot;, 2000, &quot;cases&quot;, 888,
+  &quot;USA&quot;, 2000, &quot;population&quot;, 499843
+)
+
+table2</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   country  year type        count
+##   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+## 1 USA      1999 cases         759
+## 2 USA      1999 population  87432
+## 3 USA      2000 cases         888
+## 4 USA      2000 population 499843</code></pre>
+<pre class="r"><code>(table2 %&gt;%
+  spread(key = type, value = count))</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   country  year cases population
+##   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
+## 1 USA      1999   759      87432
+## 2 USA      2000   888     499843</code></pre>
+<pre class="r"><code># separate()
+
+table3 &lt;- tribble(
+  ~&quot;country&quot;,~&quot;year&quot;,~&quot;rate&quot;,
+  &quot;USA&quot;, 2000, &quot;586/58943&quot;,
+  &quot;USA&quot;, 2001, &quot;588/76633&quot;,
+  &quot;FRA&quot;, 2001, &quot;45323/12345&quot;
+)
+
+table5 &lt;- table3 %&gt;%
+  separate(rate, into = c(&quot;cases&quot;,&quot;population&quot;), convert = TRUE) %&gt;%
+  separate(year, into = c(&quot;century&quot;, &quot;year&quot;), sep = 2)</code></pre>
+<pre class="r"><code># unite(new, century, year)
+
+table5 %&gt;%
+  unite(new, century, year, sep = &quot;&quot;)</code></pre>
+<pre><code>## # A tibble: 3 x 4
+##   country new   cases population
+##   &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;      &lt;int&gt;
+## 1 USA     2000    586      58943
+## 2 USA     2001    588      76633
+## 3 FRA     2001  45323      12345</code></pre>
+<pre class="r"><code>stocks &lt;- tibble(
+  year   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+  qtr    = c(   1,    2,    3,    4,    2,    3,    4),
+  return = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
+)
+
+stocks %&gt;%
+  spread(qtr, return)</code></pre>
+<pre><code>## # A tibble: 2 x 5
+##    year   `1`   `2`   `3`   `4`
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  2015  1.88  0.59  0.35 NA   
+## 2  2016 NA     0.92  0.17  2.66</code></pre>
+<pre class="r"><code>stocks %&gt;%
+  spread(year, return) %&gt;%
+  gather(year, return, `2015`:`2016`, na.rm = TRUE)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##     qtr year  return
+## * &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
+## 1     1 2015    1.88
+## 2     2 2015    0.59
+## 3     3 2015    0.35
+## 4     2 2016    0.92
+## 5     3 2016    0.17
+## 6     4 2016    2.66</code></pre>
+<pre class="r"><code># complete()
+
+stocks %&gt;%
+  complete(year, qtr)</code></pre>
+<pre><code>## # A tibble: 8 x 3
+##    year   qtr return
+##   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1  2015     1   1.88
+## 2  2015     2   0.59
+## 3  2015     3   0.35
+## 4  2015     4  NA   
+## 5  2016     1  NA   
+## 6  2016     2   0.92
+## 7  2016     3   0.17
+## 8  2016     4   2.66</code></pre>
+<pre class="r"><code>treatment &lt;- tribble(
+  ~ person,           ~ treatment, ~response,
+  &quot;Derrick Whitmore&quot;, 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  &quot;Katherine Burke&quot;,  1,           4
+)
+
+treatment %&gt;%
+  fill(person)</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   person           treatment response
+##   &lt;chr&gt;                &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Derrick Whitmore         1        7
+## 2 Derrick Whitmore         2       10
+## 3 Derrick Whitmore         3        9
+## 4 Katherine Burke          1        4</code></pre>
+<pre class="r"><code>who1 &lt;- who %&gt;%
+  gather(new_sp_m014:newrel_f65, key = &quot;key&quot;, value = &quot;cases&quot;, na.rm = TRUE)
+
+who1 %&gt;%
+  count(key)</code></pre>
+<pre><code>## # A tibble: 56 x 2
+##    key              n
+##    &lt;chr&gt;        &lt;int&gt;
+##  1 new_ep_f014   1032
+##  2 new_ep_f1524  1021
+##  3 new_ep_f2534  1021
+##  4 new_ep_f3544  1021
+##  5 new_ep_f4554  1017
+##  6 new_ep_f5564  1017
+##  7 new_ep_f65    1014
+##  8 new_ep_m014   1038
+##  9 new_ep_m1524  1026
+## 10 new_ep_m2534  1020
+## # ... with 46 more rows</code></pre>
+<pre class="r"><code>who2 &lt;- who1 %&gt;%
+  mutate(key = stringr::str_replace(key, &quot;newrel&quot;, &quot;new_rel&quot;))
+
+who2</code></pre>
+<pre><code>## # A tibble: 76,046 x 6
+##    country     iso2  iso3   year key         cases
+##    &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;       &lt;int&gt;
+##  1 Afghanistan AF    AFG    1997 new_sp_m014     0
+##  2 Afghanistan AF    AFG    1998 new_sp_m014    30
+##  3 Afghanistan AF    AFG    1999 new_sp_m014     8
+##  4 Afghanistan AF    AFG    2000 new_sp_m014    52
+##  5 Afghanistan AF    AFG    2001 new_sp_m014   129
+##  6 Afghanistan AF    AFG    2002 new_sp_m014    90
+##  7 Afghanistan AF    AFG    2003 new_sp_m014   127
+##  8 Afghanistan AF    AFG    2004 new_sp_m014   139
+##  9 Afghanistan AF    AFG    2005 new_sp_m014   151
+## 10 Afghanistan AF    AFG    2006 new_sp_m014   193
+## # ... with 76,036 more rows</code></pre>
+<pre class="r"><code>who3 &lt;- who2 %&gt;%
+  separate(key,c(&quot;new&quot;,&quot;type&quot;,&quot;sexage&quot;), sep = &quot;_&quot;)
+
+who3</code></pre>
+<pre><code>## # A tibble: 76,046 x 8
+##    country     iso2  iso3   year new   type  sexage cases
+##    &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;
+##  1 Afghanistan AF    AFG    1997 new   sp    m014       0
+##  2 Afghanistan AF    AFG    1998 new   sp    m014      30
+##  3 Afghanistan AF    AFG    1999 new   sp    m014       8
+##  4 Afghanistan AF    AFG    2000 new   sp    m014      52
+##  5 Afghanistan AF    AFG    2001 new   sp    m014     129
+##  6 Afghanistan AF    AFG    2002 new   sp    m014      90
+##  7 Afghanistan AF    AFG    2003 new   sp    m014     127
+##  8 Afghanistan AF    AFG    2004 new   sp    m014     139
+##  9 Afghanistan AF    AFG    2005 new   sp    m014     151
+## 10 Afghanistan AF    AFG    2006 new   sp    m014     193
+## # ... with 76,036 more rows</code></pre>
+<pre class="r"><code>who3 %&gt;%
+  count(new)</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   new       n
+##   &lt;chr&gt; &lt;int&gt;
+## 1 new   76046</code></pre>
+<pre class="r"><code>who4 &lt;- who3 %&gt;%
+  select(-new, -iso2, -iso3)
+
+who5 &lt;- who4 %&gt;%
+  separate(sexage, c(&quot;sex&quot;,&quot;age&quot;), sep = 1)
+
+who5</code></pre>
+<pre><code>## # A tibble: 76,046 x 6
+##    country      year type  sex   age   cases
+##    &lt;chr&gt;       &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+##  1 Afghanistan  1997 sp    m     014       0
+##  2 Afghanistan  1998 sp    m     014      30
+##  3 Afghanistan  1999 sp    m     014       8
+##  4 Afghanistan  2000 sp    m     014      52
+##  5 Afghanistan  2001 sp    m     014     129
+##  6 Afghanistan  2002 sp    m     014      90
+##  7 Afghanistan  2003 sp    m     014     127
+##  8 Afghanistan  2004 sp    m     014     139
+##  9 Afghanistan  2005 sp    m     014     151
+## 10 Afghanistan  2006 sp    m     014     193
+## # ... with 76,036 more rows</code></pre>
+<pre class="r"><code>planes %&gt;%
+  count(tailnum) %&gt;%
+  filter(n&gt;1)</code></pre>
+<pre><code>## # A tibble: 0 x 2
+## # ... with 2 variables: tailnum &lt;chr&gt;, n &lt;int&gt;</code></pre>
+<pre class="r"><code>weather %&gt;%
+  count(year, month, day, hour, origin) %&gt;%
+  filter(n&gt;1)</code></pre>
+<pre><code>## # A tibble: 3 x 6
+##    year month   day  hour origin     n
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;int&gt;
+## 1  2013    11     3     1 EWR        2
+## 2  2013    11     3     1 JFK        2
+## 3  2013    11     3     1 LGA        2</code></pre>
+<pre class="r"><code>flights2 &lt;- flights %&gt;%
+  select(year:day, hour, origin, dest, tailnum, carrier)
+
+flights2 </code></pre>
+<pre><code>## # A tibble: 336,776 x 8
+##     year month   day  hour origin dest  tailnum carrier
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  
+##  1  2013     1     1     5 EWR    IAH   N14228  UA     
+##  2  2013     1     1     5 LGA    IAH   N24211  UA     
+##  3  2013     1     1     5 JFK    MIA   N619AA  AA     
+##  4  2013     1     1     5 JFK    BQN   N804JB  B6     
+##  5  2013     1     1     6 LGA    ATL   N668DN  DL     
+##  6  2013     1     1     5 EWR    ORD   N39463  UA     
+##  7  2013     1     1     6 EWR    FLL   N516JB  B6     
+##  8  2013     1     1     6 LGA    IAD   N829AS  EV     
+##  9  2013     1     1     6 JFK    MCO   N593JB  B6     
+## 10  2013     1     1     6 LGA    ORD   N3ALAA  AA     
+## # ... with 336,766 more rows</code></pre>
+<pre class="r"><code>flights2 %&gt;%
+  select(-origin, -dest) %&gt;%
+  left_join(airlines, by = &quot;carrier&quot;)</code></pre>
+<pre><code>## # A tibble: 336,776 x 7
+##     year month   day  hour tailnum carrier name                    
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;                   
+##  1  2013     1     1     5 N14228  UA      United Air Lines Inc.   
+##  2  2013     1     1     5 N24211  UA      United Air Lines Inc.   
+##  3  2013     1     1     5 N619AA  AA      American Airlines Inc.  
+##  4  2013     1     1     5 N804JB  B6      JetBlue Airways         
+##  5  2013     1     1     6 N668DN  DL      Delta Air Lines Inc.    
+##  6  2013     1     1     5 N39463  UA      United Air Lines Inc.   
+##  7  2013     1     1     6 N516JB  B6      JetBlue Airways         
+##  8  2013     1     1     6 N829AS  EV      ExpressJet Airlines Inc.
+##  9  2013     1     1     6 N593JB  B6      JetBlue Airways         
+## 10  2013     1     1     6 N3ALAA  AA      American Airlines Inc.  
+## # ... with 336,766 more rows</code></pre>
+<pre class="r"><code>flights2 %&gt;%
+  select(-origin, -dest) %&gt;%
+  mutate(name = airlines$name[match(carrier, airlines$carrier)])</code></pre>
+<pre><code>## # A tibble: 336,776 x 7
+##     year month   day  hour tailnum carrier name                    
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;                   
+##  1  2013     1     1     5 N14228  UA      United Air Lines Inc.   
+##  2  2013     1     1     5 N24211  UA      United Air Lines Inc.   
+##  3  2013     1     1     5 N619AA  AA      American Airlines Inc.  
+##  4  2013     1     1     5 N804JB  B6      JetBlue Airways         
+##  5  2013     1     1     6 N668DN  DL      Delta Air Lines Inc.    
+##  6  2013     1     1     5 N39463  UA      United Air Lines Inc.   
+##  7  2013     1     1     6 N516JB  B6      JetBlue Airways         
+##  8  2013     1     1     6 N829AS  EV      ExpressJet Airlines Inc.
+##  9  2013     1     1     6 N593JB  B6      JetBlue Airways         
+## 10  2013     1     1     6 N3ALAA  AA      American Airlines Inc.  
+## # ... with 336,766 more rows</code></pre>
+<pre class="r"><code>flights2 %&gt;%
+  left_join(airports, c(&quot;dest&quot; = &quot;faa&quot;)) %&gt;%
+  arrange(origin)</code></pre>
+<pre><code>## # A tibble: 336,776 x 15
+##     year month   day  hour origin dest  tailnum carrier name    lat    lon
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1  2013     1     1     5 EWR    IAH   N14228  UA      Geor…  30.0  -95.3
+##  2  2013     1     1     5 EWR    ORD   N39463  UA      Chic…  42.0  -87.9
+##  3  2013     1     1     6 EWR    FLL   N516JB  B6      Fort…  26.1  -80.2
+##  4  2013     1     1     6 EWR    SFO   N53441  UA      San …  37.6 -122. 
+##  5  2013     1     1     6 EWR    LAS   N76515  UA      Mc C…  36.1 -115. 
+##  6  2013     1     1     6 EWR    PBI   N644JB  B6      Palm…  26.7  -80.1
+##  7  2013     1     1     6 EWR    MIA   N633AA  AA      Miam…  25.8  -80.3
+##  8  2013     1     1     6 EWR    MIA   N53442  UA      Miam…  25.8  -80.3
+##  9  2013     1     1     6 EWR    ORD   N9EAMQ  MQ      Chic…  42.0  -87.9
+## 10  2013     1     1     6 EWR    ATL   N326NB  DL      Hart…  33.6  -84.4
+## # ... with 336,766 more rows, and 4 more variables: alt &lt;int&gt;, tz &lt;dbl&gt;,
+## #   dst &lt;chr&gt;, tzone &lt;chr&gt;</code></pre>
+<pre class="r"><code>flights2 %&gt;%
+  left_join(airports, c(&quot;origin&quot; = &quot;faa&quot;)) %&gt;%
+  arrange(origin)</code></pre>
+<pre><code>## # A tibble: 336,776 x 15
+##     year month   day  hour origin dest  tailnum carrier name    lat   lon
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  2013     1     1     5 EWR    IAH   N14228  UA      Newa…  40.7 -74.2
+##  2  2013     1     1     5 EWR    ORD   N39463  UA      Newa…  40.7 -74.2
+##  3  2013     1     1     6 EWR    FLL   N516JB  B6      Newa…  40.7 -74.2
+##  4  2013     1     1     6 EWR    SFO   N53441  UA      Newa…  40.7 -74.2
+##  5  2013     1     1     6 EWR    LAS   N76515  UA      Newa…  40.7 -74.2
+##  6  2013     1     1     6 EWR    PBI   N644JB  B6      Newa…  40.7 -74.2
+##  7  2013     1     1     6 EWR    MIA   N633AA  AA      Newa…  40.7 -74.2
+##  8  2013     1     1     6 EWR    MIA   N53442  UA      Newa…  40.7 -74.2
+##  9  2013     1     1     6 EWR    ORD   N9EAMQ  MQ      Newa…  40.7 -74.2
+## 10  2013     1     1     6 EWR    ATL   N326NB  DL      Newa…  40.7 -74.2
+## # ... with 336,766 more rows, and 4 more variables: alt &lt;int&gt;, tz &lt;dbl&gt;,
+## #   dst &lt;chr&gt;, tzone &lt;chr&gt;</code></pre>
+<pre class="r"><code>airports %&gt;%
+  semi_join(flights, c(&quot;faa&quot; = &quot;dest&quot;)) %&gt;%
+  filter(lon &gt; -140) %&gt;%
+  ggplot(aes(lon, lat)) +
+    borders(&quot;state&quot;) +
+    geom_point(aes(color = alt)) +
+    coord_quickmap()</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<pre class="r"><code>(top_dest &lt;- flights %&gt;%
+  count(dest, sort = TRUE) %&gt;%
+  head(10))</code></pre>
+<pre><code>## # A tibble: 10 x 2
+##    dest      n
+##    &lt;chr&gt; &lt;int&gt;
+##  1 ORD   17283
+##  2 ATL   17215
+##  3 LAX   16174
+##  4 BOS   15508
+##  5 MCO   14082
+##  6 CLT   14064
+##  7 SFO   13331
+##  8 FLL   12055
+##  9 MIA   11728
+## 10 DCA    9705</code></pre>
+<pre class="r"><code>top_dest &lt;- flights %&gt;%
+  count(dest, sort = TRUE) %&gt;%
+  left_join(airports, c(&quot;dest&quot; = &quot;faa&quot;))
+
+top_dest</code></pre>
+<pre><code>## # A tibble: 105 x 9
+##    dest      n name                lat    lon   alt    tz dst   tzone     
+##    &lt;chr&gt; &lt;int&gt; &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     
+##  1 ORD   17283 Chicago Ohare In…  42.0  -87.9   668    -6 A     America/C…
+##  2 ATL   17215 Hartsfield Jacks…  33.6  -84.4  1026    -5 A     America/N…
+##  3 LAX   16174 Los Angeles Intl   33.9 -118.    126    -8 A     America/L…
+##  4 BOS   15508 General Edward L…  42.4  -71.0    19    -5 A     America/N…
+##  5 MCO   14082 Orlando Intl       28.4  -81.3    96    -5 A     America/N…
+##  6 CLT   14064 Charlotte Dougla…  35.2  -80.9   748    -5 A     America/N…
+##  7 SFO   13331 San Francisco In…  37.6 -122.     13    -8 A     America/L…
+##  8 FLL   12055 Fort Lauderdale …  26.1  -80.2     9    -5 A     America/N…
+##  9 MIA   11728 Miami Intl         25.8  -80.3     8    -5 A     America/N…
+## 10 DCA    9705 Ronald Reagan Wa…  38.9  -77.0    15    -5 A     America/N…
+## # ... with 95 more rows</code></pre>
+<pre class="r"><code>flights %&gt;%
+  filter(dest %in% top_dest$dest)</code></pre>
+<pre><code>## # A tibble: 336,776 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+##  1  2013     1     1      517            515         2      830
+##  2  2013     1     1      533            529         4      850
+##  3  2013     1     1      542            540         2      923
+##  4  2013     1     1      544            545        -1     1004
+##  5  2013     1     1      554            600        -6      812
+##  6  2013     1     1      554            558        -4      740
+##  7  2013     1     1      555            600        -5      913
+##  8  2013     1     1      557            600        -3      709
+##  9  2013     1     1      557            600        -3      838
+## 10  2013     1     1      558            600        -2      753
+## # ... with 336,766 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+## #   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+</div>
+<div id="strings" class="section level1">
+<h1>Strings</h1>
+<pre class="r"><code>x &lt;- &quot;\u00b5&quot;
+x</code></pre>
+<pre><code>## [1] &quot;µ&quot;</code></pre>
+<pre class="r"><code>string &lt;- c(&quot;x&quot;,&quot;y&quot;,&quot;z&quot;)
+string</code></pre>
+<pre><code>## [1] &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
+<pre class="r"><code>str_c(&quot;x&quot;,&quot;y&quot;,&quot;z&quot;)</code></pre>
+<pre><code>## [1] &quot;xyz&quot;</code></pre>
+<pre class="r"><code>str_c(&quot;x&quot;,&quot;y&quot;,&quot;z&quot;, sep = &quot;, &quot;)</code></pre>
+<pre><code>## [1] &quot;x, y, z&quot;</code></pre>
+<pre class="r"><code>name &lt;- &quot;Tomas&quot;
+time_of_day &lt;- &quot;morning&quot;
+birthday &lt;- FALSE
+
+str_c(
+  &quot;Good &quot;, time_of_day, &quot; &quot;, name,
+  if (birthday) &quot; and HAPPY BIRTHDAY&quot;,
+  &quot;.&quot;
+)</code></pre>
+<pre><code>## [1] &quot;Good morning Tomas.&quot;</code></pre>
+<pre class="r"><code>str_c(c(&quot;x&quot;, &quot;y&quot;, &quot;z&quot;), collapse = &quot;:&quot;)</code></pre>
+<pre><code>## [1] &quot;x:y:z&quot;</code></pre>
+<pre class="r"><code>x &lt;- c(&quot;Apple&quot;, &quot;Banana&quot;, &quot;Pear&quot;)
+str_sub(x, 1, 2)</code></pre>
+<pre><code>## [1] &quot;Ap&quot; &quot;Ba&quot; &quot;Pe&quot;</code></pre>
+<pre class="r"><code>str_sub(x, -3, -1)</code></pre>
+<pre><code>## [1] &quot;ple&quot; &quot;ana&quot; &quot;ear&quot;</code></pre>
+<pre class="r"><code>str_sub(x, 1, 1) &lt;- str_to_lower(str_sub(x, 1, 1))
+x</code></pre>
+<pre><code>## [1] &quot;apple&quot;  &quot;banana&quot; &quot;pear&quot;</code></pre>
+<pre class="r"><code>x &lt;- c(&quot;x&quot;,&quot;d&quot;,&quot;y&quot;,&quot;u&quot;,&quot;q&quot;,&quot;a&quot;,&quot;b&quot;)
+
+str_sort(x)</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;d&quot; &quot;q&quot; &quot;u&quot; &quot;x&quot; &quot;y&quot;</code></pre>
+<pre class="r"><code>x &lt;- c(&quot;xylophone&quot;,&quot;apples&quot;,&quot;pears&quot;,&quot;chicken&quot;,&quot;pork&quot;,&quot;ate&quot;,&quot;bee&quot;)
+
+str_view(x, &quot;a&quot;)</code></pre>
+<div id="htmlwidget-f5bede67c7a4609364a2" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f5bede67c7a4609364a2">{"x":{"html":"<ul>\n  <li>xylophone<\/li>\n  <li><span class='match'>a<\/span>pples<\/li>\n  <li>pe<span class='match'>a<\/span>rs<\/li>\n  <li>chicken<\/li>\n  <li>pork<\/li>\n  <li><span class='match'>a<\/span>te<\/li>\n  <li>bee<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="determine-matches" class="section level1">
+<h1>Determine Matches</h1>
+<pre class="r"><code>writeLines(x)</code></pre>
+<pre><code>## xylophone
+## apples
+## pears
+## chicken
+## pork
+## ate
+## bee</code></pre>
+<pre class="r"><code>str_detect(x, &quot;e&quot;)</code></pre>
+<pre><code>## [1]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE</code></pre>
+<pre class="r"><code>sum(str_detect(words, &quot;[aeiou]$&quot;))</code></pre>
+<pre><code>## [1] 271</code></pre>
+<pre class="r"><code>mean(str_detect(words, &quot;[aeiou]$&quot;))</code></pre>
+<pre><code>## [1] 0.2765306</code></pre>
+<pre class="r"><code>no_vowels_1 &lt;- !str_detect(words, &quot;[aeiou]&quot;)
+
+no_vowels_2 &lt;- str_detect(words, &quot;^[^aeiou]+$&quot;)
+identical(no_vowels_1, no_vowels_2)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="models" class="section level1">
+<h1>Models</h1>
+<pre class="r"><code>if (!require(&quot;modelr&quot;)) install.packages(&quot;modelr&quot;)</code></pre>
+<pre><code>## Loading required package: modelr</code></pre>
+<pre><code>## 
+## Attaching package: &#39;modelr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:broom&#39;:
+## 
+##     bootstrap</code></pre>
+<pre class="r"><code>library(modelr)
+options(na.action = na.warn)
+
+ggplot(sim1, aes(x, y)) +
+  geom_point()</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<pre class="r"><code>models &lt;- tibble(
+  a1 = runif(250, -20, 40),
+  a2 = runif(250, -5, 5)
+)
+
+ggplot(sim1,aes(x,y)) +
+  geom_abline(aes(intercept=a1,slope=a2), models, alpha = 1/4) +
+  geom_point()</code></pre>
+<p><img src="wepage2_files/figure-html/unnamed-chunk-42-2.png" width="672" /></p>
+<pre class="r"><code>model1 &lt;- function(a, data) {
+  a[1] + data$x * a[2]
+}
+
+model1(c(5,5), sim1)</code></pre>
+<pre><code>##  [1] 10 10 10 15 15 15 20 20 20 25 25 25 30 30 30 35 35 35 40 40 40 45 45
+## [24] 45 50 50 50 55 55 55</code></pre>
+</div>
+<div id="root-mean-squared-deviation" class="section level1">
+<h1>Root-mean-squared deviation</h1>
+<pre class="r"><code>measure_dist &lt;- function(mod, data) {
+  diff &lt;- data$y - model1(mod, data)
+  diff^2 %&gt;%
+    mean() %&gt;%
+    sqrt()
+}
+measure_dist(c(5,5), sim1)</code></pre>
+<pre><code>## [1] 19.10774</code></pre>
+</div>
+<div id="fitting-linear-models-with-lm" class="section level1">
+<h1>Fitting linear models with lm()</h1>
+<pre class="r"><code>sim1_mod &lt;- lm(y ~ x, data = sim1)
+
+coef(sim1_mod)</code></pre>
+<pre><code>## (Intercept)           x 
+##    4.220822    2.051533</code></pre>
+<pre class="r"><code>sim1a &lt;- tibble(
+  x = rep(1:10, each = 3),
+  y = x * 1.5 + 6 + rt(length(x), df = 2)
+)
+
+sim1a_mod &lt;- lm(y ~ x, data = sim1a)
+
+coef(sim1a_mod)</code></pre>
+<pre><code>## (Intercept)           x 
+##    4.933794    1.657851</code></pre>
+<pre class="r"><code>grid &lt;- sim1 %&gt;%
+  data_grid(x)
+grid</code></pre>
+<pre><code>## # A tibble: 10 x 1
+##        x
+##    &lt;int&gt;
+##  1     1
+##  2     2
+##  3     3
+##  4     4
+##  5     5
+##  6     6
+##  7     7
+##  8     8
+##  9     9
+## 10    10</code></pre>
+<pre class="r"><code>grid &lt;- grid %&gt;%
+  add_predictions(sim1_mod)
+grid</code></pre>
+<pre><code>## # A tibble: 10 x 2
+##        x  pred
+##    &lt;int&gt; &lt;dbl&gt;
+##  1     1  6.27
+##  2     2  8.32
+##  3     3 10.4 
+##  4     4 12.4 
+##  5     5 14.5 
+##  6     6 16.5 
+##  7     7 18.6 
+##  8     8 20.6 
+##  9     9 22.7 
+## 10    10 24.7</code></pre>
+<pre class="r"><code>primary &lt;- function(x) {
+  if (min(x %% 2:(x-1)) &gt; 0) {
+    return(x)
+  }else{
+    return(0)
+  }
+}
+
+array = c(1:1000)
+
+count = 0
+
+for (x in array) {
+  if (x == 1) {
+    next
+  }
+  if (primary(x) &gt; 0) {
+    print(x)
+    count = count + 1
+  }
+  
+}</code></pre>
+<pre><code>## [1] 3
+## [1] 5
+## [1] 7
+## [1] 11
+## [1] 13
+## [1] 17
+## [1] 19
+## [1] 23
+## [1] 29
+## [1] 31
+## [1] 37
+## [1] 41
+## [1] 43
+## [1] 47
+## [1] 53
+## [1] 59
+## [1] 61
+## [1] 67
+## [1] 71
+## [1] 73
+## [1] 79
+## [1] 83
+## [1] 89
+## [1] 97
+## [1] 101
+## [1] 103
+## [1] 107
+## [1] 109
+## [1] 113
+## [1] 127
+## [1] 131
+## [1] 137
+## [1] 139
+## [1] 149
+## [1] 151
+## [1] 157
+## [1] 163
+## [1] 167
+## [1] 173
+## [1] 179
+## [1] 181
+## [1] 191
+## [1] 193
+## [1] 197
+## [1] 199
+## [1] 211
+## [1] 223
+## [1] 227
+## [1] 229
+## [1] 233
+## [1] 239
+## [1] 241
+## [1] 251
+## [1] 257
+## [1] 263
+## [1] 269
+## [1] 271
+## [1] 277
+## [1] 281
+## [1] 283
+## [1] 293
+## [1] 307
+## [1] 311
+## [1] 313
+## [1] 317
+## [1] 331
+## [1] 337
+## [1] 347
+## [1] 349
+## [1] 353
+## [1] 359
+## [1] 367
+## [1] 373
+## [1] 379
+## [1] 383
+## [1] 389
+## [1] 397
+## [1] 401
+## [1] 409
+## [1] 419
+## [1] 421
+## [1] 431
+## [1] 433
+## [1] 439
+## [1] 443
+## [1] 449
+## [1] 457
+## [1] 461
+## [1] 463
+## [1] 467
+## [1] 479
+## [1] 487
+## [1] 491
+## [1] 499
+## [1] 503
+## [1] 509
+## [1] 521
+## [1] 523
+## [1] 541
+## [1] 547
+## [1] 557
+## [1] 563
+## [1] 569
+## [1] 571
+## [1] 577
+## [1] 587
+## [1] 593
+## [1] 599
+## [1] 601
+## [1] 607
+## [1] 613
+## [1] 617
+## [1] 619
+## [1] 631
+## [1] 641
+## [1] 643
+## [1] 647
+## [1] 653
+## [1] 659
+## [1] 661
+## [1] 673
+## [1] 677
+## [1] 683
+## [1] 691
+## [1] 701
+## [1] 709
+## [1] 719
+## [1] 727
+## [1] 733
+## [1] 739
+## [1] 743
+## [1] 751
+## [1] 757
+## [1] 761
+## [1] 769
+## [1] 773
+## [1] 787
+## [1] 797
+## [1] 809
+## [1] 811
+## [1] 821
+## [1] 823
+## [1] 827
+## [1] 829
+## [1] 839
+## [1] 853
+## [1] 857
+## [1] 859
+## [1] 863
+## [1] 877
+## [1] 881
+## [1] 883
+## [1] 887
+## [1] 907
+## [1] 911
+## [1] 919
+## [1] 929
+## [1] 937
+## [1] 941
+## [1] 947
+## [1] 953
+## [1] 967
+## [1] 971
+## [1] 977
+## [1] 983
+## [1] 991
+## [1] 997</code></pre>
+<pre class="r"><code>count</code></pre>
+<pre><code>## [1] 167</code></pre>
 </div>
 
 

@@ -1,0 +1,38 @@
+---
+title: "KateWork"
+author: "Tomas Leriche"
+date: "1/2/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r}
+df <- tribble(
+  ~invoiceNum, ~hours, ~totalBill, ~strEngCons, ~printPermFees,
+  168201, 57.0, 2720.00, 0, 0,
+  168202, 126.0, 5863.75, 0, 476.08,
+  168203, 35.5, 2069.31, 0, 158.81,
+  168204, 33.0, 1679.00, 135.39, 126.00,
+  168205, 58.0, 2850.25, 0, 0,
+  168206, 46.75, 2219.00, 79.69, 595.72,
+  168207, 26.75, 1245.00, 0, 0
+)
+
+df
+
+write.table(df, "/Users/tomasleriche/Documents/KateData.txt")
+
+
+```
+
+
+```{r echo=FALSE}
+plot(pressure)
+```
+

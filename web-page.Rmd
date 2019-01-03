@@ -62,6 +62,98 @@ ggplot(compare_words, aes(swift_prop, riri_prop)) +
   labs(y="Rihanna", x="Taylor Swift") + theme_classic()
 ```
 
+#Over Time
+
+```{r}
+if (!require("rvest")) install.packages("rvest")
+library(rvest)
+riridisc = 'https://en.wikipedia.org/wiki/Rihanna_discography'
+
+disc <- riridisc %>%
+  read_html() %>%
+  html_nodes(xpath = '//*[@id="mw-content-text"]/div/table[2]') %>%
+  html_table(fill = TRUE)
+
+
+ririAlbums = disc[[1]]
+```
+
+
+```{r}
+TS_albums <- ririAlbums[2:9,1:2] %>%
+  separate(`Album details`, c("Released","Month","Day","Year"),
+           extra='drop') %>%
+  select(c("Title","Year"))
+
+TS_albums$Year<-as.numeric(TS_albums$Year)
+```
+
+```{r}
+riri_lyrics = TS_albums %>%
+  mutate(tracks = map2("Rihanna", Title, genius_album))
+```
+
+```{r}
+riri_lyrics = riri_lyrics %>%
+  unnest(tracks)
+```
+
+```{r}
+library(tidytext)
+tidy_riri <- riri_lyrics %>%
+  unnest_tokens(word, lyric) %>%
+  anti_join(stop_words)
+```
+
+```{r}
+tidy_riri %>%
+  count(word, sort=TRUE)
+```
+
+```{r}
+words_by_year <- tidy_riri %>%
+  count(Year, word) %>%
+  group_by(Year) %>%
+  mutate(time_total = sum(n)) %>%
+  group_by(word) %>%
+  mutate(word_total = sum(n)) %>%
+  ungroup() %>%
+  rename(count = n) %>%
+  filter(word_total > 50)
+
+nested_words <- words_by_year %>%
+  nest(-word)
+
+word_models <- nested_words %>%
+  mutate(models = map(data, ~glm(cbind(count, time_total) ~ Year, .,
+                                 family = "binomial")))
+```
+
+
+```{r}
+library(broom)
+
+slopes <- word_models %>%
+  unnest(map(models, tidy)) %>%
+  filter(term == "Year") %>%
+  mutate(adjusted.p.value = p.adjust(p.value))
+
+top_slopes <- slopes%>%
+  filter(adjusted.p.value < 0.1) %>%
+  select(-statistic, -p.value)
+```
+
+```{r}
+library(scales)
+words_by_year %>%
+  inner_join(top_slopes, by = "word") %>%
+  ggplot(aes(Year, count/time_total, color = word, lty = word)) +
+  geom_line(size = 1.3) +
+  labs(x = NULL, y = "Word Frequency") +
+  scale_x_continuous(breaks=TS_albums$Year,
+                     labels=TS_albums$Title) +
+  scale_y_continuous(labels=scales::percent)
+```
 
 
 
