@@ -12,9 +12,9 @@ navbar:
     - text: "Data Analysis in R"
       href: DataAnalysis.html
     - text: "Notebook"
-      href: NoteBook.nb.html
+      href: NoteBook.html
     - text: "Notebook 2"
-      href: NoteBookKaggleData.nb.html
+      href: NoteBookKaggleData.html
 output:
   html_document:
     theme: cosmo

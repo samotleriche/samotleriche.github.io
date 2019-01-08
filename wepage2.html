@@ -195,6 +195,12 @@ $(document).ready(function () {
 <li>
   <a href="DataAnalysis.html">Data Analysis in R</a>
 </li>
+<li>
+  <a href="NoteBook.html">Notebook</a>
+</li>
+<li>
+  <a href="NoteBookKaggleData.html">Notebook 2</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -217,12 +223,6 @@ $(document).ready(function () {
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="wepage2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p><img src="wepage2_files/figure-html/unnamed-chunk-3-1.png" width="672" /> <img src="wepage2_files/figure-html/unnamed-chunk-4-1.png" width="672" /><img src="wepage2_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
-<pre><code>## Loading required package: maps</code></pre>
-<pre><code>## 
-## Attaching package: &#39;maps&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     map</code></pre>
 <p><img src="wepage2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="data-transformations" class="section level1">
@@ -234,14 +234,8 @@ $(document).ready(function () {
 # mutate(mpg, ctyvshwy = cty - hwy)
 # mutate(mpg, ctyvshwy = cty - hwy) %&gt;% select(model, cty, hwy, ctyvshwy) %&gt;% filter(ctyvshwy &gt; -3)
 # transmute(mpg, )</code></pre>
-<pre class="r"><code>if (!require(&quot;nycflights13&quot;)) install.packages(&quot;nycflights13&quot;)</code></pre>
-<pre><code>## Loading required package: nycflights13</code></pre>
-<pre><code>## 
-## Attaching package: &#39;nycflights13&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:rattle&#39;:
-## 
-##     weather</code></pre>
-<pre class="r"><code>library(nycflights13)
+<pre class="r"><code>if (!require(&quot;nycflights13&quot;)) install.packages(&quot;nycflights13&quot;)
+library(nycflights13)
 
 delays &lt;- flights %&gt;% 
   group_by(dest) %&gt;% 
@@ -265,7 +259,6 @@ ggplot(delays, aes(dist, delay)) +
 # ggplot(var, aes(cyl,mean_mpg)) + geom_point(aes(size = mean_hp, color = median_wt))</code></pre>
 <p><img src="wepage2_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p><img src="wepage2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<pre><code>## Loading required package: hexbin</code></pre>
 <p><img src="wepage2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p><img src="wepage2_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <pre class="r"><code>tb &lt;- tribble(
@@ -283,60 +276,58 @@ tibble(
   e = sample(letters, 1e3, replace = TRUE)
 )</code></pre>
 <pre><code>## # A tibble: 1,000 x 5
-##    a                   b              c       d e    
-##    &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
-##  1 2019-01-03 22:47:12 2019-01-22     1 0.780   y    
-##  2 2019-01-04 00:20:53 2019-01-22     2 0.747   z    
-##  3 2019-01-03 14:22:36 2019-01-31     3 0.351   s    
-##  4 2019-01-04 00:53:51 2019-01-20     4 0.547   j    
-##  5 2019-01-03 16:09:47 2019-01-04     5 0.293   k    
-##  6 2019-01-03 22:03:13 2019-02-01     6 0.767   n    
-##  7 2019-01-04 00:02:20 2019-01-24     7 0.604   t    
-##  8 2019-01-03 18:44:44 2019-01-31     8 0.00428 d    
-##  9 2019-01-04 12:23:46 2019-01-23     9 0.0183  v    
-## 10 2019-01-03 19:31:02 2019-01-21    10 0.544   j    
-## # ... with 990 more rows</code></pre>
+##    a                   b              c      d e    
+##    &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt;
+##  1 2019-01-08 13:00:21 2019-01-14     1 0.764  e    
+##  2 2019-01-08 04:39:25 2019-01-07     2 0.216  k    
+##  3 2019-01-08 13:58:34 2019-02-03     3 0.0343 y    
+##  4 2019-01-07 21:20:05 2019-01-30     4 0.726  o    
+##  5 2019-01-07 23:39:57 2019-01-19     5 0.743  a    
+##  6 2019-01-08 20:04:56 2019-01-30     6 0.809  y    
+##  7 2019-01-08 14:09:59 2019-01-20     7 0.675  e    
+##  8 2019-01-08 13:37:51 2019-01-31     8 0.676  j    
+##  9 2019-01-08 18:27:38 2019-01-24     9 0.676  m    
+## 10 2019-01-08 05:33:21 2019-01-23    10 0.383  f    
+## # … with 990 more rows</code></pre>
 <pre class="r"><code>df &lt;- tibble(
   x = runif(5),
   y = rnorm(5)
 )
 df</code></pre>
 <pre><code>## # A tibble: 5 x 2
-##       x      y
-##   &lt;dbl&gt;  &lt;dbl&gt;
-## 1 0.467  0.953
-## 2 0.417 -1.22 
-## 3 0.605  2.11 
-## 4 0.295  0.550
-## 5 0.984 -0.397</code></pre>
+##        x      y
+##    &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.136   0.452
+## 2 0.0634  1.10 
+## 3 0.541  -1.71 
+## 4 0.365  -1.09 
+## 5 0.962   0.260</code></pre>
 <pre class="r"><code>ggplot(df,aes(x, y)) +
   geom_point(aes(color = x))</code></pre>
 <p><img src="wepage2_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>df$x</code></pre>
-<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre><code>## [1] 0.13576139 0.06344888 0.54122403 0.36498856 0.96243610</code></pre>
 <pre class="r"><code>df[[&quot;x&quot;]]</code></pre>
-<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre><code>## [1] 0.13576139 0.06344888 0.54122403 0.36498856 0.96243610</code></pre>
 <pre class="r"><code>df[[1]]</code></pre>
-<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre><code>## [1] 0.13576139 0.06344888 0.54122403 0.36498856 0.96243610</code></pre>
 <pre class="r"><code>df %&gt;% .$x</code></pre>
-<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre><code>## [1] 0.13576139 0.06344888 0.54122403 0.36498856 0.96243610</code></pre>
 <pre class="r"><code>df %&gt;% .[[&quot;x&quot;]]</code></pre>
-<pre><code>## [1] 0.4670269 0.4172237 0.6049795 0.2952572 0.9836895</code></pre>
+<pre><code>## [1] 0.13576139 0.06344888 0.54122403 0.36498856 0.96243610</code></pre>
 </div>
 <div id="reading-files" class="section level1">
 <h1>Reading Files</h1>
 <pre class="r"><code>read_csv(&quot;first line\n1,2,3\n4,.,6\n1,0,1&quot;, skip = 1, col_names = c(&quot;x&quot;, &quot;y&quot;, &quot;z&quot;), na = &quot;.&quot;)</code></pre>
 <pre><code>## # A tibble: 3 x 3
 ##       x     y     z
-##   &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     1     2     3
 ## 2     4    NA     6
 ## 3     1     0     1</code></pre>
 </div>
 <div id="parsing-a-vector" class="section level1">
 <h1>Parsing a Vector</h1>
-<pre class="r"><code>str(parse_logical(c(1,0,1)))</code></pre>
-<pre><code>##  logi [1:3] TRUE FALSE TRUE</code></pre>
 <pre class="r"><code>str(parse_date(c(&quot;2010-01-01&quot;, &#39;2019-01-01&#39;, &#39;1990-01-01&#39;,&#39;.&#39;), na = &quot;.&quot;))</code></pre>
 <pre><code>##  Date[1:4], format: &quot;2010-01-01&quot; &quot;2019-01-01&quot; &quot;1990-01-01&quot; NA</code></pre>
 <pre class="r"><code>str(parse_character(c(&quot;a&quot;,&quot;b&quot;)))</code></pre>
@@ -449,7 +440,7 @@ stocks %&gt;%
   gather(year, return, `2015`:`2016`, na.rm = TRUE)</code></pre>
 <pre><code>## # A tibble: 6 x 3
 ##     qtr year  return
-## * &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
 ## 1     1 2015    1.88
 ## 2     2 2015    0.59
 ## 3     3 2015    0.35
@@ -506,7 +497,7 @@ who1 %&gt;%
 ##  8 new_ep_m014   1038
 ##  9 new_ep_m1524  1026
 ## 10 new_ep_m2534  1020
-## # ... with 46 more rows</code></pre>
+## # … with 46 more rows</code></pre>
 <pre class="r"><code>who2 &lt;- who1 %&gt;%
   mutate(key = stringr::str_replace(key, &quot;newrel&quot;, &quot;new_rel&quot;))
 
@@ -524,7 +515,7 @@ who2</code></pre>
 ##  8 Afghanistan AF    AFG    2004 new_sp_m014   139
 ##  9 Afghanistan AF    AFG    2005 new_sp_m014   151
 ## 10 Afghanistan AF    AFG    2006 new_sp_m014   193
-## # ... with 76,036 more rows</code></pre>
+## # … with 76,036 more rows</code></pre>
 <pre class="r"><code>who3 &lt;- who2 %&gt;%
   separate(key,c(&quot;new&quot;,&quot;type&quot;,&quot;sexage&quot;), sep = &quot;_&quot;)
 
@@ -542,7 +533,7 @@ who3</code></pre>
 ##  8 Afghanistan AF    AFG    2004 new   sp    m014     139
 ##  9 Afghanistan AF    AFG    2005 new   sp    m014     151
 ## 10 Afghanistan AF    AFG    2006 new   sp    m014     193
-## # ... with 76,036 more rows</code></pre>
+## # … with 76,036 more rows</code></pre>
 <pre class="r"><code>who3 %&gt;%
   count(new)</code></pre>
 <pre><code>## # A tibble: 1 x 2
@@ -569,12 +560,12 @@ who5</code></pre>
 ##  8 Afghanistan  2004 sp    m     014     139
 ##  9 Afghanistan  2005 sp    m     014     151
 ## 10 Afghanistan  2006 sp    m     014     193
-## # ... with 76,036 more rows</code></pre>
+## # … with 76,036 more rows</code></pre>
 <pre class="r"><code>planes %&gt;%
   count(tailnum) %&gt;%
   filter(n&gt;1)</code></pre>
 <pre><code>## # A tibble: 0 x 2
-## # ... with 2 variables: tailnum &lt;chr&gt;, n &lt;int&gt;</code></pre>
+## # … with 2 variables: tailnum &lt;chr&gt;, n &lt;int&gt;</code></pre>
 <pre class="r"><code>weather %&gt;%
   count(year, month, day, hour, origin) %&gt;%
   filter(n&gt;1)</code></pre>
@@ -601,7 +592,7 @@ flights2 </code></pre>
 ##  8  2013     1     1     6 LGA    IAD   N829AS  EV     
 ##  9  2013     1     1     6 JFK    MCO   N593JB  B6     
 ## 10  2013     1     1     6 LGA    ORD   N3ALAA  AA     
-## # ... with 336,766 more rows</code></pre>
+## # … with 336,766 more rows</code></pre>
 <pre class="r"><code>flights2 %&gt;%
   select(-origin, -dest) %&gt;%
   left_join(airlines, by = &quot;carrier&quot;)</code></pre>
@@ -618,7 +609,7 @@ flights2 </code></pre>
 ##  8  2013     1     1     6 N829AS  EV      ExpressJet Airlines Inc.
 ##  9  2013     1     1     6 N593JB  B6      JetBlue Airways         
 ## 10  2013     1     1     6 N3ALAA  AA      American Airlines Inc.  
-## # ... with 336,766 more rows</code></pre>
+## # … with 336,766 more rows</code></pre>
 <pre class="r"><code>flights2 %&gt;%
   select(-origin, -dest) %&gt;%
   mutate(name = airlines$name[match(carrier, airlines$carrier)])</code></pre>
@@ -635,7 +626,7 @@ flights2 </code></pre>
 ##  8  2013     1     1     6 N829AS  EV      ExpressJet Airlines Inc.
 ##  9  2013     1     1     6 N593JB  B6      JetBlue Airways         
 ## 10  2013     1     1     6 N3ALAA  AA      American Airlines Inc.  
-## # ... with 336,766 more rows</code></pre>
+## # … with 336,766 more rows</code></pre>
 <pre class="r"><code>flights2 %&gt;%
   left_join(airports, c(&quot;dest&quot; = &quot;faa&quot;)) %&gt;%
   arrange(origin)</code></pre>
@@ -652,7 +643,7 @@ flights2 </code></pre>
 ##  8  2013     1     1     6 EWR    MIA   N53442  UA      Miam…  25.8  -80.3
 ##  9  2013     1     1     6 EWR    ORD   N9EAMQ  MQ      Chic…  42.0  -87.9
 ## 10  2013     1     1     6 EWR    ATL   N326NB  DL      Hart…  33.6  -84.4
-## # ... with 336,766 more rows, and 4 more variables: alt &lt;int&gt;, tz &lt;dbl&gt;,
+## # … with 336,766 more rows, and 4 more variables: alt &lt;int&gt;, tz &lt;dbl&gt;,
 ## #   dst &lt;chr&gt;, tzone &lt;chr&gt;</code></pre>
 <pre class="r"><code>flights2 %&gt;%
   left_join(airports, c(&quot;origin&quot; = &quot;faa&quot;)) %&gt;%
@@ -670,7 +661,7 @@ flights2 </code></pre>
 ##  8  2013     1     1     6 EWR    MIA   N53442  UA      Newa…  40.7 -74.2
 ##  9  2013     1     1     6 EWR    ORD   N9EAMQ  MQ      Newa…  40.7 -74.2
 ## 10  2013     1     1     6 EWR    ATL   N326NB  DL      Newa…  40.7 -74.2
-## # ... with 336,766 more rows, and 4 more variables: alt &lt;int&gt;, tz &lt;dbl&gt;,
+## # … with 336,766 more rows, and 4 more variables: alt &lt;int&gt;, tz &lt;dbl&gt;,
 ## #   dst &lt;chr&gt;, tzone &lt;chr&gt;</code></pre>
 <pre class="r"><code>airports %&gt;%
   semi_join(flights, c(&quot;faa&quot; = &quot;dest&quot;)) %&gt;%
@@ -702,19 +693,19 @@ flights2 </code></pre>
 
 top_dest</code></pre>
 <pre><code>## # A tibble: 105 x 9
-##    dest      n name                lat    lon   alt    tz dst   tzone     
-##    &lt;chr&gt; &lt;int&gt; &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     
-##  1 ORD   17283 Chicago Ohare In…  42.0  -87.9   668    -6 A     America/C…
-##  2 ATL   17215 Hartsfield Jacks…  33.6  -84.4  1026    -5 A     America/N…
-##  3 LAX   16174 Los Angeles Intl   33.9 -118.    126    -8 A     America/L…
-##  4 BOS   15508 General Edward L…  42.4  -71.0    19    -5 A     America/N…
-##  5 MCO   14082 Orlando Intl       28.4  -81.3    96    -5 A     America/N…
-##  6 CLT   14064 Charlotte Dougla…  35.2  -80.9   748    -5 A     America/N…
-##  7 SFO   13331 San Francisco In…  37.6 -122.     13    -8 A     America/L…
-##  8 FLL   12055 Fort Lauderdale …  26.1  -80.2     9    -5 A     America/N…
-##  9 MIA   11728 Miami Intl         25.8  -80.3     8    -5 A     America/N…
-## 10 DCA    9705 Ronald Reagan Wa…  38.9  -77.0    15    -5 A     America/N…
-## # ... with 95 more rows</code></pre>
+##    dest      n name                 lat    lon   alt    tz dst   tzone     
+##    &lt;chr&gt; &lt;int&gt; &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     
+##  1 ORD   17283 Chicago Ohare Intl  42.0  -87.9   668    -6 A     America/C…
+##  2 ATL   17215 Hartsfield Jackso…  33.6  -84.4  1026    -5 A     America/N…
+##  3 LAX   16174 Los Angeles Intl    33.9 -118.    126    -8 A     America/L…
+##  4 BOS   15508 General Edward La…  42.4  -71.0    19    -5 A     America/N…
+##  5 MCO   14082 Orlando Intl        28.4  -81.3    96    -5 A     America/N…
+##  6 CLT   14064 Charlotte Douglas…  35.2  -80.9   748    -5 A     America/N…
+##  7 SFO   13331 San Francisco Intl  37.6 -122.     13    -8 A     America/L…
+##  8 FLL   12055 Fort Lauderdale H…  26.1  -80.2     9    -5 A     America/N…
+##  9 MIA   11728 Miami Intl          25.8  -80.3     8    -5 A     America/N…
+## 10 DCA    9705 Ronald Reagan Was…  38.9  -77.0    15    -5 A     America/N…
+## # … with 95 more rows</code></pre>
 <pre class="r"><code>flights %&gt;%
   filter(dest %in% top_dest$dest)</code></pre>
 <pre><code>## # A tibble: 336,776 x 19
@@ -730,7 +721,7 @@ top_dest</code></pre>
 ##  8  2013     1     1      557            600        -3      709
 ##  9  2013     1     1      557            600        -3      838
 ## 10  2013     1     1      558            600        -2      753
-## # ... with 336,766 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+## # … with 336,766 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
 ## #   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
 ## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
 ## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
@@ -774,8 +765,8 @@ str_sort(x)</code></pre>
 <pre class="r"><code>x &lt;- c(&quot;xylophone&quot;,&quot;apples&quot;,&quot;pears&quot;,&quot;chicken&quot;,&quot;pork&quot;,&quot;ate&quot;,&quot;bee&quot;)
 
 str_view(x, &quot;a&quot;)</code></pre>
-<div id="htmlwidget-f5bede67c7a4609364a2" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f5bede67c7a4609364a2">{"x":{"html":"<ul>\n  <li>xylophone<\/li>\n  <li><span class='match'>a<\/span>pples<\/li>\n  <li>pe<span class='match'>a<\/span>rs<\/li>\n  <li>chicken<\/li>\n  <li>pork<\/li>\n  <li><span class='match'>a<\/span>te<\/li>\n  <li>bee<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6b442966434d3f5bb082" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6b442966434d3f5bb082">{"x":{"html":"<ul>\n  <li>xylophone<\/li>\n  <li><span class='match'>a<\/span>pples<\/li>\n  <li>pe<span class='match'>a<\/span>rs<\/li>\n  <li>chicken<\/li>\n  <li>pork<\/li>\n  <li><span class='match'>a<\/span>te<\/li>\n  <li>bee<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="determine-matches" class="section level1">
 <h1>Determine Matches</h1>
@@ -801,14 +792,8 @@ identical(no_vowels_1, no_vowels_2)</code></pre>
 </div>
 <div id="models" class="section level1">
 <h1>Models</h1>
-<pre class="r"><code>if (!require(&quot;modelr&quot;)) install.packages(&quot;modelr&quot;)</code></pre>
-<pre><code>## Loading required package: modelr</code></pre>
-<pre><code>## 
-## Attaching package: &#39;modelr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:broom&#39;:
-## 
-##     bootstrap</code></pre>
-<pre class="r"><code>library(modelr)
+<pre class="r"><code>if (!require(&quot;modelr&quot;)) install.packages(&quot;modelr&quot;)
+library(modelr)
 options(na.action = na.warn)
 
 ggplot(sim1, aes(x, y)) +
@@ -858,7 +843,7 @@ sim1a_mod &lt;- lm(y ~ x, data = sim1a)
 
 coef(sim1a_mod)</code></pre>
 <pre><code>## (Intercept)           x 
-##    4.933794    1.657851</code></pre>
+##    5.115588    1.602591</code></pre>
 <pre class="r"><code>grid &lt;- sim1 %&gt;%
   data_grid(x)
 grid</code></pre>

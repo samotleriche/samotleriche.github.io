@@ -193,10 +193,10 @@ $(document).ready(function () {
   <a href="DataAnalysis.html">Data Analysis in R</a>
 </li>
 <li>
-  <a href="NoteBook.nb.html">Notebook</a>
+  <a href="NoteBook.html">Notebook</a>
 </li>
 <li>
-  <a href="NoteBookKaggleData.nb.html">Notebook 2</a>
+  <a href="NoteBookKaggleData.html">Notebook 2</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -215,7 +215,7 @@ $(document).ready(function () {
 </div>
 
 
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. I’m using it to show some examples of work done using R.</p>
+<p><em>This</em> is an <a href="http://rmarkdown.rstudio.com">R Markdown</a>. I’m using it to show some examples of work done using R.</p>
 <div id="nobel-prize-dataset" class="section level1">
 <h1>Nobel Prize Dataset</h1>
 <pre class="r"><code>nobel %&gt;%
@@ -316,7 +316,7 @@ winner &lt;- usa_nobel %&gt;%
 usa_nobel &lt;- inner_join(usa_nobel, winner, by = &#39;decade&#39;)</code></pre>
 <pre class="r"><code>winner %&gt;% ggplot(aes(decade, winprop)) + geom_point(aes(color = winner, size = 100)) + geom_smooth() + scale_y_continuous(limits = c(0,1), expand = c(0,0))</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="NoteBook_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="NoteBook_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code>nobel &lt;- nobel %&gt;% mutate(female = Sex == &quot;Female&quot;)
 
 nobel %&gt;% group_by(decade) %&gt;%
@@ -343,7 +343,7 @@ nobel %&gt;% group_by(decade) %&gt;%
   filter(Sex == &#39;Female&#39;)
 
 ggplot(nobelfem, aes(decade, propFem, color = Category)) + geom_line() + geom_point()</code></pre>
-<p><img src="NoteBook_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="NoteBook_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>First woman to win a nobel prize</p>
 <pre class="r"><code>nobel %&gt;%
   group_by(Year) %&gt;%
@@ -431,7 +431,7 @@ nobel_age</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <pre><code>## Warning: Removed 31 rows containing non-finite values (stat_smooth).</code></pre>
 <pre><code>## Warning: Removed 31 rows containing missing values (geom_point).</code></pre>
-<p><img src="NoteBook_files/figure-html/unnamed-chunk-10-1.png" width="672" /> Oldest and Youngest</p>
+<p><img src="NoteBook_files/figure-html/unnamed-chunk-9-1.png" width="672" /> Oldest and Youngest</p>
 <pre class="r"><code>nobel_age %&gt;%
   filter(age == age[which.max(age)]) %&gt;%
   select(`Full Name`,age, `Birth Country`)</code></pre>
@@ -453,7 +453,7 @@ nobel_age</code></pre>
   select(`Full Name`, decade, Category)
 
 ggplot(g,aes(decade)) + geom_bar()</code></pre>
-<p><img src="NoteBook_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="NoteBook_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 
 

@@ -193,10 +193,10 @@ $(document).ready(function () {
   <a href="DataAnalysis.html">Data Analysis in R</a>
 </li>
 <li>
-  <a href="NoteBook.nb.html">Notebook</a>
+  <a href="NoteBook.html">Notebook</a>
 </li>
 <li>
-  <a href="NoteBookKaggleData.nb.html">Notebook 2</a>
+  <a href="NoteBookKaggleData.html">Notebook 2</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -306,7 +306,7 @@ print(acc)</code></pre>
 ##   0 769  66
 ##   1  97 448</code></pre>
 <pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
 <pre class="r"><code># normalize data on a 0-1 scale
 # knn_train$Age &lt;- (knn_train$Age - min_age) / (max_age - min_age)</code></pre>
 <pre class="r"><code>df &lt;- read.table(&quot;./adultCensus.data&quot;, header = FALSE, sep = &quot;,&quot;)
@@ -332,25 +332,18 @@ all_probs %&gt;% head()</code></pre>
 <pre><code>##          1          2          3          4          5          6 
 ## 0.04987988 0.30019374 0.30019374 0.98084291 0.04987988 0.04987988</code></pre>
 <pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-78-1.png" width="672" /></p>
 <div id="roc-curve" class="section level2">
 <h2>ROC Curve</h2>
-<pre class="r"><code>if (!require(&quot;ROCR&quot;)) install.packages(&quot;ROCR&quot;)</code></pre>
-<pre><code>## Loading required package: ROCR</code></pre>
-<pre><code>## Loading required package: gplots</code></pre>
-<pre><code>## 
-## Attaching package: &#39;gplots&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     lowess</code></pre>
-<pre class="r"><code>library(ROCR)
+<pre class="r"><code>if (!require(&quot;ROCR&quot;)) install.packages(&quot;ROCR&quot;)
+library(ROCR)
 
 pred = prediction(all_probs, df_test$income)
 
 perf = performance(pred, &quot;tpr&quot;, &quot;fpr&quot;)
 
 plot(perf)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
 <pre class="r"><code>perf = performance(pred, &quot;auc&quot;)
 
 print(perf@y.values[[1]])</code></pre>
@@ -358,9 +351,8 @@ print(perf@y.values[[1]])</code></pre>
 </div>
 <div id="comparing-k-nn-and-decision-tree-models" class="section level2">
 <h2>Comparing K-NN and Decision Tree Models</h2>
-<pre class="r"><code>if (!require(&quot;class&quot;)) install.packages(&quot;class&quot;)</code></pre>
-<pre><code>## Loading required package: class</code></pre>
-<pre class="r"><code>library(class)
+<pre class="r"><code>if (!require(&quot;class&quot;)) install.packages(&quot;class&quot;)
+library(class)
 
 train_indices &lt;- 1:round(0.7*n)
 train &lt;- shuffled[train_indices,]
@@ -405,7 +397,7 @@ for (k in range){
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
 <pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
 <pre class="r"><code>which.max(accs)</code></pre>
 <pre><code>## [1] 10</code></pre>
 <pre class="r"><code>train_indices &lt;- 1:round(0.7*n)
@@ -453,7 +445,7 @@ for (k in range){
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
 <pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
 <pre class="r"><code>best = which.max(accs)</code></pre>
 <pre class="r"><code>pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = best, prob = TRUE)
 
@@ -497,9 +489,8 @@ print(perf_t@y.values[[1]])</code></pre>
 </div>
 <div id="voronoi-diagram-with-ggvoronoi" class="section level2">
 <h2>Voronoi Diagram with ggvoronoi</h2>
-<pre class="r"><code>if (!require(&quot;ggvoronoi&quot;)) install.packages(&quot;ggvoronoi&quot;)</code></pre>
-<pre><code>## Loading required package: ggvoronoi</code></pre>
-<pre class="r"><code>library(ggvoronoi)
+<pre class="r"><code>if (!require(&quot;ggvoronoi&quot;)) install.packages(&quot;ggvoronoi&quot;)
+library(ggvoronoi)
 
 x &lt;- sample(1:150,50)
 y &lt;- sample(1:150,50)
@@ -511,7 +502,7 @@ ggplot(points) +
   geom_point(aes(x,y)) +
   theme_void() +
   coord_fixed()</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-84-1.png" width="672" /></p>
 </div>
 </div>
 <div id="regression" class="section level1">

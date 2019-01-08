@@ -18,7 +18,7 @@ library(tidyverse)
 
 ```
 
-```{r}
+```{r, booo}
 swift = genius_album(artist = "Taylor Swift", album = "Reputation")
 riri = genius_album(artist = "Rihanna", album = "Anti")
 ```
@@ -124,26 +124,19 @@ words_by_year <- tidy_riri %>%
 nested_words <- words_by_year %>%
   nest(-word)
 
-word_models <- nested_words %>%
-  mutate(models = map(data, ~glm(cbind(count, time_total) ~ Year, .,
-                                 family = "binomial")))
 ```
 
 
-```{r}
+```{r, jooo}
 library(broom)
 
-slopes <- word_models %>%
-  unnest(map(models, tidy)) %>%
-  filter(term == "Year") %>%
-  mutate(adjusted.p.value = p.adjust(p.value))
 
 top_slopes <- slopes%>%
   filter(adjusted.p.value < 0.1) %>%
   select(-statistic, -p.value)
 ```
 
-```{r}
+```{r, tooop}
 library(scales)
 words_by_year %>%
   inner_join(top_slopes, by = "word") %>%

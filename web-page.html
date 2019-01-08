@@ -192,6 +192,12 @@ $(document).ready(function () {
 <li>
   <a href="DataAnalysis.html">Data Analysis in R</a>
 </li>
+<li>
+  <a href="NoteBook.html">Notebook</a>
+</li>
+<li>
+  <a href="NoteBookKaggleData.html">Notebook 2</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -213,9 +219,8 @@ $(document).ready(function () {
 #install.packages(&quot;devtools&quot;)
 
 #devtools::install_github(&quot;josiahparry/geniusR&quot;)</code></pre>
-<pre class="r"><code>if (!require(&quot;geniusR&quot;)) install.packages(&quot;geniusR&quot;)</code></pre>
-<pre><code>## Loading required package: geniusR</code></pre>
-<pre class="r"><code>library(geniusR)
+<pre class="r"><code>if (!require(&quot;geniusR&quot;)) install.packages(&quot;geniusR&quot;)
+library(geniusR)
 if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
 library(tidyverse)</code></pre>
 <pre class="r"><code>swift = genius_album(artist = &quot;Taylor Swift&quot;, album = &quot;Reputation&quot;)</code></pre>
@@ -265,21 +270,11 @@ summary(compare_words)</code></pre>
   geom_text(aes(label=word), check_overlap = TRUE, vjust=1.5) +
   labs(y=&quot;Rihanna&quot;, x=&quot;Taylor Swift&quot;) + theme_classic()</code></pre>
 <pre><code>## Warning: Removed 843 rows containing missing values (geom_text).</code></pre>
-<p><img src="web-page_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="web-page_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <div id="over-time" class="section level1">
 <h1>Over Time</h1>
-<pre class="r"><code>if (!require(&quot;rvest&quot;)) install.packages(&quot;rvest&quot;)</code></pre>
-<pre><code>## Loading required package: rvest</code></pre>
-<pre><code>## Loading required package: xml2</code></pre>
-<pre><code>## 
-## Attaching package: &#39;rvest&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     pluck</code></pre>
-<pre><code>## The following object is masked from &#39;package:readr&#39;:
-## 
-##     guess_encoding</code></pre>
-<pre class="r"><code>library(rvest)
+<pre class="r"><code>if (!require(&quot;rvest&quot;)) install.packages(&quot;rvest&quot;)
+library(rvest)
 riridisc = &#39;https://en.wikipedia.org/wiki/Rihanna_discography&#39;
 
 disc &lt;- riridisc %&gt;%
@@ -327,7 +322,7 @@ tidy_riri &lt;- riri_lyrics %&gt;%
 ##  8 na      187
 ##  9 la      158
 ## 10 cake    155
-## # ... with 2,215 more rows</code></pre>
+## # … with 2,215 more rows</code></pre>
 <pre class="r"><code>words_by_year &lt;- tidy_riri %&gt;%
   count(Year, word) %&gt;%
   group_by(Year) %&gt;%
@@ -339,31 +334,15 @@ tidy_riri &lt;- riri_lyrics %&gt;%
   filter(word_total &gt; 50)
 
 nested_words &lt;- words_by_year %&gt;%
-  nest(-word)
-
-word_models &lt;- nested_words %&gt;%
-  mutate(models = map(data, ~glm(cbind(count, time_total) ~ Year, .,
-                                 family = &quot;binomial&quot;)))</code></pre>
+  nest(-word)</code></pre>
 <pre class="r"><code>library(broom)
 
-slopes &lt;- word_models %&gt;%
-  unnest(map(models, tidy)) %&gt;%
-  filter(term == &quot;Year&quot;) %&gt;%
-  mutate(adjusted.p.value = p.adjust(p.value))
 
 top_slopes &lt;- slopes%&gt;%
   filter(adjusted.p.value &lt; 0.1) %&gt;%
   select(-statistic, -p.value)</code></pre>
-<pre class="r"><code>library(scales)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;scales&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     discard</code></pre>
-<pre><code>## The following object is masked from &#39;package:readr&#39;:
-## 
-##     col_factor</code></pre>
-<pre class="r"><code>words_by_year %&gt;%
+<pre class="r"><code>library(scales)
+words_by_year %&gt;%
   inner_join(top_slopes, by = &quot;word&quot;) %&gt;%
   ggplot(aes(Year, count/time_total, color = word, lty = word)) +
   geom_line(size = 1.3) +
@@ -371,7 +350,7 @@ top_slopes &lt;- slopes%&gt;%
   scale_x_continuous(breaks=TS_albums$Year,
                      labels=TS_albums$Title) +
   scale_y_continuous(labels=scales::percent)</code></pre>
-<p><img src="web-page_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="web-page_files/figure-html/tooop-1.png" width="672" /></p>
 </div>
 
 

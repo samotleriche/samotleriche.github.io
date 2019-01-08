@@ -1,12 +1,11 @@
 ---
 title: "R Notebook"
-output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. I'm using it to show some examples of work done using R.
+_This_ is an [R Markdown](http://rmarkdown.rstudio.com). I'm using it to show some examples of work done using R.
 
 #Nobel Prize Dataset
-```{r include=FALSE}
+```{r, name, include=FALSE}
 if (!require("tidyverse")) install.packages("tidyverse")
 if (!require("lubridate")) install.packages("lubridate")
 library("tidyverse");library("lubridate")
@@ -124,7 +123,7 @@ ggplot(nobel_age, aes(Year, age)) + geom_point() + geom_smooth(aes(color = Categ
 ```
 Oldest and Youngest
 
-```{r}
+```{r, SUPER}
 nobel_age %>%
   filter(age == age[which.max(age)]) %>%
   select(`Full Name`,age, `Birth Country`)
