@@ -1,5 +1,8 @@
 ---
 title: "Examples of htmlwidgets made in R"
+output:
+  html_document:
+    css: faded.css
 ---
 ```{r include=FALSE}
 #rmarkdown::render_site()

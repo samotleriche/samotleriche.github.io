@@ -5,6 +5,7 @@ title: "Data Analysis"
 # Data Analysis Fundamentals
 
 ```{r test rpart, include=FALSE}
+library("tidyverse")
 library(rpart)
 # Set random seed. Don't remove this line.
 set.seed(1)
@@ -115,7 +116,7 @@ train <- shuffled[train_indices,]
 test_indices <- (round(0.7*n)+1):n
 test <- shuffled[test_indices, ]
 
-tree <- rpart(spam_label ~ ., train, method = "class")
+tree <- rpart(spam_label ~ ., train, method = "class", parms = list(split = "information"))
 
 
 pred <- predict(tree, test, type = "class")
@@ -129,3 +130,261 @@ print(conf)
 
 fancyRpartPlot(tree)
 ```
+
+
+```{r}
+# normalize data on a 0-1 scale
+# knn_train$Age <- (knn_train$Age - min_age) / (max_age - min_age)
+```
+
+
+```{r}
+df <- read.table("./adultCensus.data", header = FALSE, sep = ",")
+df_test <- read.table("./adultTest.test", header = FALSE, sep = ",", skip = 1)
+
+names(df) <- c("age","workclass","fnlwgt","education", "education-num","maritalstatus","occupation","relationship","race","sex","capital-gain","capital-loss","hoursPerWeek","native-country","income")
+
+names(df_test) <- c("age","workclass","fnlwgt","education", "education-num","maritalstatus","occupation","relationship","race","sex","capital-gain","capital-loss","hoursPerWeek","native-country","income")
+
+```
+
+```{r}
+df[1,]
+
+df$fnlwgt <- NULL
+
+tree <- rpart(income ~ ., df, method = "class", parms = list(split = "gini"))
+
+all_probs = predict(tree, df_test, type = "prob")[,2]
+
+all_probs %>% head()
+
+
+
+```
+
+```{r}
+fancyRpartPlot(tree)
+```
+
+##ROC Curve
+```{r error=FALSE}
+if (!require("ROCR")) install.packages("ROCR")
+library(ROCR)
+
+pred = prediction(all_probs, df_test$income)
+
+perf = performance(pred, "tpr", "fpr")
+
+plot(perf)
+
+
+perf = performance(pred, "auc")
+
+print(perf@y.values[[1]])
+
+```
+
+##Comparing K-NN and Decision Tree Models
+```{r}
+if (!require("class")) install.packages("class")
+library(class)
+
+train_indices <- 1:round(0.7*n)
+train <- shuffled[train_indices,]
+test_indices <- (round(0.7*n)+1):n
+test <- shuffled[test_indices, ]
+
+knn_train <- train
+knn_test <- test
+
+knn_train_labels <- knn_train$spam_label
+knn_train$spam_label <- NULL
+
+knn_test_labels <- knn_test$spam_label
+knn_test$spam_label <- NULL
+
+
+knn_train <- apply(knn_train, 2, function(x) (x - min(x))/(max(x)-min(x)))
+knn_test <- apply(knn_test, 2, function(x) (x - min(x))/(max(x)-min(x)))
+
+
+pred <- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = 5)
+conf = table(knn_test_labels, pred)
+print(conf)
+
+range <- 1:50
+accs <- rep(0, length(range))
+
+for (k in range){
+  pred <- knn(knn_train, knn_test, knn_train_labels, k=k)
+  conf <- table(knn_test_labels, pred)
+  accs[k] <- sum(diag(conf)) / sum(conf)
+  if (k %% 10 == 0){
+    print("10")
+  }
+}
+
+plot(range, accs, xlab = "k")
+
+which.max(accs)
+```
+
+```{r}
+train_indices <- 1:round(0.7*n)
+train <- shuffled[train_indices,]
+test_indices <- (round(0.7*n)+1):n
+test <- shuffled[test_indices, ]
+```
+
+```{r}
+set.seed(1)
+
+knn_train <- train
+knn_test <- test
+
+knn_train_labels <- knn_train$spam_label
+knn_train$spam_label <- NULL
+
+knn_test_labels <- knn_test$spam_label
+knn_test$spam_label <- NULL
+
+#knn_train <- apply(knn_train, 2, function(x) (x - mean(x))/sd(x))
+#knn_test <- apply(knn_test, 2, function(x) (x - mean(x))/sd(x))
+
+knn_train <- scale(knn_train)
+knn_test <- scale(knn_test)
+
+pred <- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = 5)
+conf = table(knn_test_labels, pred)
+print(conf)
+
+range <- 1:50
+accs <- rep(0, length(range))
+
+for (k in range){
+  pred <- knn(knn_train, knn_test, knn_train_labels, k=k)
+  conf <- table(knn_test_labels, pred)
+  accs[k] <- sum(diag(conf)) / sum(conf)
+  if (k %% 10 == 0){
+    print("10")
+  }
+}
+
+plot(range, accs, xlab = "k")
+
+best = which.max(accs)
+```
+```{r include=FALSE}
+ROC_curves <- function(tree, knn) {
+  if (!(class(tree)== "performance" && class(knn) == "performance") ||
+      !(attr(class(tree),"package") == "ROCR" && attr(class(knn),"package") == "ROCR")) {
+    stop("This predefined function needs two performance objects as arguments.")
+  } else if (length(tree@x.values) == 0 | length(knn@x.values) == 0) {
+    stop('This predefined function needs the right kind of performance objects as arguments. Are you sure you are creating both objects with arguments "tpr" and  "fpr"?')
+  } else {
+    plot(0,0,
+         type = "n",
+         main = "ROC Curves",
+         ylab = "True positive rate",
+         xlab = "False positive rate",
+         ylim = c(0,1),
+         xlim = c(0,1))
+    lines(tree@x.values[[1]], tree@y.values[[1]], type = "l", lwd = 2, col = "red")
+    lines(knn@x.values[[1]], knn@y.values[[1]], type = "l", lwd = 2, col = "green")
+    legend("bottomright", c("DT","KNN"), lty=c(1,1),lwd=c(2.5,2.5),col=c("red","green"))
+  }
+}
+
+```
+
+
+
+```{r}
+pred <- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = best, prob = TRUE)
+
+conf = table(knn_test_labels, pred)
+acc = sum(diag(conf))/sum(conf)
+print(conf)
+print(paste(acc, " knn accuracy"))
+
+probs_k <- attr(pred, "prob")
+
+tree <- rpart(spam_label ~ ., train, method = "class")
+
+probs_t <- predict(tree, test, type = "class")
+conf = table(test$spam_label, probs_t)
+acc = sum(diag(conf))/sum(conf)
+print(conf)
+print(paste(acc, " tree accuracy"))
+
+probs_t <- predict(tree, test, type = "prob")[,2]
+
+pred_t = prediction(probs_t, test$spam_label)
+pred_k <- prediction(probs_k, test$spam_label)
+
+perf_t = performance(pred_t, "auc")
+perf_k = performance(pred_k, "auc")
+
+#ROC_curves(perf_t, perf_k)
+
+print(perf_t@y.values[[1]])
+print(perf_k@y.values[[1]])
+
+```
+
+
+
+
+
+
+
+
+
+
+
+##Voronoi Diagram with ggvoronoi
+```{r error=FALSE}
+if (!require("ggvoronoi")) install.packages("ggvoronoi")
+library(ggvoronoi)
+
+x <- sample(1:150,50)
+y <- sample(1:150,50)
+points <- data.frame(x, y, distance = sqrt((x-75)^2 + (y-75)^2))
+
+ggplot(points) +
+  geom_voronoi(aes(x,y,fill=distance)) +
+  scale_fill_gradient(low="#4dffb8",high="navyblue",guide=F) +
+  geom_point(aes(x,y)) +
+  theme_void() +
+  coord_fixed()
+
+```
+
+#Regression
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

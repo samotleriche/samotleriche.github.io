@@ -11,6 +11,10 @@ navbar:
       href: wepage2.html
     - text: "Data Analysis in R"
       href: DataAnalysis.html
+    - text: "Notebook"
+      href: NoteBook.nb.html
+    - text: "Notebook 2"
+      href: NoteBookKaggleData.nb.html
 output:
   html_document:
     theme: cosmo
