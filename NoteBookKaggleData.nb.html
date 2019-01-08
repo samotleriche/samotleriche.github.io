@@ -271,22 +271,87 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5kYXRhIDwtIHJlYWRfY3N2KFwibXVsdGlwbGVDaG9pY2VSZXNwb25zZXMuY3N2XCIpXG5gYGAifQ== -->
+<pre class="r"><code>library(tidyverse)
+data &lt;- read_csv(&quot;multipleChoiceResponses.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICAuZGVmYXVsdCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgQWdlID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIExlYXJuaW5nQ2F0ZWdvcnlTZWxmdFRhdWdodCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBMZWFybmluZ0NhdGVnb3J5T25saW5lQ291cnNlcyA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBMZWFybmluZ0NhdGVnb3J5V29yayA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBMZWFybmluZ0NhdGVnb3J5VW5pdmVyc2l0eSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBMZWFybmluZ0NhdGVnb3J5S2FnZ2xlID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIExlYXJuaW5nQ2F0ZWdvcnlPdGhlciA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBXb3JrVG9vbHNGcmVxdWVuY3lLTklNRUNvbW1lcmNpYWwgPSBcdTAwMWJbMzNtY29sX2xvZ2ljYWwoKVx1MDAxYlszOW0sXG4gIFRpbWVHYXRoZXJpbmdEYXRhID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIFRpbWVNb2RlbEJ1aWxkaW5nID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIFRpbWVQcm9kdWN0aW9uID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIFRpbWVWaXN1YWxpemluZyA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBUaW1lRmluZGluZ0luc2lnaHRzID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIFRpbWVPdGhlclNlbGVjdCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBDb21wZW5zYXRpb25BbW91bnQgPSBcdTAwMWJbMzJtY29sX251bWJlcigpXHUwMDFiWzM5bVxuKVxuU2VlIHNwZWMoLi4uKSBmb3IgZnVsbCBjb2x1bW4gc3BlY2lmaWNhdGlvbnMuXG40MyBwYXJzaW5nIGZhaWx1cmVzLlxuIHJvdyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb2wgICAgICAgICAgIGV4cGVjdGVkICAgICAgICAgICBhY3R1YWwgICAgICAgICAgICAgICAgICAgICAgICAgIGZpbGVcbjEyMDkgQ29tcGVuc2F0aW9uQW1vdW50ICAgICAgICAgICAgICAgIGEgbnVtYmVyICAgICAgICAgICAtICAgICAgICAgICAgICAgICdtdWx0aXBsZUNob2ljZVJlc3BvbnNlcy5jc3YnXG4xMzE2IFdvcmtUb29sc0ZyZXF1ZW5jeUtOSU1FQ29tbWVyY2lhbCAxLzAvVC9GL1RSVUUvRkFMU0UgUmFyZWx5ICAgICAgICAgICAnbXVsdGlwbGVDaG9pY2VSZXNwb25zZXMuY3N2J1xuMTU5NCBXb3JrVG9vbHNGcmVxdWVuY3lLTklNRUNvbW1lcmNpYWwgMS8wL1QvRi9UUlVFL0ZBTFNFIE9mdGVuICAgICAgICAgICAgJ211bHRpcGxlQ2hvaWNlUmVzcG9uc2VzLmNzdidcbjI0NDMgV29ya1Rvb2xzRnJlcXVlbmN5S05JTUVDb21tZXJjaWFsIDEvMC9UL0YvVFJVRS9GQUxTRSBNb3N0IG9mIHRoZSB0aW1lICdtdWx0aXBsZUNob2ljZVJlc3BvbnNlcy5jc3YnXG4yNDY2IFdvcmtUb29sc0ZyZXF1ZW5jeUtOSU1FQ29tbWVyY2lhbCAxLzAvVC9GL1RSVUUvRkFMU0UgTW9zdCBvZiB0aGUgdGltZSAnbXVsdGlwbGVDaG9pY2VSZXNwb25zZXMuY3N2J1xuLi4uLiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4gLi4uLi4uLi4uLi4uLi4uLi4uIC4uLi4uLi4uLi4uLi4uLi4gLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi5cblNlZSBwcm9ibGVtcyguLi4pIGZvciBtb3JlIGRldGFpbHMuXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  .default = col_character(),
+  Age = [32mcol_double()[39m,
+  LearningCategorySelftTaught = [32mcol_double()[39m,
+  LearningCategoryOnlineCourses = [32mcol_double()[39m,
+  LearningCategoryWork = [32mcol_double()[39m,
+  LearningCategoryUniversity = [32mcol_double()[39m,
+  LearningCategoryKaggle = [32mcol_double()[39m,
+  LearningCategoryOther = [32mcol_double()[39m,
+  WorkToolsFrequencyKNIMECommercial = [33mcol_logical()[39m,
+  TimeGatheringData = [32mcol_double()[39m,
+  TimeModelBuilding = [32mcol_double()[39m,
+  TimeProduction = [32mcol_double()[39m,
+  TimeVisualizing = [32mcol_double()[39m,
+  TimeFindingInsights = [32mcol_double()[39m,
+  TimeOtherSelect = [32mcol_double()[39m,
+  CompensationAmount = [32mcol_number()[39m
+)
+See spec(...) for full column specifications.
+43 parsing failures.
+ row                               col           expected           actual                          file
+1209 CompensationAmount                a number           -                'multipleChoiceResponses.csv'
+1316 WorkToolsFrequencyKNIMECommercial 1/0/T/F/TRUE/FALSE Rarely           'multipleChoiceResponses.csv'
+1594 WorkToolsFrequencyKNIMECommercial 1/0/T/F/TRUE/FALSE Often            'multipleChoiceResponses.csv'
+2443 WorkToolsFrequencyKNIMECommercial 1/0/T/F/TRUE/FALSE Most of the time 'multipleChoiceResponses.csv'
+2466 WorkToolsFrequencyKNIMECommercial 1/0/T/F/TRUE/FALSE Most of the time 'multipleChoiceResponses.csv'
+.... ................................. .................. ................ .............................
+See problems(...) for more details.</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGltKGRhdGEpXG5gYGAifQ== -->
 <pre class="r"><code>dim(data)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE2NzE2ICAgMjI4XG4ifQ== -->
+<pre><code>[1] 16716   228</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSA8LSBhcy5kYXRhLmZyYW1lKGRhdGEpXG50eXBlb2YoZGF0YSlcbmBgYCJ9 -->
+<pre class="r"><code>data &lt;- as.data.frame(data)
+typeof(data)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwibGlzdFwiXG4ifQ== -->
+<pre><code>[1] &quot;list&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW5pcXVlKGRhdGEkRm9ybWFsRWR1Y2F0aW9uKVxuYGBgIn0= -->
+<pre class="r"><code>unique(data$FormalEducation)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiQmFjaGVsb3IncyBkZWdyZWVcIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuWzJdIFwiTWFzdGVyJ3MgZGVncmVlXCIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuWzNdIFwiRG9jdG9yYWwgZGVncmVlXCIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuWzRdIE5BICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbls1XSBcIlNvbWUgY29sbGVnZS91bml2ZXJzaXR5IHN0dWR5IHdpdGhvdXQgZWFybmluZyBhIGJhY2hlbG9yJ3MgZGVncmVlXCJcbls2XSBcIkkgZGlkIG5vdCBjb21wbGV0ZSBhbnkgZm9ybWFsIGVkdWNhdGlvbiBwYXN0IGhpZ2ggc2Nob29sXCIgICAgICAgICBcbls3XSBcIlByb2Zlc3Npb25hbCBkZWdyZWVcIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbls4XSBcIkkgcHJlZmVyIG5vdCB0byBhbnN3ZXJcIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiJ9 -->
+<pre><code>[1] &quot;Bachelor's degree&quot;                                                
+[2] &quot;Master's degree&quot;                                                  
+[3] &quot;Doctoral degree&quot;                                                  
+[4] NA                                                                 
+[5] &quot;Some college/university study without earning a bachelor's degree&quot;
+[6] &quot;I did not complete any formal education past high school&quot;         
+[7] &quot;Professional degree&quot;                                              
+[8] &quot;I prefer not to answer&quot;                                           </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgPC0gZGF0YSAlPiVcbiAgZ3JvdXBfYnkoRm9ybWFsRWR1Y2F0aW9uLCBHZW5kZXJTZWxlY3QpICU+JVxuICBmaWx0ZXIoR2VuZGVyU2VsZWN0ID09IFwiTWFsZVwiIHwgR2VuZGVyU2VsZWN0ID09IFwiRmVtYWxlXCIpICU+JVxuICBzdW1tYXJpc2UoY291bnQgPSBuKCkpXG4gIFxuYGBgIn0= -->
+<pre class="r"><code>df &lt;- data %&gt;%
+  group_by(FormalEducation, GenderSelect) %&gt;%
+  filter(GenderSelect == &quot;Male&quot; | GenderSelect == &quot;Female&quot;) %&gt;%
+  summarise(count = n())
+  </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayAyIgotLS0KClRoaXMgaXMgYW4gW1IgTWFya2Rvd25dKGh0dHA6Ly9ybWFya2Rvd24ucnN0dWRpby5jb20pLiBJJ20gdXNpbmcgdGhpcyB0byBkZW1vbnN0cmF0ZSB1c2luZyBSIGFuZCBSIE5vdGVib29rcy4KCmBgYHtyLCBTVVBFUlQsIGluY2x1ZGU9RkFMU0V9CmxpYnJhcnkodGlkeXZlcnNlKQpkYXRhIDwtIHJlYWRfY3N2KCJtdWx0aXBsZUNob2ljZVJlc3BvbnNlcy5jc3YiKQpgYGAKCmBgYHtyfQpkaW0oZGF0YSkKYGBgCgpgYGB7cn0KCmBgYAoKYGBge3IsIFNVUEVSU30KCmBgYAoKCgoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayAyIgotLS0KClRoaXMgaXMgYW4gW1IgTWFya2Rvd25dKGh0dHA6Ly9ybWFya2Rvd24ucnN0dWRpby5jb20pLiBJJ20gdXNpbmcgdGhpcyB0byBkZW1vbnN0cmF0ZSB1c2luZyBSIGFuZCBSIE5vdGVib29rcy4KCmBgYHtyLCBTVVBFUlQsIGluY2x1ZGU9RkFMU0V9CmxpYnJhcnkodGlkeXZlcnNlKQpkYXRhIDwtIHJlYWRfY3N2KCJtdWx0aXBsZUNob2ljZVJlc3BvbnNlcy5jc3YiKQpgYGAKCmBgYHtyfQpkaW0oZGF0YSkKYGBgCgpgYGB7cn0KZGF0YSA8LSBhcy5kYXRhLmZyYW1lKGRhdGEpCgp0eXBlb2YoZGF0YSkKCnVuaXF1ZShkYXRhJEZvcm1hbEVkdWNhdGlvbikKCmRmIDwtIGRhdGEgJT4lCiAgZ3JvdXBfYnkoRm9ybWFsRWR1Y2F0aW9uLCBHZW5kZXJTZWxlY3QpICU+JQogIGZpbHRlcihHZW5kZXJTZWxlY3QgPT0gIk1hbGUiIHwgR2VuZGVyU2VsZWN0ID09ICJGZW1hbGUiKSAlPiUKICBzdW1tYXJpc2UoY291bnQgPSBuKCkpCiAgCmBgYAoKYGBge3J9CmdncGxvdChkZixhZXMoR2VuZGVyU2VsZWN0LCBjb3VudCkpICsgZ2VvbV9jb2woYWVzKGZpbGwgPSBGb3JtYWxFZHVjYXRpb24pKQpgYGAKCgoKCgo=</div>
 
 
 

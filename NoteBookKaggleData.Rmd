@@ -14,11 +14,21 @@ dim(data)
 ```
 
 ```{r}
+data <- as.data.frame(data)
 
+typeof(data)
+
+unique(data$FormalEducation)
+
+df <- data %>%
+  group_by(FormalEducation, GenderSelect) %>%
+  filter(GenderSelect == "Male" | GenderSelect == "Female") %>%
+  summarise(count = n())
+  
 ```
 
-```{r, SUPERS}
-
+```{r}
+ggplot(df,aes(GenderSelect, count)) + geom_col(aes(fill = FormalEducation))
 ```
 
 

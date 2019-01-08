@@ -218,6 +218,25 @@ $(document).ready(function () {
 <p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a>. I’m using this to demonstrate using R and R Notebooks.</p>
 <pre class="r"><code>dim(data)</code></pre>
 <pre><code>## [1] 16716   228</code></pre>
+<pre class="r"><code>data &lt;- as.data.frame(data)
+
+typeof(data)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>unique(data$FormalEducation)</code></pre>
+<pre><code>## [1] &quot;Bachelor&#39;s degree&quot;                                                
+## [2] &quot;Master&#39;s degree&quot;                                                  
+## [3] &quot;Doctoral degree&quot;                                                  
+## [4] NA                                                                 
+## [5] &quot;Some college/university study without earning a bachelor&#39;s degree&quot;
+## [6] &quot;I did not complete any formal education past high school&quot;         
+## [7] &quot;Professional degree&quot;                                              
+## [8] &quot;I prefer not to answer&quot;</code></pre>
+<pre class="r"><code>df &lt;- data %&gt;%
+  group_by(FormalEducation, GenderSelect) %&gt;%
+  filter(GenderSelect == &quot;Male&quot; | GenderSelect == &quot;Female&quot;) %&gt;%
+  summarise(count = n())</code></pre>
+<pre class="r"><code>ggplot(df,aes(GenderSelect, count)) + geom_col(aes(fill = FormalEducation))</code></pre>
+<p><img src="NoteBookKaggleData_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 
 
 

@@ -306,7 +306,7 @@ print(acc)</code></pre>
 ##   0 769  66
 ##   1  97 448</code></pre>
 <pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code># normalize data on a 0-1 scale
 # knn_train$Age &lt;- (knn_train$Age - min_age) / (max_age - min_age)</code></pre>
 <pre class="r"><code>df &lt;- read.table(&quot;./adultCensus.data&quot;, header = FALSE, sep = &quot;,&quot;)
@@ -332,7 +332,7 @@ all_probs %&gt;% head()</code></pre>
 <pre><code>##          1          2          3          4          5          6 
 ## 0.04987988 0.30019374 0.30019374 0.98084291 0.04987988 0.04987988</code></pre>
 <pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-78-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <div id="roc-curve" class="section level2">
 <h2>ROC Curve</h2>
 <pre class="r"><code>if (!require(&quot;ROCR&quot;)) install.packages(&quot;ROCR&quot;)
@@ -343,7 +343,7 @@ pred = prediction(all_probs, df_test$income)
 perf = performance(pred, &quot;tpr&quot;, &quot;fpr&quot;)
 
 plot(perf)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <pre class="r"><code>perf = performance(pred, &quot;auc&quot;)
 
 print(perf@y.values[[1]])</code></pre>
@@ -397,7 +397,7 @@ for (k in range){
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
 <pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <pre class="r"><code>which.max(accs)</code></pre>
 <pre><code>## [1] 10</code></pre>
 <pre class="r"><code>train_indices &lt;- 1:round(0.7*n)
@@ -445,7 +445,7 @@ for (k in range){
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
 <pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>best = which.max(accs)</code></pre>
 <pre class="r"><code>pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = best, prob = TRUE)
 
@@ -502,7 +502,7 @@ ggplot(points) +
   geom_point(aes(x,y)) +
   theme_void() +
   coord_fixed()</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-84-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 </div>
 <div id="regression" class="section level1">
