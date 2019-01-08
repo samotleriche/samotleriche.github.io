@@ -88,6 +88,7 @@ m %>% fitBounds(0, 40, 10, 50) %>%
 if (!require("reticulate")) install.packages("reticulate")
 library(reticulate)
 
+
 ```
 #Python in R.
 ```{python}
@@ -102,6 +103,6 @@ vat = 0
 
 print(var[0:])
 
-
+print()
 
 ```

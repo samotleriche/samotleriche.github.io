@@ -31,6 +31,58 @@ df <- data %>%
 ggplot(df,aes(GenderSelect, count)) + geom_col(aes(fill = FormalEducation))
 ```
 
+```{r}
+df <- data %>%
+  group_by(LanguageRecommendationSelect) %>%
+  summarise(count = n()) %>%
+  filter(count > 90)
+  
+df <- df[complete.cases(df), ]
+
+ggplot(df,aes(LanguageRecommendationSelect, count)) + geom_col(aes(fill = LanguageRecommendationSelect)) + scale_y_continuous(expand = c(0,0)) +
+  theme(legend.position="none") +
+  coord_flip()
+```
+
+```{r}
+df <- data
+
+df <- df[c("LanguageRecommendationSelect","Age", "GenderSelect")]
+
+df <- df[complete.cases(df), ]
+
+df <- df %>%
+  mutate(Age = floor(Age/10) * 10)
+
+df <- df %>% group_by(Age, LanguageRecommendationSelect) %>%
+  summarise(count = n()) %>%
+  filter(LanguageRecommendationSelect == "R" | LanguageRecommendationSelect == "Python")
+
+df %>% ggplot(aes(Age, count, fill = LanguageRecommendationSelect)) + geom_col(position = position_dodge())
+```
+
+```{r}
+df <- read_csv("kagglesurvey.csv")
+
+df
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

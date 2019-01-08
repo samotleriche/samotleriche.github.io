@@ -237,6 +237,56 @@ typeof(data)</code></pre>
   summarise(count = n())</code></pre>
 <pre class="r"><code>ggplot(df,aes(GenderSelect, count)) + geom_col(aes(fill = FormalEducation))</code></pre>
 <p><img src="NoteBookKaggleData_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>df &lt;- data %&gt;%
+  group_by(LanguageRecommendationSelect) %&gt;%
+  summarise(count = n()) %&gt;%
+  filter(count &gt; 90)
+  
+df &lt;- df[complete.cases(df), ]
+
+ggplot(df,aes(LanguageRecommendationSelect, count)) + geom_col(aes(fill = LanguageRecommendationSelect)) + scale_y_continuous(expand = c(0,0)) +
+  theme(legend.position=&quot;none&quot;) +
+  coord_flip()</code></pre>
+<p><img src="NoteBookKaggleData_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>df &lt;- data
+
+df &lt;- df[c(&quot;LanguageRecommendationSelect&quot;,&quot;Age&quot;, &quot;GenderSelect&quot;)]
+
+df &lt;- df[complete.cases(df), ]
+
+df &lt;- df %&gt;%
+  mutate(Age = floor(Age/10) * 10)
+
+df &lt;- df %&gt;% group_by(Age, LanguageRecommendationSelect) %&gt;%
+  summarise(count = n()) %&gt;%
+  filter(LanguageRecommendationSelect == &quot;R&quot; | LanguageRecommendationSelect == &quot;Python&quot;)
+
+df %&gt;% ggplot(aes(Age, count, fill = LanguageRecommendationSelect)) + geom_col(position = position_dodge())</code></pre>
+<p><img src="NoteBookKaggleData_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>df &lt;- read_csv(&quot;kagglesurvey.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Respondent = col_double(),
+##   WorkToolsSelect = col_character(),
+##   LanguageRecommendationSelect = col_character(),
+##   EmployerIndustry = col_character(),
+##   WorkAlgorithmsSelect = col_character()
+## )</code></pre>
+<pre class="r"><code>df</code></pre>
+<pre><code>## # A tibble: 10,153 x 5
+##    Respondent WorkToolsSelect LanguageRecomme… EmployerIndustry
+##         &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;           
+##  1          1 Amazon Web ser… F#               Internet-based  
+##  2          2 Amazon Machine… Python           Mix of fields   
+##  3          3 C/C++,Jupyter … Python           Technology      
+##  4          4 Jupyter notebo… Python           Academic        
+##  5          5 C/C++,Cloudera… R                Government      
+##  6          6 SQL             Python           Non-profit      
+##  7          7 Jupyter notebo… Python           Internet-based  
+##  8          8 Python,Spark /… Python           Mix of fields   
+##  9          9 Jupyter notebo… Python           Financial       
+## 10         10 C/C++,IBM Cogn… R                Technology      
+## # … with 10,143 more rows, and 1 more variable: WorkAlgorithmsSelect &lt;chr&gt;</code></pre>
 
 
 

@@ -15,8 +15,17 @@ navbar:
       href: NoteBook.html
     - text: "Notebook 2"
       href: NoteBookKaggleData.html
+  right:
+    - icon: fa-envelope fa-lg
+      href: http://github.com/samotleriche
+    - icon: fa-github fa-lg
+      href: http://github.com/samotleriche
 output:
   html_document:
-    theme: cosmo
+    theme: paper
+    highlight: textmate
+    include:
+      after_body: footer.html
+    css: styles.css
     
 
