@@ -2,7 +2,7 @@
 title: "R Notebook 2"
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com). I'm using this to demonstrate using R and R Notebooks.
+This is an [R Markdown](http://rmarkdown.rstudio.com) notebook. I'm using this to demonstrate using R and R Notebooks. The Example is based on the Exploring Kaggle Data Science Survery from [DataCamp](https://projects.datacamp.com/projects/74)
 
 ```{r, SUPERT, include=FALSE}
 library(tidyverse)

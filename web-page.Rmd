@@ -127,30 +127,6 @@ nested_words <- words_by_year %>%
 ```
 
 
-```{r, jooo}
-library(broom)
-
-
-top_slopes <- slopes%>%
-  filter(adjusted.p.value < 0.1) %>%
-  select(-statistic, -p.value)
-```
-
-```{r, tooop}
-library(scales)
-words_by_year %>%
-  inner_join(top_slopes, by = "word") %>%
-  ggplot(aes(Year, count/time_total, color = word, lty = word)) +
-  geom_line(size = 1.3) +
-  labs(x = NULL, y = "Word Frequency") +
-  scale_x_continuous(breaks=TS_albums$Year,
-                     labels=TS_albums$Title) +
-  scale_y_continuous(labels=scales::percent)
-```
-
-
-
-
 
 
 
