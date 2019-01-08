@@ -192,6 +192,12 @@ $(document).ready(function () {
 <li>
   <a href="DataAnalysis.html">Data Analysis in R</a>
 </li>
+<li>
+  <a href="NoteBook.nb.html">Notebook</a>
+</li>
+<li>
+  <a href="NoteBookKaggleData.nb.html">Notebook 2</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -283,7 +289,7 @@ train &lt;- shuffled[train_indices,]
 test_indices &lt;- (round(0.7*n)+1):n
 test &lt;- shuffled[test_indices, ]
 
-tree &lt;- rpart(spam_label ~ ., train, method = &quot;class&quot;)
+tree &lt;- rpart(spam_label ~ ., train, method = &quot;class&quot;, parms = list(split = &quot;information&quot;))
 
 
 pred &lt;- predict(tree, test, type = &quot;class&quot;)
@@ -293,14 +299,223 @@ conf = table(test$spam_label ,pred)
 acc = sum(diag(conf))/sum(conf)
 
 print(acc)</code></pre>
-<pre><code>## [1] 0.8826087</code></pre>
+<pre><code>## [1] 0.8818841</code></pre>
 <pre class="r"><code>print(conf)</code></pre>
 <pre><code>##    pred
 ##       0   1
+##   0 769  66
+##   1  97 448</code></pre>
+<pre class="r"><code>fancyRpartPlot(tree)</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code># normalize data on a 0-1 scale
+# knn_train$Age &lt;- (knn_train$Age - min_age) / (max_age - min_age)</code></pre>
+<pre class="r"><code>df &lt;- read.table(&quot;./adultCensus.data&quot;, header = FALSE, sep = &quot;,&quot;)
+df_test &lt;- read.table(&quot;./adultTest.test&quot;, header = FALSE, sep = &quot;,&quot;, skip = 1)
+
+names(df) &lt;- c(&quot;age&quot;,&quot;workclass&quot;,&quot;fnlwgt&quot;,&quot;education&quot;, &quot;education-num&quot;,&quot;maritalstatus&quot;,&quot;occupation&quot;,&quot;relationship&quot;,&quot;race&quot;,&quot;sex&quot;,&quot;capital-gain&quot;,&quot;capital-loss&quot;,&quot;hoursPerWeek&quot;,&quot;native-country&quot;,&quot;income&quot;)
+
+names(df_test) &lt;- c(&quot;age&quot;,&quot;workclass&quot;,&quot;fnlwgt&quot;,&quot;education&quot;, &quot;education-num&quot;,&quot;maritalstatus&quot;,&quot;occupation&quot;,&quot;relationship&quot;,&quot;race&quot;,&quot;sex&quot;,&quot;capital-gain&quot;,&quot;capital-loss&quot;,&quot;hoursPerWeek&quot;,&quot;native-country&quot;,&quot;income&quot;)</code></pre>
+<pre class="r"><code>df[1,]</code></pre>
+<pre><code>##   age  workclass fnlwgt  education education-num  maritalstatus
+## 1  39  State-gov  77516  Bachelors            13  Never-married
+##      occupation   relationship   race   sex capital-gain capital-loss
+## 1  Adm-clerical  Not-in-family  White  Male         2174            0
+##   hoursPerWeek native-country income
+## 1           40  United-States  &lt;=50K</code></pre>
+<pre class="r"><code>df$fnlwgt &lt;- NULL
+
+tree &lt;- rpart(income ~ ., df, method = &quot;class&quot;, parms = list(split = &quot;gini&quot;))
+
+all_probs = predict(tree, df_test, type = &quot;prob&quot;)[,2]
+
+all_probs %&gt;% head()</code></pre>
+<pre><code>##          1          2          3          4          5          6 
+## 0.04987988 0.30019374 0.30019374 0.98084291 0.04987988 0.04987988</code></pre>
+<pre class="r"><code>fancyRpartPlot(tree)</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div id="roc-curve" class="section level2">
+<h2>ROC Curve</h2>
+<pre class="r"><code>if (!require(&quot;ROCR&quot;)) install.packages(&quot;ROCR&quot;)</code></pre>
+<pre><code>## Loading required package: ROCR</code></pre>
+<pre><code>## Loading required package: gplots</code></pre>
+<pre><code>## 
+## Attaching package: &#39;gplots&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     lowess</code></pre>
+<pre class="r"><code>library(ROCR)
+
+pred = prediction(all_probs, df_test$income)
+
+perf = performance(pred, &quot;tpr&quot;, &quot;fpr&quot;)
+
+plot(perf)</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>perf = performance(pred, &quot;auc&quot;)
+
+print(perf@y.values[[1]])</code></pre>
+<pre><code>## [1] 0.8451151</code></pre>
+</div>
+<div id="comparing-k-nn-and-decision-tree-models" class="section level2">
+<h2>Comparing K-NN and Decision Tree Models</h2>
+<pre class="r"><code>if (!require(&quot;class&quot;)) install.packages(&quot;class&quot;)</code></pre>
+<pre><code>## Loading required package: class</code></pre>
+<pre class="r"><code>library(class)
+
+train_indices &lt;- 1:round(0.7*n)
+train &lt;- shuffled[train_indices,]
+test_indices &lt;- (round(0.7*n)+1):n
+test &lt;- shuffled[test_indices, ]
+
+knn_train &lt;- train
+knn_test &lt;- test
+
+knn_train_labels &lt;- knn_train$spam_label
+knn_train$spam_label &lt;- NULL
+
+knn_test_labels &lt;- knn_test$spam_label
+knn_test$spam_label &lt;- NULL
+
+
+knn_train &lt;- apply(knn_train, 2, function(x) (x - min(x))/(max(x)-min(x)))
+knn_test &lt;- apply(knn_test, 2, function(x) (x - min(x))/(max(x)-min(x)))
+
+
+pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = 5)
+conf = table(knn_test_labels, pred)
+print(conf)</code></pre>
+<pre><code>##                pred
+## knn_test_labels   0   1
+##               0 757  78
+##               1  94 451</code></pre>
+<pre class="r"><code>range &lt;- 1:50
+accs &lt;- rep(0, length(range))
+
+for (k in range){
+  pred &lt;- knn(knn_train, knn_test, knn_train_labels, k=k)
+  conf &lt;- table(knn_test_labels, pred)
+  accs[k] &lt;- sum(diag(conf)) / sum(conf)
+  if (k %% 10 == 0){
+    print(&quot;10&quot;)
+  }
+}</code></pre>
+<pre><code>## [1] &quot;10&quot;
+## [1] &quot;10&quot;
+## [1] &quot;10&quot;
+## [1] &quot;10&quot;
+## [1] &quot;10&quot;</code></pre>
+<pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>which.max(accs)</code></pre>
+<pre><code>## [1] 10</code></pre>
+<pre class="r"><code>train_indices &lt;- 1:round(0.7*n)
+train &lt;- shuffled[train_indices,]
+test_indices &lt;- (round(0.7*n)+1):n
+test &lt;- shuffled[test_indices, ]</code></pre>
+<pre class="r"><code>set.seed(1)
+
+knn_train &lt;- train
+knn_test &lt;- test
+
+knn_train_labels &lt;- knn_train$spam_label
+knn_train$spam_label &lt;- NULL
+
+knn_test_labels &lt;- knn_test$spam_label
+knn_test$spam_label &lt;- NULL
+
+#knn_train &lt;- apply(knn_train, 2, function(x) (x - mean(x))/sd(x))
+#knn_test &lt;- apply(knn_test, 2, function(x) (x - mean(x))/sd(x))
+
+knn_train &lt;- scale(knn_train)
+knn_test &lt;- scale(knn_test)
+
+pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = 5)
+conf = table(knn_test_labels, pred)
+print(conf)</code></pre>
+<pre><code>##                pred
+## knn_test_labels   0   1
+##               0 784  51
+##               1  90 455</code></pre>
+<pre class="r"><code>range &lt;- 1:50
+accs &lt;- rep(0, length(range))
+
+for (k in range){
+  pred &lt;- knn(knn_train, knn_test, knn_train_labels, k=k)
+  conf &lt;- table(knn_test_labels, pred)
+  accs[k] &lt;- sum(diag(conf)) / sum(conf)
+  if (k %% 10 == 0){
+    print(&quot;10&quot;)
+  }
+}</code></pre>
+<pre><code>## [1] &quot;10&quot;
+## [1] &quot;10&quot;
+## [1] &quot;10&quot;
+## [1] &quot;10&quot;
+## [1] &quot;10&quot;</code></pre>
+<pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code>best = which.max(accs)</code></pre>
+<pre class="r"><code>pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = best, prob = TRUE)
+
+conf = table(knn_test_labels, pred)
+acc = sum(diag(conf))/sum(conf)
+print(conf)</code></pre>
+<pre><code>##                pred
+## knn_test_labels   0   1
+##               0 780  55
+##               1  91 454</code></pre>
+<pre class="r"><code>print(paste(acc, &quot; knn accuracy&quot;))</code></pre>
+<pre><code>## [1] &quot;0.894202898550725  knn accuracy&quot;</code></pre>
+<pre class="r"><code>probs_k &lt;- attr(pred, &quot;prob&quot;)
+
+tree &lt;- rpart(spam_label ~ ., train, method = &quot;class&quot;)
+
+probs_t &lt;- predict(tree, test, type = &quot;class&quot;)
+conf = table(test$spam_label, probs_t)
+acc = sum(diag(conf))/sum(conf)
+print(conf)</code></pre>
+<pre><code>##    probs_t
+##       0   1
 ##   0 778  57
 ##   1 105 440</code></pre>
-<pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<pre class="r"><code>print(paste(acc, &quot; tree accuracy&quot;))</code></pre>
+<pre><code>## [1] &quot;0.882608695652174  tree accuracy&quot;</code></pre>
+<pre class="r"><code>probs_t &lt;- predict(tree, test, type = &quot;prob&quot;)[,2]
+
+pred_t = prediction(probs_t, test$spam_label)
+pred_k &lt;- prediction(probs_k, test$spam_label)
+
+perf_t = performance(pred_t, &quot;auc&quot;)
+perf_k = performance(pred_k, &quot;auc&quot;)
+
+#ROC_curves(perf_t, perf_k)
+
+print(perf_t@y.values[[1]])</code></pre>
+<pre><code>## [1] 0.886733</code></pre>
+<pre class="r"><code>print(perf_k@y.values[[1]])</code></pre>
+<pre><code>## [1] 0.4365995</code></pre>
+</div>
+<div id="voronoi-diagram-with-ggvoronoi" class="section level2">
+<h2>Voronoi Diagram with ggvoronoi</h2>
+<pre class="r"><code>if (!require(&quot;ggvoronoi&quot;)) install.packages(&quot;ggvoronoi&quot;)</code></pre>
+<pre><code>## Loading required package: ggvoronoi</code></pre>
+<pre class="r"><code>library(ggvoronoi)
+
+x &lt;- sample(1:150,50)
+y &lt;- sample(1:150,50)
+points &lt;- data.frame(x, y, distance = sqrt((x-75)^2 + (y-75)^2))
+
+ggplot(points) +
+  geom_voronoi(aes(x,y,fill=distance)) +
+  scale_fill_gradient(low=&quot;#4dffb8&quot;,high=&quot;navyblue&quot;,guide=F) +
+  geom_point(aes(x,y)) +
+  theme_void() +
+  coord_fixed()</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+</div>
+<div id="regression" class="section level1">
+<h1>Regression</h1>
 </div>
 
 

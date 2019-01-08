@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>R Notebook</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Tomas Leriche</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="web-page.html">Graphing</a>
+</li>
+<li>
+  <a href="wepage2.html">wepage2</a>
+</li>
+<li>
+  <a href="DataAnalysis.html">Data Analysis in R</a>
+</li>
+<li>
+  <a href="NoteBook.nb.html">Notebook</a>
+</li>
+<li>
+  <a href="NoteBookKaggleData.nb.html">Notebook 2</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">R Notebook</h1>
+
+</div>
+
+
+<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. I’m using it to show some examples of work done using R.</p>
+<div id="nobel-prize-dataset" class="section level1">
+<h1>Nobel Prize Dataset</h1>
+<pre class="r"><code>nobel %&gt;%
+  group_by(`Birth Country`) %&gt;%
+  summarise(total = n()) %&gt;%
+  arrange(desc(total)) %&gt;% 
+  mutate(percent = total/sum(total))</code></pre>
+<pre><code>## # A tibble: 122 x 3
+##    `Birth Country`          total percent
+##    &lt;chr&gt;                    &lt;int&gt;   &lt;dbl&gt;
+##  1 United States of America   276  0.285 
+##  2 United Kingdom              88  0.0908
+##  3 Germany                     70  0.0722
+##  4 France                      53  0.0547
+##  5 Sweden                      30  0.0310
+##  6 Japan                       29  0.0299
+##  7 &lt;NA&gt;                        26  0.0268
+##  8 Russia                      20  0.0206
+##  9 Netherlands                 19  0.0196
+## 10 Canada                      18  0.0186
+## # … with 112 more rows</code></pre>
+<pre class="r"><code>nobel %&gt;%
+  group_by(Sex) %&gt;%
+  summarise(total = n()) %&gt;%
+  arrange(desc(total)) %&gt;%
+  mutate(percent = total/sum(total))</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   Sex    total percent
+##   &lt;chr&gt;  &lt;int&gt;   &lt;dbl&gt;
+## 1 Male     893  0.922 
+## 2 Female    50  0.0516
+## 3 &lt;NA&gt;      26  0.0268</code></pre>
+<pre class="r"><code>nrow(nobel)</code></pre>
+<pre><code>## [1] 969</code></pre>
+<pre class="r"><code>nobel %&gt;%
+  group_by(Category,Sex) %&gt;%
+  summarise(total = n()) %&gt;%
+  arrange(desc(total))</code></pre>
+<pre><code>## # A tibble: 13 x 3
+## # Groups:   Category [6]
+##    Category   Sex    total
+##    &lt;chr&gt;      &lt;chr&gt;  &lt;int&gt;
+##  1 Physics    Male     220
+##  2 Medicine   Male     215
+##  3 Chemistry  Male     190
+##  4 Literature Male      99
+##  5 Peace      Male      88
+##  6 Economics  Male      81
+##  7 Peace      &lt;NA&gt;      26
+##  8 Peace      Female    16
+##  9 Literature Female    14
+## 10 Medicine   Female    12
+## 11 Chemistry  Female     4
+## 12 Economics  Female     2
+## 13 Physics    Female     2</code></pre>
+<pre class="r"><code>nobel %&gt;% group_by(`Birth Country`)</code></pre>
+<pre><code>## # A tibble: 969 x 18
+## # Groups:   Birth Country [122]
+##     Year Category Prize Motivation `Prize Share` `Laureate ID`
+##    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;                 &lt;dbl&gt;
+##  1  1901 Chemist… The … &quot;\&quot;in rec… 1/1                     160
+##  2  1901 Literat… The … &quot;\&quot;in spe… 1/1                     569
+##  3  1901 Medicine The … &quot;\&quot;for hi… 1/1                     293
+##  4  1901 Peace    The … &lt;NA&gt;       1/2                     462
+##  5  1901 Peace    The … &lt;NA&gt;       1/2                     463
+##  6  1901 Physics  The … &quot;\&quot;in rec… 1/1                       1
+##  7  1902 Chemist… The … &quot;\&quot;in rec… 1/1                     161
+##  8  1902 Literat… The … &quot;\&quot;the gr… 1/1                     571
+##  9  1902 Medicine The … &quot;\&quot;for hi… 1/1                     294
+## 10  1902 Peace    The … &lt;NA&gt;       1/2                     464
+## # … with 959 more rows, and 12 more variables: `Laureate Type` &lt;chr&gt;,
+## #   `Full Name` &lt;chr&gt;, `Birth Date` &lt;date&gt;, `Birth City` &lt;chr&gt;, `Birth
+## #   Country` &lt;chr&gt;, Sex &lt;chr&gt;, `Organization Name` &lt;chr&gt;, `Organization
+## #   City` &lt;chr&gt;, `Organization Country` &lt;chr&gt;, `Death Date` &lt;date&gt;, `Death
+## #   City` &lt;chr&gt;, `Death Country` &lt;chr&gt;</code></pre>
+<pre class="r"><code>nobel &lt;- nobel %&gt;% mutate(usa_winner = ifelse(`Birth Country` == &#39;United States of America&#39;,1,0))
+
+nobel &lt;- nobel %&gt;% 
+  mutate(decade = floor(Year/10) * 10)
+
+decadetot &lt;- nobel %&gt;%
+  group_by(decade) %&gt;%
+  summarise(total = n()) %&gt;%
+  arrange(desc(total))
+
+nobel &lt;- inner_join(nobel, decadetot, by = &#39;decade&#39;)</code></pre>
+<pre class="r"><code>usa_nobel &lt;- nobel %&gt;% 
+  group_by(`Birth Country`, decade) %&gt;%
+  summarise(count = n(),
+            prop = (count/mean(total))) %&gt;%
+  arrange(desc(decade))
+
+winner &lt;- usa_nobel %&gt;%
+  group_by(decade) %&gt;%
+  summarise(winner = `Birth Country`[which.max(prop)],
+            winprop = max(prop))
+
+usa_nobel &lt;- inner_join(usa_nobel, winner, by = &#39;decade&#39;)</code></pre>
+<pre class="r"><code>winner %&gt;% ggplot(aes(decade, winprop)) + geom_point(aes(color = winner, size = 100)) + geom_smooth() + scale_y_continuous(limits = c(0,1), expand = c(0,0))</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="NoteBook_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>nobel &lt;- nobel %&gt;% mutate(female = Sex == &quot;Female&quot;)
+
+nobel %&gt;% group_by(decade) %&gt;%
+  summarise(count = n())</code></pre>
+<pre><code>## # A tibble: 12 x 2
+##    decade count
+##     &lt;dbl&gt; &lt;int&gt;
+##  1   1900    58
+##  2   1910    40
+##  3   1920    54
+##  4   1930    62
+##  5   1940    45
+##  6   1950    79
+##  7   1960    80
+##  8   1970   107
+##  9   1980    99
+## 10   1990   107
+## 11   2000   140
+## 12   2010    98</code></pre>
+<pre class="r"><code>nobelfem &lt;- nobel %&gt;%
+  group_by(decade, Category, Sex) %&gt;%
+  summarise(count = n(),
+            propFem = count/mean(total)) %&gt;%
+  filter(Sex == &#39;Female&#39;)
+
+ggplot(nobelfem, aes(decade, propFem, color = Category)) + geom_line() + geom_point()</code></pre>
+<p><img src="NoteBook_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>First woman to win a nobel prize</p>
+<pre class="r"><code>nobel %&gt;%
+  group_by(Year) %&gt;%
+  filter(Sex == &quot;Female&quot;) %&gt;%
+  select(Year,Category, `Full Name`)</code></pre>
+<pre><code>## # A tibble: 50 x 3
+## # Groups:   Year [37]
+##     Year Category   `Full Name`                                            
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;                                                  
+##  1  1903 Physics    Marie Curie, née Sklodowska                            
+##  2  1905 Peace      Baroness Bertha Sophie Felicita von Suttner, née Count…
+##  3  1909 Literature Selma Ottilia Lovisa Lagerlöf                          
+##  4  1911 Chemistry  Marie Curie, née Sklodowska                            
+##  5  1926 Literature Grazia Deledda                                         
+##  6  1928 Literature Sigrid Undset                                          
+##  7  1931 Peace      Jane Addams                                            
+##  8  1935 Chemistry  Irène Joliot-Curie                                     
+##  9  1938 Literature Pearl Buck                                             
+## 10  1945 Literature Gabriela Mistral                                       
+## # … with 40 more rows</code></pre>
+<p>Repeat Winners</p>
+<pre class="r"><code>nobel %&gt;%
+  group_by(`Laureate ID`, `Full Name`) %&gt;%
+  count() %&gt;%
+  select(`Full Name`,n, `Laureate ID`) %&gt;%
+  filter(n &gt; 1)</code></pre>
+<pre><code>## # A tibble: 63 x 3
+## # Groups:   Laureate ID, Full Name [63]
+##    `Full Name`                     n `Laureate ID`
+##    &lt;chr&gt;                       &lt;int&gt;         &lt;dbl&gt;
+##  1 Marie Curie, née Sklodowska     2             6
+##  2 Hideki Yukawa                   2            54
+##  3 Walther Bothe                   2            62
+##  4 John Bardeen                    2            66
+##  5 Igor Yevgenyevich Tamm          2            71
+##  6 Rudolf Ludwig Mössbauer         2            76
+##  7 Abdus Salam                     2           114
+##  8 Georges Charpak                 2           142
+##  9 Claude Cohen-Tannoudji          2           153
+## 10 Carl Bosch                      2           189
+## # … with 53 more rows</code></pre>
+<p>Age of winners</p>
+<pre class="r"><code>nobel_age &lt;- nobel %&gt;% 
+  mutate(age = (Year) - year(`Birth Date`))
+
+nobel_age</code></pre>
+<pre><code>## # A tibble: 969 x 23
+##     Year Category Prize Motivation `Prize Share` `Laureate ID`
+##    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;                 &lt;dbl&gt;
+##  1  1901 Chemist… The … &quot;\&quot;in rec… 1/1                     160
+##  2  1901 Literat… The … &quot;\&quot;in spe… 1/1                     569
+##  3  1901 Medicine The … &quot;\&quot;for hi… 1/1                     293
+##  4  1901 Peace    The … &lt;NA&gt;       1/2                     462
+##  5  1901 Peace    The … &lt;NA&gt;       1/2                     463
+##  6  1901 Physics  The … &quot;\&quot;in rec… 1/1                       1
+##  7  1902 Chemist… The … &quot;\&quot;in rec… 1/1                     161
+##  8  1902 Literat… The … &quot;\&quot;the gr… 1/1                     571
+##  9  1902 Medicine The … &quot;\&quot;for hi… 1/1                     294
+## 10  1902 Peace    The … &lt;NA&gt;       1/2                     464
+## # … with 959 more rows, and 17 more variables: `Laureate Type` &lt;chr&gt;,
+## #   `Full Name` &lt;chr&gt;, `Birth Date` &lt;date&gt;, `Birth City` &lt;chr&gt;, `Birth
+## #   Country` &lt;chr&gt;, Sex &lt;chr&gt;, `Organization Name` &lt;chr&gt;, `Organization
+## #   City` &lt;chr&gt;, `Organization Country` &lt;chr&gt;, `Death Date` &lt;date&gt;, `Death
+## #   City` &lt;chr&gt;, `Death Country` &lt;chr&gt;, usa_winner &lt;dbl&gt;, decade &lt;dbl&gt;,
+## #   total &lt;int&gt;, female &lt;lgl&gt;, age &lt;dbl&gt;</code></pre>
+<pre class="r"><code>nobel_age %&gt;%
+  top_n(10, (Year)) %&gt;%
+  select(`Full Name`, age, Year) </code></pre>
+<pre><code>## # A tibble: 11 x 3
+##    `Full Name`              age  Year
+##    &lt;chr&gt;                  &lt;dbl&gt; &lt;dbl&gt;
+##  1 Jean-Pierre Sauvage       72  2016
+##  2 Sir J. Fraser Stoddart    74  2016
+##  3 Bernard L. Feringa        65  2016
+##  4 Oliver Hart               68  2016
+##  5 Bengt Holmström           67  2016
+##  6 Bob Dylan                 75  2016
+##  7 Yoshinori Ohsumi          71  2016
+##  8 Juan Manuel Santos        65  2016
+##  9 David J. Thouless         82  2016
+## 10 F. Duncan M. Haldane      65  2016
+## 11 J. Michael Kosterlitz     73  2016</code></pre>
+<pre class="r"><code>ggplot(nobel_age, aes(Year, age)) + geom_point() + geom_smooth(aes(color = Category)) +
+  scale_y_continuous(expand = c(0,0))</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 31 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 31 rows containing missing values (geom_point).</code></pre>
+<p><img src="NoteBook_files/figure-html/unnamed-chunk-10-1.png" width="672" /> Oldest and Youngest</p>
+<pre class="r"><code>nobel_age %&gt;%
+  filter(age == age[which.max(age)]) %&gt;%
+  select(`Full Name`,age, `Birth Country`)</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   `Full Name`      age `Birth Country`
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;          
+## 1 Leonid Hurwicz    90 Russia</code></pre>
+<pre class="r"><code>nobel_age %&gt;%
+  filter(age == age[which.min(age)]) %&gt;%
+  select(`Full Name`, age, `Birth Country`)</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   `Full Name`        age `Birth Country`
+##   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;          
+## 1 Malala Yousafzai    17 Pakistan</code></pre>
+<p>Nobel Organization Winners</p>
+<pre class="r"><code>g &lt;- nobel %&gt;%
+  group_by(decade) %&gt;%
+  filter(`Laureate Type` == &quot;Organization&quot;) %&gt;%
+  select(`Full Name`, decade, Category)
+
+ggplot(g,aes(decade)) + geom_bar()</code></pre>
+<p><img src="NoteBook_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
