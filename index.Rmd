@@ -84,4 +84,24 @@ m %>% fitBounds(0, 40, 10, 50) %>%
 
 
 ```
+```{r include=FALSE}
+if (!require("reticulate")) install.packages("reticulate")
+library(reticulate)
 
+```
+#Python in R.
+```{python}
+
+print(1 + 1)
+
+var = [2,5,6,3,]
+
+print(sum(var))
+
+vat = 0
+
+print(var[0:])
+
+
+
+```

@@ -193,7 +193,7 @@ read_csv("first line\n1,2,3\n4,.,6\n1,0,1", skip = 1, col_names = c("x", "y", "z
 # Parsing a Vector
 
 ```{r}
-str(parse_logical(c(1,0,1)))
+
 
 str(parse_date(c("2010-01-01", '2019-01-01', '1990-01-01','.'), na = "."))
 
@@ -570,7 +570,7 @@ grid <- grid %>%
 grid
 ```
 
-```{r echo=TRUE}
+```{r, looo, echo=TRUE}
 primary <- function(x) {
   if (min(x %% 2:(x-1)) > 0) {
     return(x)

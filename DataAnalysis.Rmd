@@ -300,7 +300,7 @@ ROC_curves <- function(tree, knn) {
 
 
 
-```{r}
+```{r, yessss}
 pred <- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = best, prob = TRUE)
 
 conf = table(knn_test_labels, pred)
