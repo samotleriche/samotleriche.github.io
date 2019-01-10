@@ -2,7 +2,7 @@
 title: "R Notebook 2"
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) notebook. I'm using this to demonstrate using R and R Notebooks. The Example is based on the Exploring Kaggle Data Science Survery from [DataCamp](https://projects.datacamp.com/projects/74)
+This is an [R Markdown](http://rmarkdown.rstudio.com) notebook. I'm using this to demonstrate using R and R Notebooks. The Example is based on the Exploring Kaggle Data Science Survery from [DataCamp](https://projects.datacamp.com/projects/74).
 
 ```{r, SUPERT, include=FALSE}
 library(tidyverse)
@@ -61,16 +61,21 @@ df <- df %>% group_by(Age, LanguageRecommendationSelect) %>%
 df %>% ggplot(aes(Age, count, fill = LanguageRecommendationSelect)) + geom_col(position = position_dodge())
 ```
 
-```{r}
+```{r include=FALSE}
 df <- read_csv("kagglesurvey.csv")
 
 df
+
+tools <- df
 ```
+Here I create a new dataframe and I split the WorkToolsSelect column by *","* and then _unnest()_.  
+```{r}
+tools <- tools %>%
+  mutate(worktools = strsplit(WorkToolsSelect, split = ",")) %>%
+  unnest()
 
-
-
-
-
+tools %>% select(Respondent ,worktools)
+```
 
 
 

@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -173,9 +176,104 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
 
 
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -204,6 +302,26 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="NoteBookKaggleData.html">Notebook 2</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Heading 1</li>
+    <li>
+      <a href="web-page.html">Page 1</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Heading 2</li>
+    <li>
+      <a href="wepage2.html">Page 2</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -293,16 +411,16 @@ tibble(
 <pre><code>## # A tibble: 1,000 x 5
 ##    a                   b              c      d e    
 ##    &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt;
-##  1 2019-01-09 04:49:47 2019-01-15     1 0.764  e    
-##  2 2019-01-08 20:28:51 2019-01-08     2 0.216  k    
-##  3 2019-01-09 05:48:00 2019-02-04     3 0.0343 y    
-##  4 2019-01-08 13:09:32 2019-01-31     4 0.726  o    
-##  5 2019-01-08 15:29:23 2019-01-20     5 0.743  a    
-##  6 2019-01-09 11:54:22 2019-01-31     6 0.809  y    
-##  7 2019-01-09 05:59:26 2019-01-21     7 0.675  e    
-##  8 2019-01-09 05:27:17 2019-02-01     8 0.676  j    
-##  9 2019-01-09 10:17:04 2019-01-25     9 0.676  m    
-## 10 2019-01-08 21:22:47 2019-01-24    10 0.383  f    
+##  1 2019-01-11 07:02:45 2019-01-17     1 0.764  e    
+##  2 2019-01-10 22:41:48 2019-01-10     2 0.216  k    
+##  3 2019-01-11 08:00:57 2019-02-06     3 0.0343 y    
+##  4 2019-01-10 15:22:29 2019-02-02     4 0.726  o    
+##  5 2019-01-10 17:42:21 2019-01-22     5 0.743  a    
+##  6 2019-01-11 14:07:19 2019-02-02     6 0.809  y    
+##  7 2019-01-11 08:12:23 2019-01-23     7 0.675  e    
+##  8 2019-01-11 07:40:15 2019-02-03     8 0.676  j    
+##  9 2019-01-11 12:30:01 2019-01-27     9 0.676  m    
+## 10 2019-01-10 23:35:45 2019-01-26    10 0.383  f    
 ## # … with 990 more rows</code></pre>
 <pre class="r"><code>df &lt;- tibble(
   x = runif(5),
@@ -780,8 +898,8 @@ str_sort(x)</code></pre>
 <pre class="r"><code>x &lt;- c(&quot;xylophone&quot;,&quot;apples&quot;,&quot;pears&quot;,&quot;chicken&quot;,&quot;pork&quot;,&quot;ate&quot;,&quot;bee&quot;)
 
 str_view(x, &quot;a&quot;)</code></pre>
-<div id="htmlwidget-b5a0af0b750c15488bcd" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b5a0af0b750c15488bcd">{"x":{"html":"<ul>\n  <li>xylophone<\/li>\n  <li><span class='match'>a<\/span>pples<\/li>\n  <li>pe<span class='match'>a<\/span>rs<\/li>\n  <li>chicken<\/li>\n  <li>pork<\/li>\n  <li><span class='match'>a<\/span>te<\/li>\n  <li>bee<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-465f46a5ebb559aa6f62" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-465f46a5ebb559aa6f62">{"x":{"html":"<ul>\n  <li>xylophone<\/li>\n  <li><span class='match'>a<\/span>pples<\/li>\n  <li>pe<span class='match'>a<\/span>rs<\/li>\n  <li>chicken<\/li>\n  <li>pork<\/li>\n  <li><span class='match'>a<\/span>te<\/li>\n  <li>bee<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="determine-matches" class="section level1">
 <h1>Determine Matches</h1>
@@ -1087,6 +1205,8 @@ for (x in array) {
 <p>Copyright &copy; 2019 Tomas Leriche. All rights reserved.</p>
 
 
+</div>
+</div>
 
 </div>
 

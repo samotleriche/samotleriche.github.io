@@ -2,6 +2,7 @@ name: "my-website"
 output_dir: "."
 navbar:
   title: "Tomas Leriche"
+  type: inverse
   left:
     - text: "Home"
       href: index.html
@@ -15,6 +16,16 @@ navbar:
       href: NoteBook.html
     - text: "Notebook 2"
       href: NoteBookKaggleData.html
+    - text: "More"
+      icon: fa-gear
+      menu:
+        - text: "Heading 1"
+        - text: "Page 1"
+          href: web-page.html
+        - text: "---------"
+        - text: "Heading 2"
+        - text: "Page 2"
+          href: wepage2.html
   right:
     - icon: fa-envelope fa-lg
       href: http://github.com/samotleriche
@@ -22,6 +33,8 @@ navbar:
       href: http://github.com/samotleriche
 output:
   html_document:
+    toc: true
+    toc_float: true
     theme: paper
     highlight: textmate
     include:

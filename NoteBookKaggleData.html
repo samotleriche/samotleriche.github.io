@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -170,9 +173,104 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
 
 
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -202,6 +300,26 @@ $(document).ready(function () {
 <li>
   <a href="NoteBookKaggleData.html">Notebook 2</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Heading 1</li>
+    <li>
+      <a href="web-page.html">Page 1</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Heading 2</li>
+    <li>
+      <a href="wepage2.html">Page 2</a>
+    </li>
+  </ul>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -230,7 +348,7 @@ $(document).ready(function () {
 </div>
 
 
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> notebook. I’m using this to demonstrate using R and R Notebooks. The Example is based on the Exploring Kaggle Data Science Survery from <a href="https://projects.datacamp.com/projects/74">DataCamp</a></p>
+<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> notebook. I’m using this to demonstrate using R and R Notebooks. The Example is based on the Exploring Kaggle Data Science Survery from <a href="https://projects.datacamp.com/projects/74">DataCamp</a>.</p>
 <pre class="r"><code>dim(data)</code></pre>
 <pre><code>## [1] 16716   228</code></pre>
 <pre class="r"><code>data &lt;- as.data.frame(data)
@@ -278,34 +396,32 @@ df &lt;- df %&gt;% group_by(Age, LanguageRecommendationSelect) %&gt;%
 
 df %&gt;% ggplot(aes(Age, count, fill = LanguageRecommendationSelect)) + geom_col(position = position_dodge())</code></pre>
 <p><img src="NoteBookKaggleData_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<pre class="r"><code>df &lt;- read_csv(&quot;kagglesurvey.csv&quot;)</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   Respondent = col_double(),
-##   WorkToolsSelect = col_character(),
-##   LanguageRecommendationSelect = col_character(),
-##   EmployerIndustry = col_character(),
-##   WorkAlgorithmsSelect = col_character()
-## )</code></pre>
-<pre class="r"><code>df</code></pre>
-<pre><code>## # A tibble: 10,153 x 5
-##    Respondent WorkToolsSelect LanguageRecomme… EmployerIndustry
-##         &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;           
-##  1          1 Amazon Web ser… F#               Internet-based  
-##  2          2 Amazon Machine… Python           Mix of fields   
-##  3          3 C/C++,Jupyter … Python           Technology      
-##  4          4 Jupyter notebo… Python           Academic        
-##  5          5 C/C++,Cloudera… R                Government      
-##  6          6 SQL             Python           Non-profit      
-##  7          7 Jupyter notebo… Python           Internet-based  
-##  8          8 Python,Spark /… Python           Mix of fields   
-##  9          9 Jupyter notebo… Python           Financial       
-## 10         10 C/C++,IBM Cogn… R                Technology      
-## # … with 10,143 more rows, and 1 more variable: WorkAlgorithmsSelect &lt;chr&gt;</code></pre>
+<p>Here I create a new dataframe and I split the WorkToolsSelect column by <em>“,”</em> and then <em>unnest()</em>.</p>
+<pre class="r"><code>tools &lt;- tools %&gt;%
+  mutate(worktools = strsplit(WorkToolsSelect, split = &quot;,&quot;)) %&gt;%
+  unnest()
+
+tools %&gt;% select(Respondent ,worktools)</code></pre>
+<pre><code>## # A tibble: 47,409 x 2
+##    Respondent worktools                              
+##         &lt;dbl&gt; &lt;chr&gt;                                  
+##  1          1 Amazon Web services                    
+##  2          1 Oracle Data Mining/ Oracle R Enterprise
+##  3          1 Perl                                   
+##  4          2 Amazon Machine Learning                
+##  5          2 Amazon Web services                    
+##  6          2 Cloudera                               
+##  7          2 Hadoop/Hive/Pig                        
+##  8          2 Impala                                 
+##  9          2 Java                                   
+## 10          2 Mathematica                            
+## # … with 47,399 more rows</code></pre>
 
 <p>Copyright &copy; 2019 Tomas Leriche. All rights reserved.</p>
 
 
+</div>
+</div>
 
 </div>
 
