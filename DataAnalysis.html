@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -170,9 +173,104 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
 
 
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -201,6 +299,26 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="NoteBookKaggleData.html">Notebook 2</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Heading 1</li>
+    <li>
+      <a href="web-page.html">Page 1</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Heading 2</li>
+    <li>
+      <a href="wepage2.html">Page 2</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -321,7 +439,7 @@ print(acc)</code></pre>
 ##   0 769  66
 ##   1  97 448</code></pre>
 <pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <pre class="r"><code># normalize data on a 0-1 scale
 # knn_train$Age &lt;- (knn_train$Age - min_age) / (max_age - min_age)</code></pre>
 <pre class="r"><code>df &lt;- read.table(&quot;./adultCensus.data&quot;, header = FALSE, sep = &quot;,&quot;)
@@ -347,7 +465,7 @@ all_probs %&gt;% head()</code></pre>
 <pre><code>##          1          2          3          4          5          6 
 ## 0.04987988 0.30019374 0.30019374 0.98084291 0.04987988 0.04987988</code></pre>
 <pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <div id="roc-curve" class="section level2">
 <h2>ROC Curve</h2>
 <pre class="r"><code>if (!require(&quot;ROCR&quot;)) install.packages(&quot;ROCR&quot;)
@@ -358,7 +476,7 @@ pred = prediction(all_probs, df_test$income)
 perf = performance(pred, &quot;tpr&quot;, &quot;fpr&quot;)
 
 plot(perf)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>perf = performance(pred, &quot;auc&quot;)
 
 print(perf@y.values[[1]])</code></pre>
@@ -412,7 +530,7 @@ for (k in range){
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
 <pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <pre class="r"><code>which.max(accs)</code></pre>
 <pre><code>## [1] 10</code></pre>
 <pre class="r"><code>train_indices &lt;- 1:round(0.7*n)
@@ -460,7 +578,7 @@ for (k in range){
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
 <pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <pre class="r"><code>best = which.max(accs)</code></pre>
 <pre class="r"><code>pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = best, prob = TRUE)
 
@@ -517,7 +635,7 @@ ggplot(points) +
   geom_point(aes(x,y)) +
   theme_void() +
   coord_fixed()</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 </div>
 </div>
 <div id="regression" class="section level1">
@@ -527,6 +645,8 @@ ggplot(points) +
 <p>Copyright &copy; 2019 Tomas Leriche. All rights reserved.</p>
 
 
+</div>
+</div>
 
 </div>
 
