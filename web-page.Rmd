@@ -136,4 +136,3 @@ nested_words <- words_by_year %>%
 
 
 
-

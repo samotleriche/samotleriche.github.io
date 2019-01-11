@@ -66,6 +66,7 @@ winner <- usa_nobel %>%
 usa_nobel <- inner_join(usa_nobel, winner, by = 'decade')
 ```
 
+## Country with Highest Winning proportion {.tabset .tabset-fade .tabset-pills}
 ```{r}
 winner %>% ggplot(aes(decade, winprop)) + geom_point(aes(color = winner, size = 100)) + geom_smooth() + scale_y_continuous(limits = c(0,1), expand = c(0,0))
 
@@ -73,6 +74,7 @@ winner %>% ggplot(aes(decade, winprop)) + geom_point(aes(color = winner, size = 
 
 ```
 
+### Women's Proportional Winning Rate
 ```{r}
 nobel <- nobel %>% mutate(female = Sex == "Female")
 
@@ -88,7 +90,7 @@ nobelfem <- nobel %>%
 ggplot(nobelfem, aes(decade, propFem, color = Category)) + geom_line() + geom_point()
 ```
 
-First woman to win a nobel prize
+### First Woman to Win a Nobel Prize
 ```{r}
 nobel %>%
   group_by(Year) %>%
@@ -144,7 +146,6 @@ g <- nobel %>%
 ggplot(g,aes(decade)) + geom_bar()
 ```
 
-##HI _sup_ *hehe*
 
 
 

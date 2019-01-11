@@ -23,28 +23,60 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
 <script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
 <script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 
+
 <style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
-
 
 
 <style type="text/css">
@@ -169,6 +201,14 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
 
 
 
@@ -192,7 +232,7 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = true;
+    options.showAndHide = false;
     options.smoothScroll = true;
 
     // tocify
@@ -255,6 +295,12 @@ div.tocify {
   border-radius: 0px;
 }
 
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
 
 </style>
 
@@ -341,6 +387,14 @@ div.tocify {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Text Analysis</h1>
@@ -348,40 +402,40 @@ div.tocify {
 </div>
 
 
-<pre class="r"><code>#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-#install.packages(&quot;devtools&quot;)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)</span>
+<span class="co">#install.packages(&quot;devtools&quot;)</span>
 
-#devtools::install_github(&quot;josiahparry/geniusR&quot;)</code></pre>
-<pre class="r"><code>if (!require(&quot;geniusR&quot;)) install.packages(&quot;geniusR&quot;)
-library(geniusR)
-if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
-library(tidyverse)</code></pre>
-<pre class="r"><code>swift = genius_album(artist = &quot;Taylor Swift&quot;, album = &quot;Reputation&quot;)</code></pre>
+<span class="co">#devtools::install_github(&quot;josiahparry/geniusR&quot;)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;geniusR&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;geniusR&quot;</span>)
+<span class="kw">library</span>(geniusR)
+<span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;tidyverse&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)
+<span class="kw">library</span>(tidyverse)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">swift =<span class="st"> </span><span class="kw">genius_album</span>(<span class="dt">artist =</span> <span class="st">&quot;Taylor Swift&quot;</span>, <span class="dt">album =</span> <span class="st">&quot;Reputation&quot;</span>)</code></pre></div>
 <pre><code>## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)</code></pre>
-<pre class="r"><code>riri = genius_album(artist = &quot;Rihanna&quot;, album = &quot;Anti&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">riri =<span class="st"> </span><span class="kw">genius_album</span>(<span class="dt">artist =</span> <span class="st">&quot;Rihanna&quot;</span>, <span class="dt">album =</span> <span class="st">&quot;Anti&quot;</span>)</code></pre></div>
 <pre><code>## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)</code></pre>
-<pre class="r"><code>library(tidytext)
-tidy_swift = swift %&gt;%
-  unnest_tokens(word, lyric) %&gt;%
-  anti_join(stop_words) %&gt;%
-  count(word, sort = TRUE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
+tidy_swift =<span class="st"> </span>swift <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, lyric) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## Joining, by = &quot;word&quot;</code></pre>
-<pre class="r"><code>tidy_riri = riri %&gt;%
-  unnest_tokens(word, lyric) %&gt;%
-  anti_join(stop_words) %&gt;%
-  count(word, sort = TRUE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_riri =<span class="st"> </span>riri <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, lyric) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## Joining, by = &quot;word&quot;</code></pre>
-<pre class="r"><code>tidy_swift = tidy_swift %&gt;%
-  rename(swift_n = n) %&gt;%
-  mutate(swift_prop = swift_n/sum(swift_n))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_swift =<span class="st"> </span>tidy_swift <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">swift_n =</span> n) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swift_prop =</span> swift_n<span class="op">/</span><span class="kw">sum</span>(swift_n))
 
-tidy_riri = tidy_riri %&gt;%
-  rename(riri_n = n) %&gt;%
-  mutate(riri_prop = riri_n/sum(riri_n))</code></pre>
-<pre class="r"><code>compare_words = tidy_swift %&gt;%
-  full_join(tidy_riri, by = &quot;word&quot;)
+tidy_riri =<span class="st"> </span>tidy_riri <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">riri_n =</span> n) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">riri_prop =</span> riri_n<span class="op">/</span><span class="kw">sum</span>(riri_n))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compare_words =<span class="st"> </span>tidy_swift <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">full_join</span>(tidy_riri, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>)
 
-summary(compare_words)</code></pre>
+<span class="kw">summary</span>(compare_words)</code></pre></div>
 <pre><code>##      word              swift_n         swift_prop          riri_n       
 ##  Length:971         Min.   : 1.000   Min.   :0.00047   Min.   :  1.000  
 ##  Class :character   1st Qu.: 1.000   1st Qu.:0.00047   1st Qu.:  1.000  
@@ -398,33 +452,33 @@ summary(compare_words)</code></pre>
 ##  3rd Qu.:0.0020  
 ##  Max.   :0.1229  
 ##  NA&#39;s   :532</code></pre>
-<pre class="r"><code>ggplot(compare_words, aes(swift_prop, riri_prop)) +
-  geom_abline() +
-  geom_text(aes(label=word), check_overlap = TRUE, vjust=1.5) +
-  labs(y=&quot;Rihanna&quot;, x=&quot;Taylor Swift&quot;) + theme_classic()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(compare_words, <span class="kw">aes</span>(swift_prop, riri_prop)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span>word), <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">vjust=</span><span class="fl">1.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;Rihanna&quot;</span>, <span class="dt">x=</span><span class="st">&quot;Taylor Swift&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_classic</span>()</code></pre></div>
 <pre><code>## Warning: Removed 843 rows containing missing values (geom_text).</code></pre>
 <p><img src="web-page_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <div id="over-time" class="section level1">
-<h1>Over Time</h1>
-<pre class="r"><code>if (!require(&quot;rvest&quot;)) install.packages(&quot;rvest&quot;)
-library(rvest)
-riridisc = &#39;https://en.wikipedia.org/wiki/Rihanna_discography&#39;
+<h1><span class="header-section-number">1</span> Over Time</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;rvest&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;rvest&quot;</span>)
+<span class="kw">library</span>(rvest)
+riridisc =<span class="st"> &#39;https://en.wikipedia.org/wiki/Rihanna_discography&#39;</span>
 
-disc &lt;- riridisc %&gt;%
-  read_html() %&gt;%
-  html_nodes(xpath = &#39;//*[@id=&quot;mw-content-text&quot;]/div/table[2]&#39;) %&gt;%
-  html_table(fill = TRUE)
+disc &lt;-<span class="st"> </span>riridisc <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">html_nodes</span>(<span class="dt">xpath =</span> <span class="st">&#39;//*[@id=&quot;mw-content-text&quot;]/div/table[2]&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">html_table</span>(<span class="dt">fill =</span> <span class="ot">TRUE</span>)
 
 
-ririAlbums = disc[[1]]</code></pre>
-<pre class="r"><code>TS_albums &lt;- ririAlbums[2:9,1:2] %&gt;%
-  separate(`Album details`, c(&quot;Released&quot;,&quot;Month&quot;,&quot;Day&quot;,&quot;Year&quot;),
-           extra=&#39;drop&#39;) %&gt;%
-  select(c(&quot;Title&quot;,&quot;Year&quot;))
+ririAlbums =<span class="st"> </span>disc[[<span class="dv">1</span>]]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TS_albums &lt;-<span class="st"> </span>ririAlbums[<span class="dv">2</span><span class="op">:</span><span class="dv">9</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>] <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">separate</span>(<span class="st">`</span><span class="dt">Album details</span><span class="st">`</span>, <span class="kw">c</span>(<span class="st">&quot;Released&quot;</span>,<span class="st">&quot;Month&quot;</span>,<span class="st">&quot;Day&quot;</span>,<span class="st">&quot;Year&quot;</span>),
+           <span class="dt">extra=</span><span class="st">&#39;drop&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;Title&quot;</span>,<span class="st">&quot;Year&quot;</span>))
 
-TS_albums$Year&lt;-as.numeric(TS_albums$Year)</code></pre>
-<pre class="r"><code>riri_lyrics = TS_albums %&gt;%
-  mutate(tracks = map2(&quot;Rihanna&quot;, Title, genius_album))</code></pre>
+TS_albums<span class="op">$</span>Year&lt;-<span class="kw">as.numeric</span>(TS_albums<span class="op">$</span>Year)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">riri_lyrics =<span class="st"> </span>TS_albums <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tracks =</span> <span class="kw">map2</span>(<span class="st">&quot;Rihanna&quot;</span>, Title, genius_album))</code></pre></div>
 <pre><code>## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)
 ## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)
 ## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)
@@ -433,41 +487,32 @@ TS_albums$Year&lt;-as.numeric(TS_albums$Year)</code></pre>
 ## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)
 ## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)
 ## Joining, by = c(&quot;track_title&quot;, &quot;track_n&quot;, &quot;track_url&quot;)</code></pre>
-<pre class="r"><code>riri_lyrics = riri_lyrics %&gt;%
-  unnest(tracks)</code></pre>
-<pre class="r"><code>library(tidytext)
-tidy_riri &lt;- riri_lyrics %&gt;%
-  unnest_tokens(word, lyric) %&gt;%
-  anti_join(stop_words)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">riri_lyrics =<span class="st"> </span>riri_lyrics <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">unnest</span>(tracks)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
+tidy_riri &lt;-<span class="st"> </span>riri_lyrics <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, lyric) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words)</code></pre></div>
 <pre><code>## Joining, by = &quot;word&quot;</code></pre>
-<pre class="r"><code>tidy_riri %&gt;%
-  count(word, sort=TRUE)</code></pre>
-<pre><code>## # A tibble: 2,225 x 2
-##    word      n
-##    &lt;chr&gt; &lt;int&gt;
-##  1 love    652
-##  2 yeah    484
-##  3 baby    399
-##  4 boy     260
-##  5 night   250
-##  6 wanna   235
-##  7 ya      215
-##  8 na      187
-##  9 la      158
-## 10 cake    155
-## # … with 2,215 more rows</code></pre>
-<pre class="r"><code>words_by_year &lt;- tidy_riri %&gt;%
-  count(Year, word) %&gt;%
-  group_by(Year) %&gt;%
-  mutate(time_total = sum(n)) %&gt;%
-  group_by(word) %&gt;%
-  mutate(word_total = sum(n)) %&gt;%
-  ungroup() %&gt;%
-  rename(count = n) %&gt;%
-  filter(word_total &gt; 50)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_riri <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort=</span><span class="ot">TRUE</span>)</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["word"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"love","2":"652"},{"1":"yeah","2":"484"},{"1":"baby","2":"399"},{"1":"boy","2":"260"},{"1":"night","2":"250"},{"1":"wanna","2":"235"},{"1":"ya","2":"215"},{"1":"na","2":"187"},{"1":"la","2":"158"},{"1":"cake","2":"155"},{"1":"feel","2":"154"},{"1":"girl","2":"152"},{"1":"break","2":"148"},{"1":"time","2":"139"},{"1":"music","2":"123"},{"1":"eh","2":"118"},{"1":"jump","2":"103"},{"1":"run","2":"103"},{"1":"mama","2":"100"},{"1":"gonna","2":"97"},{"1":"stop","2":"97"},{"1":"dj","2":"93"},{"1":"phresh","2":"87"},{"1":"heart","2":"86"},{"1":"life","2":"86"},{"1":"hard","2":"85"},{"1":"feeling","2":"82"},{"1":"hear","2":"78"},{"1":"day","2":"77"},{"1":"uh","2":"77"},{"1":"cry","2":"76"},{"1":"i'ma","2":"75"},{"1":"eat","2":"74"},{"1":"ma","2":"73"},{"1":"tonight","2":"73"},{"1":"type","2":"72"},{"1":"ride","2":"71"},{"1":"fight","2":"68"},{"1":"question","2":"67"},{"1":"ella","2":"66"},{"1":"head","2":"66"},{"1":"world","2":"64"},{"1":"eyes","2":"63"},{"1":"mind","2":"63"},{"1":"play","2":"63"},{"1":"push","2":"63"},{"1":"wait","2":"63"},{"1":"talk","2":"59"},{"1":"gotta","2":"58"},{"1":"ah","2":"57"},{"1":"crazy","2":"56"},{"1":"die","2":"55"},{"1":"til","2":"55"},{"1":"pum","2":"54"},{"1":"babe","2":"53"},{"1":"forever","2":"53"},{"1":"kiss","2":"52"},{"1":"numb","2":"52"},{"1":"song","2":"52"},{"1":"di","2":"51"},{"1":"hey","2":"51"},{"1":"sun","2":"51"},{"1":"learn","2":"50"},{"1":"umbrella","2":"50"},{"1":"pon","2":"49"},{"1":"da","2":"48"},{"1":"lie","2":"47"},{"1":"hold","2":"46"},{"1":"runway","2":"46"},{"1":"huh","2":"45"},{"1":"close","2":"43"},{"1":"move","2":"43"},{"1":"care","2":"42"},{"1":"ooh","2":"42"},{"1":"shine","2":"42"},{"1":"stand","2":"42"},{"1":"bad","2":"41"},{"1":"bright","2":"41"},{"1":"stay","2":"41"},{"1":"thang","2":"41"},{"1":"watch","2":"41"},{"1":"lost","2":"40"},{"1":"hate","2":"39"},{"1":"yo","2":"39"},{"1":"easy","2":"38"},{"1":"body","2":"37"},{"1":"gon","2":"37"},{"1":"ko","2":"36"},{"1":"left","2":"36"},{"1":"sa","2":"36"},{"1":"ssa","2":"36"},{"1":"breakin","2":"34"},{"1":"drive","2":"34"},{"1":"hurt","2":"34"},{"1":"inside","2":"34"},{"1":"woo","2":"34"},{"1":"hole","2":"33"},{"1":"light","2":"33"},{"1":"lovin","2":"33"},{"1":"blow","2":"32"},{"1":"moment","2":"32"},{"1":"bitch","2":"31"},{"1":"de","2":"31"},{"1":"fire","2":"31"},{"1":"lights","2":"31"},{"1":"money","2":"31"},{"1":"share","2":"31"},{"1":"told","2":"31"},{"1":"amazing","2":"30"},{"1":"late","2":"30"},{"1":"ready","2":"30"},{"1":"reason","2":"30"},{"1":"walk","2":"30"},{"1":"gyal","2":"29"},{"1":"hands","2":"29"},{"1":"whoa","2":"29"},{"1":"bout","2":"28"},{"1":"fall","2":"28"},{"1":"feels","2":"28"},{"1":"i'mma","2":"28"},{"1":"rihanna","2":"28"},{"1":"thinking","2":"28"},{"1":"diamond","2":"27"},{"1":"friend","2":"27"},{"1":"wrong","2":"27"},{"1":"mine","2":"26"},{"1":"rain","2":"26"},{"1":"throw","2":"26"},{"1":"upset","2":"26"},{"1":"breaking","2":"25"},{"1":"chest","2":"25"},{"1":"dirt","2":"25"},{"1":"hit","2":"25"},{"1":"living","2":"25"},{"1":"oooh","2":"25"},{"1":"call","2":"24"},{"1":"game","2":"24"},{"1":"guess","2":"24"},{"1":"home","2":"24"},{"1":"lemme","2":"24"},{"1":"loving","2":"24"},{"1":"rockstar","2":"24"},{"1":"sex","2":"24"},{"1":"touch","2":"24"},{"1":"dance","2":"23"},{"1":"falling","2":"23"},{"1":"floor","2":"23"},{"1":"found","2":"23"},{"1":"fuck","2":"23"},{"1":"hope","2":"23"},{"1":"leave","2":"23"},{"1":"miss","2":"23"},{"1":"replay","2":"23"},{"1":"skin","2":"23"},{"1":"sky","2":"23"},{"1":"trust","2":"23"},{"1":"tryna","2":"23"},{"1":"business","2":"22"},{"1":"dancefloor","2":"22"},{"1":"dishes","2":"22"},{"1":"door","2":"22"},{"1":"drink","2":"22"},{"1":"haunted","2":"22"},{"1":"hot","2":"22"},{"1":"round","2":"22"},{"1":"feelin","2":"21"},{"1":"hand","2":"21"},{"1":"hide","2":"21"},{"1":"live","2":"21"},{"1":"nobody's","2":"21"},{"1":"real","2":"21"},{"1":"goodbye","2":"20"},{"1":"kisses","2":"20"},{"1":"matter","2":"20"},{"1":"sexy","2":"20"},{"1":"slow","2":"20"},{"1":"tears","2":"20"},{"1":"wantin","2":"20"},{"1":"words","2":"20"},{"1":"affection","2":"19"},{"1":"clouds","2":"19"},{"1":"dem","2":"19"},{"1":"mo","2":"19"},{"1":"rockin","2":"19"},{"1":"shit","2":"19"},{"1":"spend","2":"19"},{"1":"start","2":"19"},{"1":"stupid","2":"19"},{"1":"air","2":"18"},{"1":"beat","2":"18"},{"1":"beautiful","2":"18"},{"1":"bring","2":"18"},{"1":"catch","2":"18"},{"1":"cold","2":"18"},{"1":"ladies","2":"18"},{"1":"roc","2":"18"},{"1":"rocking","2":"18"},{"1":"rum","2":"18"},{"1":"sell","2":"18"},{"1":"set","2":"18"},{"1":"understand","2":"18"},{"1":"woah","2":"18"},{"1":"birthday","2":"17"},{"1":"diamonds","2":"17"},{"1":"existing","2":"17"},{"1":"hopeless","2":"17"},{"1":"lips","2":"17"},{"1":"lookin","2":"17"},{"1":"losin","2":"17"},{"1":"ohh","2":"17"},{"1":"playing","2":"17"},{"1":"rude","2":"17"},{"1":"runnin","2":"17"},{"1":"shy","2":"17"},{"1":"sing","2":"17"},{"1":"somebody's","2":"17"},{"1":"broken","2":"16"},{"1":"club","2":"16"},{"1":"coulda","2":"16"},{"1":"deep","2":"16"},{"1":"em","2":"16"},{"1":"escape","2":"16"},{"1":"lonely","2":"16"},{"1":"rainin","2":"16"},{"1":"smile","2":"16"},{"1":"takes","2":"16"},{"1":"amo","2":"15"},{"1":"anymore","2":"15"},{"1":"aw","2":"15"},{"1":"ball","2":"15"},{"1":"bet","2":"15"},{"1":"boom","2":"15"},{"1":"called","2":"15"},{"1":"fool","2":"15"},{"1":"lose","2":"15"},{"1":"nothin","2":"15"},{"1":"pour","2":"15"},{"1":"raining","2":"15"},{"1":"te","2":"15"},{"1":"truth","2":"15"},{"1":"alright","2":"14"},{"1":"burn","2":"14"},{"1":"california","2":"14"},{"1":"cha","2":"14"},{"1":"coming","2":"14"},{"1":"forget","2":"14"},{"1":"ohhh","2":"14"},{"1":"paradise","2":"14"},{"1":"rest","2":"14"},{"1":"rock","2":"14"},{"1":"roll","2":"14"},{"1":"rush","2":"14"},{"1":"shake","2":"14"},{"1":"shoulda","2":"14"},{"1":"trigger","2":"14"},{"1":"change","2":"13"},{"1":"dey","2":"13"},{"1":"drunk","2":"13"},{"1":"endure","2":"13"},{"1":"eye","2":"13"},{"1":"feelings","2":"13"},{"1":"half","2":"13"},{"1":"makes","2":"13"},{"1":"miles","2":"13"},{"1":"naughty","2":"13"},{"1":"pride","2":"13"},{"1":"pull","2":"13"},{"1":"rise","2":"13"},{"1":"send","2":"13"},{"1":"singing","2":"13"},{"1":"sleep","2":"13"},{"1":"taking","2":"13"},{"1":"till","2":"13"},{"1":"true","2":"13"},{"1":"waiting","2":"13"},{"1":"addicted","2":"12"},{"1":"cash","2":"12"},{"1":"ceiling","2":"12"},{"1":"chances","2":"12"},{"1":"cities","2":"12"},{"1":"disease","2":"12"},{"1":"dream","2":"12"},{"1":"fading","2":"12"},{"1":"gettin","2":"12"},{"1":"girls","2":"12"},{"1":"knife","2":"12"},{"1":"limit","2":"12"},{"1":"low","2":"12"},{"1":"makin","2":"12"},{"1":"nigga","2":"12"},{"1":"party","2":"12"},{"1":"promise","2":"12"},{"1":"rehab","2":"12"},{"1":"strong","2":"12"},{"1":"yuh","2":"12"},{"1":"control","2":"11"},{"1":"deny","2":"11"},{"1":"dreams","2":"11"},{"1":"explode","2":"11"},{"1":"funny","2":"11"},{"1":"hurts","2":"11"},{"1":"lick","2":"11"},{"1":"lies","2":"11"},{"1":"mistakes","2":"11"},{"1":"past","2":"11"},{"1":"refuse","2":"11"},{"1":"remember","2":"11"},{"1":"rescue","2":"11"},{"1":"stick","2":"11"},{"1":"telling","2":"11"},{"1":"victim","2":"11"},{"1":"walked","2":"11"},{"1":"white","2":"11"},{"1":"wind","2":"11"},{"1":"wondering","2":"11"},{"1":"worry","2":"11"},{"1":"worst","2":"11"},{"1":"worth","2":"11"},{"1":"ahead","2":"10"},{"1":"cut","2":"10"},{"1":"dark","2":"10"},{"1":"farewell","2":"10"},{"1":"finally","2":"10"},{"1":"float","2":"10"},{"1":"groove","2":"10"},{"1":"guns","2":"10"},{"1":"haters","2":"10"},{"1":"heels","2":"10"},{"1":"house","2":"10"},{"1":"listen","2":"10"},{"1":"meant","2":"10"},{"1":"mi","2":"10"},{"1":"mirror","2":"10"},{"1":"nights","2":"10"},{"1":"played","2":"10"},{"1":"police","2":"10"},{"1":"queen","2":"10"},{"1":"realize","2":"10"},{"1":"running","2":"10"},{"1":"secret","2":"10"},{"1":"shawty","2":"10"},{"1":"shot","2":"10"},{"1":"soul","2":"10"},{"1":"standing","2":"10"},{"1":"talking","2":"10"},{"1":"top","2":"10"},{"1":"trip","2":"10"},{"1":"waitin","2":"10"},{"1":"afraid","2":"9"},{"1":"alive","2":"9"},{"1":"beating","2":"9"},{"1":"chance","2":"9"},{"1":"check","2":"9"},{"1":"complicated","2":"9"},{"1":"cool","2":"9"},{"1":"damn","2":"9"},{"1":"figure","2":"9"},{"1":"friends","2":"9"},{"1":"fucking","2":"9"},{"1":"gangsta","2":"9"},{"1":"ghost","2":"9"},{"1":"happy","2":"9"},{"1":"heaven","2":"9"},{"1":"kinda","2":"9"},{"1":"king","2":"9"},{"1":"lay","2":"9"},{"1":"million","2":"9"},{"1":"moving","2":"9"},{"1":"oath","2":"9"},{"1":"pain","2":"9"},{"1":"scared","2":"9"},{"1":"shut","2":"9"},{"1":"stare","2":"9"},{"1":"story","2":"9"},{"1":"swear","2":"9"},{"1":"that'll","2":"9"},{"1":"turnin","2":"9"},{"1":"win","2":"9"},{"1":"arms","2":"8"},{"1":"bay","2":"8"},{"1":"bed","2":"8"},{"1":"black","2":"8"},{"1":"bomb","2":"8"},{"1":"boys","2":"8"},{"1":"brain","2":"8"},{"1":"brand","2":"8"},{"1":"condition","2":"8"},{"1":"cried","2":"8"},{"1":"drum","2":"8"},{"1":"fun","2":"8"},{"1":"giving","2":"8"},{"1":"happening","2":"8"},{"1":"hiding","2":"8"},{"1":"homie","2":"8"},{"1":"icing","2":"8"},{"1":"laugh","2":"8"},{"1":"leaving","2":"8"},{"1":"line","2":"8"},{"1":"losing","2":"8"},{"1":"lot","2":"8"},{"1":"mad","2":"8"},{"1":"means","2":"8"},{"1":"ne","2":"8"},{"1":"nuh","2":"8"},{"1":"outta","2":"8"},{"1":"ova","2":"8"},{"1":"prepared","2":"8"},{"1":"rollin","2":"8"},{"1":"shots","2":"8"},{"1":"speak","2":"8"},{"1":"star","2":"8"},{"1":"started","2":"8"},{"1":"stones","2":"8"},{"1":"symptoms","2":"8"},{"1":"television","2":"8"},{"1":"thousand","2":"8"},{"1":"thundering","2":"8"},{"1":"tomorrow","2":"8"},{"1":"treat","2":"8"},{"1":"voices","2":"8"},{"1":"wall","2":"8"},{"1":"bank","2":"7"},{"1":"behave","2":"7"},{"1":"bones","2":"7"},{"1":"breathe","2":"7"},{"1":"broke","2":"7"},{"1":"chains","2":"7"},{"1":"complain","2":"7"},{"1":"direction","2":"7"},{"1":"dress","2":"7"},{"1":"drop","2":"7"},{"1":"dumb","2":"7"},{"1":"enter","2":"7"},{"1":"front","2":"7"},{"1":"gimme","2":"7"},{"1":"goin","2":"7"},{"1":"grip","2":"7"},{"1":"gun","2":"7"},{"1":"guy","2":"7"},{"1":"ha","2":"7"},{"1":"happened","2":"7"},{"1":"healthy","2":"7"},{"1":"hearin","2":"7"},{"1":"jeans","2":"7"},{"1":"killing","2":"7"},{"1":"missing","2":"7"},{"1":"mmmmm","2":"7"},{"1":"mouth","2":"7"},{"1":"paul","2":"7"},{"1":"peace","2":"7"},{"1":"perfect","2":"7"},{"1":"person","2":"7"},{"1":"pictures","2":"7"},{"1":"piece","2":"7"},{"1":"playin","2":"7"},{"1":"pony","2":"7"},{"1":"pretty","2":"7"},{"1":"recognize","2":"7"},{"1":"road","2":"7"},{"1":"rolling","2":"7"},{"1":"scene","2":"7"},{"1":"scream","2":"7"},{"1":"shirt","2":"7"},{"1":"should've","2":"7"},{"1":"sight","2":"7"},{"1":"smoke","2":"7"},{"1":"station","2":"7"},{"1":"style","2":"7"},{"1":"suck","2":"7"},{"1":"sweet","2":"7"},{"1":"thug","2":"7"},{"1":"toe","2":"7"},{"1":"waist","2":"7"},{"1":"war","2":"7"},{"1":"wild","2":"7"},{"1":"word","2":"7"},{"1":"yesterday","2":"7"},{"1":"act","2":"6"},{"1":"answer","2":"6"},{"1":"bit","2":"6"},{"1":"blue","2":"6"},{"1":"calling","2":"6"},{"1":"car","2":"6"},{"1":"cars","2":"6"},{"1":"central","2":"6"},{"1":"champagne","2":"6"},{"1":"checked","2":"6"},{"1":"clothes","2":"6"},{"1":"compete","2":"6"},{"1":"crowd","2":"6"},{"1":"daddy","2":"6"},{"1":"days","2":"6"},{"1":"dean","2":"6"},{"1":"dome","2":"6"},{"1":"downtown","2":"6"},{"1":"drown","2":"6"},{"1":"easily","2":"6"},{"1":"fake","2":"6"},{"1":"fast","2":"6"},{"1":"fears","2":"6"},{"1":"fi","2":"6"},{"1":"fighting","2":"6"},{"1":"fly","2":"6"},{"1":"flying","2":"6"},{"1":"fumble","2":"6"},{"1":"handle","2":"6"},{"1":"hearts","2":"6"},{"1":"hiii","2":"6"},{"1":"hurting","2":"6"},{"1":"kartel","2":"6"},{"1":"keys","2":"6"},{"1":"lipstick","2":"6"},{"1":"love's","2":"6"},{"1":"lover","2":"6"},{"1":"lying","2":"6"},{"1":"memory","2":"6"},{"1":"met","2":"6"},{"1":"moon","2":"6"},{"1":"morning","2":"6"},{"1":"murder","2":"6"},{"1":"murderer","2":"6"},{"1":"ner","2":"6"},{"1":"option","2":"6"},{"1":"reach","2":"6"},{"1":"rhythm","2":"6"},{"1":"sad","2":"6"},{"1":"saddle","2":"6"},{"1":"sean","2":"6"},{"1":"selfish","2":"6"},{"1":"shout","2":"6"},{"1":"smell","2":"6"},{"1":"splash","2":"6"},{"1":"spot","2":"6"},{"1":"starts","2":"6"},{"1":"steady","2":"6"},{"1":"sticks","2":"6"},{"1":"tease","2":"6"},{"1":"teasin","2":"6"},{"1":"test","2":"6"},{"1":"times","2":"6"},{"1":"tragedy","2":"6"},{"1":"vybz","2":"6"},{"1":"waste","2":"6"},{"1":"wear","2":"6"},{"1":"window","2":"6"},{"1":"wishing","2":"6"},{"1":"youuuuuu","2":"6"},{"1":"3","2":"5"},{"1":"admit","2":"5"},{"1":"ago","2":"5"},{"1":"ay","2":"5"},{"1":"bag","2":"5"},{"1":"bar","2":"5"},{"1":"bitches","2":"5"},{"1":"blame","2":"5"},{"1":"blast","2":"5"},{"1":"bleed","2":"5"},{"1":"blind","2":"5"},{"1":"boo","2":"5"},{"1":"burning","2":"5"},{"1":"candles","2":"5"},{"1":"catching","2":"5"},{"1":"cheek","2":"5"},{"1":"circle","2":"5"},{"1":"core","2":"5"},{"1":"crime","2":"5"},{"1":"criminal","2":"5"},{"1":"darling","2":"5"},{"1":"deal","2":"5"},{"1":"dear","2":"5"},{"1":"distance","2":"5"},{"1":"ear","2":"5"},{"1":"emotions","2":"5"},{"1":"excite","2":"5"},{"1":"excited","2":"5"},{"1":"fantasy","2":"5"},{"1":"feet","2":"5"},{"1":"fill","2":"5"},{"1":"flick","2":"5"},{"1":"grow","2":"5"},{"1":"haffi","2":"5"},{"1":"heart's","2":"5"},{"1":"ho","2":"5"},{"1":"hypnotized","2":"5"},{"1":"keeping","2":"5"},{"1":"louis","2":"5"},{"1":"madhouse","2":"5"},{"1":"meaning","2":"5"},{"1":"meet","2":"5"},{"1":"memories","2":"5"},{"1":"mend","2":"5"},{"1":"mess","2":"5"},{"1":"minute","2":"5"},{"1":"mmm","2":"5"},{"1":"mutual","2":"5"},{"1":"niggas","2":"5"},{"1":"oooohhhhh","2":"5"},{"1":"page","2":"5"},{"1":"people","2":"5"},{"1":"perfectly","2":"5"},{"1":"phone","2":"5"},{"1":"photographs","2":"5"},{"1":"pick","2":"5"},{"1":"plenty","2":"5"},{"1":"power","2":"5"},{"1":"red","2":"5"},{"1":"screaming","2":"5"},{"1":"sea","2":"5"},{"1":"searching","2":"5"},{"1":"signs","2":"5"},{"1":"silly","2":"5"},{"1":"sit","2":"5"},{"1":"sitting","2":"5"},{"1":"sober","2":"5"},{"1":"spell","2":"5"},{"1":"spent","2":"5"},{"1":"spinning","2":"5"},{"1":"standin","2":"5"},{"1":"stress","2":"5"},{"1":"supposed","2":"5"},{"1":"swallow","2":"5"},{"1":"taste","2":"5"},{"1":"ten","2":"5"},{"1":"testin","2":"5"},{"1":"tight","2":"5"},{"1":"tripping","2":"5"},{"1":"tun","2":"5"},{"1":"wake","2":"5"},{"1":"watching","2":"5"},{"1":"weak","2":"5"},{"1":"whips","2":"5"},{"1":"wrist","2":"5"},{"1":"zone","2":"5"},{"1":"30","2":"4"},{"1":"actin","2":"4"},{"1":"allowed","2":"4"},{"1":"ant","2":"4"},{"1":"bastards","2":"4"},{"1":"bite","2":"4"},{"1":"bodies","2":"4"},{"1":"bugging","2":"4"},{"1":"buttons","2":"4"},{"1":"buy","2":"4"},{"1":"buying","2":"4"},{"1":"bye","2":"4"},{"1":"candy","2":"4"},{"1":"caught","2":"4"},{"1":"charge","2":"4"},{"1":"cheers","2":"4"},{"1":"chill","2":"4"},{"1":"cockiness","2":"4"},{"1":"common","2":"4"},{"1":"confess","2":"4"},{"1":"confused","2":"4"},{"1":"cost","2":"4"},{"1":"danger","2":"4"},{"1":"dealt","2":"4"},{"1":"deceive","2":"4"},{"1":"deepest","2":"4"},{"1":"desperado","2":"4"},{"1":"desperate","2":"4"},{"1":"dirty","2":"4"},{"1":"dry","2":"4"},{"1":"energy","2":"4"},{"1":"everytime","2":"4"},{"1":"excuse","2":"4"},{"1":"falls","2":"4"},{"1":"favorite","2":"4"},{"1":"fell","2":"4"},{"1":"final","2":"4"},{"1":"fine","2":"4"},{"1":"flag","2":"4"},{"1":"foolish","2":"4"},{"1":"fortified","2":"4"},{"1":"free","2":"4"},{"1":"furniture","2":"4"},{"1":"giddy","2":"4"},{"1":"glass","2":"4"},{"1":"glasses","2":"4"},{"1":"glory","2":"4"},{"1":"gold","2":"4"},{"1":"gucci","2":"4"},{"1":"guys","2":"4"},{"1":"impression","2":"4"},{"1":"jameson","2":"4"},{"1":"kickin","2":"4"},{"1":"kills","2":"4"},{"1":"lady","2":"4"},{"1":"laughing","2":"4"},{"1":"lead","2":"4"},{"1":"load","2":"4"},{"1":"meh","2":"4"},{"1":"mistaken","2":"4"},{"1":"monroe","2":"4"},{"1":"mother","2":"4"},{"1":"nah","2":"4"},{"1":"nose","2":"4"},{"1":"ooohh","2":"4"},{"1":"outlines","2":"4"},{"1":"ow","2":"4"},{"1":"packed","2":"4"},{"1":"pass","2":"4"},{"1":"persuasion","2":"4"},{"1":"pleasing","2":"4"},{"1":"pose","2":"4"},{"1":"pretend","2":"4"},{"1":"prints","2":"4"},{"1":"reasons","2":"4"},{"1":"reign","2":"4"},{"1":"remain","2":"4"},{"1":"resistance","2":"4"},{"1":"rose","2":"4"},{"1":"rough","2":"4"},{"1":"sanity","2":"4"},{"1":"secrets","2":"4"},{"1":"sense","2":"4"},{"1":"shining","2":"4"},{"1":"sign","2":"4"},{"1":"sincere","2":"4"},{"1":"sink","2":"4"},{"1":"skirt","2":"4"},{"1":"sleeve","2":"4"},{"1":"solo","2":"4"},{"1":"sounding","2":"4"},{"1":"stairs","2":"4"},{"1":"stars","2":"4"},{"1":"stays","2":"4"},{"1":"stole","2":"4"},{"1":"stray","2":"4"},{"1":"sunshine","2":"4"},{"1":"temperature","2":"4"},{"1":"temptation","2":"4"},{"1":"terrified","2":"4"},{"1":"troubles","2":"4"},{"1":"tv","2":"4"},{"1":"twisted","2":"4"},{"1":"understands","2":"4"},{"1":"vibe","2":"4"},{"1":"wa","2":"4"},{"1":"walls","2":"4"},{"1":"weekend","2":"4"},{"1":"whisper","2":"4"},{"1":"who'll","2":"4"},{"1":"witcha","2":"4"},{"1":"workin","2":"4"},{"1":"world's","2":"4"},{"1":"worlds","2":"4"},{"1":"0","2":"3"},{"1":"60","2":"3"},{"1":"account","2":"3"},{"1":"ading","2":"3"},{"1":"adore","2":"3"},{"1":"aiming","2":"3"},{"1":"appetite","2":"3"},{"1":"attack","2":"3"},{"1":"awry","2":"3"},{"1":"bae","2":"3"},{"1":"bass","2":"3"},{"1":"beach","2":"3"},{"1":"beast","2":"3"},{"1":"believed","2":"3"},{"1":"block","2":"3"},{"1":"boss","2":"3"},{"1":"brakes","2":"3"},{"1":"brother","2":"3"},{"1":"bullet","2":"3"},{"1":"burned","2":"3"},{"1":"callin","2":"3"},{"1":"cards","2":"3"},{"1":"cares","2":"3"},{"1":"carry","2":"3"},{"1":"changed","2":"3"},{"1":"chase","2":"3"},{"1":"cheater","2":"3"},{"1":"cheating","2":"3"},{"1":"chick","2":"3"},{"1":"chicks","2":"3"},{"1":"cigarettes","2":"3"},{"1":"closed","2":"3"},{"1":"closer","2":"3"},{"1":"cloud","2":"3"},{"1":"command","2":"3"},{"1":"couch","2":"3"},{"1":"count","2":"3"},{"1":"crack","2":"3"},{"1":"crash","2":"3"},{"1":"crowded","2":"3"},{"1":"crush","2":"3"},{"1":"curves","2":"3"},{"1":"cuts","2":"3"},{"1":"cuz","2":"3"},{"1":"cyar","2":"3"},{"1":"dancing","2":"3"},{"1":"dare","2":"3"},{"1":"darkness","2":"3"},{"1":"date","2":"3"},{"1":"decision","2":"3"},{"1":"demons","2":"3"},{"1":"despise","2":"3"},{"1":"destiny","2":"3"},{"1":"dick","2":"3"},{"1":"difference","2":"3"},{"1":"dime","2":"3"},{"1":"dip","2":"3"},{"1":"doin","2":"3"},{"1":"dolla","2":"3"},{"1":"dollars","2":"3"},{"1":"doubt","2":"3"},{"1":"doves","2":"3"},{"1":"drama","2":"3"},{"1":"dreaming","2":"3"},{"1":"ecstasy","2":"3"},{"1":"eenie","2":"3"},{"1":"empty","2":"3"},{"1":"engine's","2":"3"},{"1":"enjoyed","2":"3"},{"1":"enticing","2":"3"},{"1":"entity","2":"3"},{"1":"erase","2":"3"},{"1":"ester","2":"3"},{"1":"everyday","2":"3"},{"1":"evil","2":"3"},{"1":"explain","2":"3"},{"1":"explore","2":"3"},{"1":"fa","2":"3"},{"1":"fair","2":"3"},{"1":"fancy","2":"3"},{"1":"fingers","2":"3"},{"1":"fish","2":"3"},{"1":"flashing","2":"3"},{"1":"flower","2":"3"},{"1":"follow","2":"3"},{"1":"fooling","2":"3"},{"1":"freakin","2":"3"},{"1":"fuss","2":"3"},{"1":"future","2":"3"},{"1":"games","2":"3"},{"1":"garages","2":"3"},{"1":"greedy","2":"3"},{"1":"ground","2":"3"},{"1":"guh","2":"3"},{"1":"hangin","2":"3"},{"1":"harder","2":"3"},{"1":"headed","2":"3"},{"1":"heard","2":"3"},{"1":"hearted","2":"3"},{"1":"held","2":"3"},{"1":"hips","2":"3"},{"1":"holding","2":"3"},{"1":"horse","2":"3"},{"1":"hurry","2":"3"},{"1":"hurtin","2":"3"},{"1":"imma","2":"3"},{"1":"infinity","2":"3"},{"1":"instagram","2":"3"},{"1":"jacket","2":"3"},{"1":"jay","2":"3"},{"1":"jumping","2":"3"},{"1":"knocked","2":"3"},{"1":"knots","2":"3"},{"1":"land","2":"3"},{"1":"law","2":"3"},{"1":"lesson","2":"3"},{"1":"letter","2":"3"},{"1":"liar","2":"3"},{"1":"lighting","2":"3"},{"1":"likes","2":"3"},{"1":"limousine","2":"3"},{"1":"lit","2":"3"},{"1":"loaded","2":"3"},{"1":"lock","2":"3"},{"1":"looked","2":"3"},{"1":"loved","2":"3"},{"1":"lovers","2":"3"},{"1":"magazines","2":"3"},{"1":"marilyn","2":"3"},{"1":"mary","2":"3"},{"1":"massages","2":"3"},{"1":"meenie","2":"3"},{"1":"melt","2":"3"},{"1":"mention","2":"3"},{"1":"message","2":"3"},{"1":"minie","2":"3"},{"1":"missin","2":"3"},{"1":"mister","2":"3"},{"1":"motherfucker","2":"3"},{"1":"movement","2":"3"},{"1":"naive","2":"3"},{"1":"ol","2":"3"},{"1":"ordinary","2":"3"},{"1":"outfit","2":"3"},{"1":"p.s","2":"3"},{"1":"patron","2":"3"},{"1":"physical","2":"3"},{"1":"playa","2":"3"},{"1":"player","2":"3"},{"1":"pleasure","2":"3"},{"1":"pockets","2":"3"},{"1":"potential","2":"3"},{"1":"press","2":"3"},{"1":"pressure","2":"3"},{"1":"pretending","2":"3"},{"1":"private","2":"3"},{"1":"proceed","2":"3"},{"1":"proud","2":"3"},{"1":"pulled","2":"3"},{"1":"pulling","2":"3"},{"1":"pure","2":"3"},{"1":"realized","2":"3"},{"1":"rear","2":"3"},{"1":"regrets","2":"3"},{"1":"reload","2":"3"},{"1":"remembers","2":"3"},{"1":"runaways","2":"3"},{"1":"save","2":"3"},{"1":"selling","2":"3"},{"1":"settle","2":"3"},{"1":"shined","2":"3"},{"1":"shiny","2":"3"},{"1":"sick","2":"3"},{"1":"sleeping","2":"3"},{"1":"smoother","2":"3"},{"1":"sneakers","2":"3"},{"1":"somebody'd","2":"3"},{"1":"somethin","2":"3"},{"1":"something's","2":"3"},{"1":"sorrow","2":"3"},{"1":"speakers","2":"3"},{"1":"special","2":"3"},{"1":"step","2":"3"},{"1":"storm","2":"3"},{"1":"story's","2":"3"},{"1":"straight","2":"3"},{"1":"strip","2":"3"},{"1":"sudden","2":"3"},{"1":"suggest","2":"3"},{"1":"talkin","2":"3"},{"1":"tearin","2":"3"},{"1":"tellin","2":"3"},{"1":"tightly","2":"3"},{"1":"time's","2":"3"},{"1":"tossin","2":"3"},{"1":"town","2":"3"},{"1":"understanding","2":"3"},{"1":"vacation","2":"3"},{"1":"voice","2":"3"},{"1":"waited","2":"3"},{"1":"walkin","2":"3"},{"1":"warm","2":"3"},{"1":"wasted","2":"3"},{"1":"weather","2":"3"},{"1":"wet","2":"3"},{"1":"whatchu","2":"3"},{"1":"wine","2":"3"},{"1":"wishful","2":"3"},{"1":"worried","2":"3"},{"1":"wrap","2":"3"},{"1":"write","2":"3"},{"1":"yea","2":"3"},{"1":"1","2":"2"},{"1":"4","2":"2"},{"1":"50","2":"2"},{"1":"abuse","2":"2"},{"1":"accept","2":"2"},{"1":"acting","2":"2"},{"1":"action","2":"2"},{"1":"advantage","2":"2"},{"1":"affect","2":"2"},{"1":"affliction","2":"2"},{"1":"aggressive","2":"2"},{"1":"aim","2":"2"},{"1":"alarmed","2":"2"},{"1":"angels","2":"2"},{"1":"anticipation","2":"2"},{"1":"anytime","2":"2"},{"1":"applause","2":"2"},{"1":"argue","2":"2"},{"1":"arm","2":"2"},{"1":"ass","2":"2"},{"1":"asses","2":"2"},{"1":"attire","2":"2"},{"1":"aura","2":"2"},{"1":"awhile","2":"2"},{"1":"bans","2":"2"},{"1":"bask","2":"2"},{"1":"battles","2":"2"},{"1":"bawl","2":"2"},{"1":"beats","2":"2"},{"1":"beg","2":"2"},{"1":"beggin","2":"2"},{"1":"belong","2":"2"},{"1":"blacked","2":"2"},{"1":"bleaching","2":"2"},{"1":"blew","2":"2"},{"1":"bloggers","2":"2"},{"1":"blowing","2":"2"},{"1":"bonds","2":"2"},{"1":"boogie","2":"2"},{"1":"bounce","2":"2"},{"1":"box","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">words_by_year &lt;-<span class="st"> </span>tidy_riri <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">count</span>(Year, word) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(Year) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time_total =</span> <span class="kw">sum</span>(n)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(word) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word_total =</span> <span class="kw">sum</span>(n)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">count =</span> n) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(word_total <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span>)
 
-nested_words &lt;- words_by_year %&gt;%
-  nest(-word)</code></pre>
+nested_words &lt;-<span class="st"> </span>words_by_year <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>word)</code></pre></div>
 </div>
 
 <p>Copyright &copy; 2019 Tomas Leriche. All rights reserved.</p>
