@@ -33,10 +33,15 @@ navbar:
       href: http://github.com/samotleriche
 output:
   html_document:
+    df_print: paged
+    code_folding: show
     toc: true
-    toc_float: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    number_sections: true
     theme: paper
-    highlight: textmate
+    highlight: tango
     include:
       after_body: footer.html
     css: styles.css

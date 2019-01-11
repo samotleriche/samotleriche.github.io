@@ -23,28 +23,60 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
 <script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
 <script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 
+
 <style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
-
 
 
 <style type="text/css">
@@ -169,6 +201,14 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
 
 
 
@@ -192,7 +232,7 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = true;
+    options.showAndHide = false;
     options.smoothScroll = true;
 
     // tocify
@@ -255,6 +295,12 @@ div.tocify {
   border-radius: 0px;
 }
 
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
 
 </style>
 
@@ -341,6 +387,14 @@ div.tocify {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Data Analysis</h1>
@@ -349,297 +403,296 @@ div.tocify {
 
 
 <div id="data-analysis-fundamentals" class="section level1">
-<h1>Data Analysis Fundamentals</h1>
+<h1><span class="header-section-number">1</span> Data Analysis Fundamentals</h1>
 </div>
 <div id="cross-validation" class="section level1">
-<h1>Cross Validation</h1>
-<pre class="r"><code># FROM: Dua, D. and Karra Taniskidou, E. (2017). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
-spamData = read.csv(&#39;spamData.csv&#39;)
+<h1><span class="header-section-number">2</span> Cross Validation</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># FROM: Dua, D. and Karra Taniskidou, E. (2017). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.</span>
+spamData =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;spamData.csv&#39;</span>)
 
-names(spamData) &lt;- c(&quot;make&quot;,&quot;address&quot;,&quot;all&quot;,&quot;3d&quot;,&quot;our&quot;,&quot;over&quot;,&quot;remove&quot;,&quot;internet&quot;,&quot;order&quot;,&quot;mail&quot;,&quot;receive&quot;,&quot;will&quot;,&quot;people&quot;,&quot;report&quot;,&quot;addresses&quot;,&quot;free&quot;,&quot;business&quot;,&quot;email&quot;,&quot;you&quot;,&quot;credit&quot;,&quot;your&quot;,&quot;font&quot;,&quot;000&quot;,&quot;money&quot;,&quot;hp&quot;,&quot;hpl&quot;,&quot;george&quot;,&quot;650&quot;,&quot;lab&quot;,&quot;labs&quot;,&quot;telnet&quot;,&quot;857&quot;,&quot;data&quot;,&quot;415&quot;,&quot;85&quot;,&quot;technology&quot;,&quot;1999&quot;,&quot;parts&quot;,&quot;pm&quot;,&quot;direct&quot;,&quot;cs&quot;,&quot;meeting&quot;,&quot;original&quot;,&quot;project&quot;,&quot;re&quot;,&quot;edu&quot;,&quot;table&quot;,&quot;conference&quot;,&quot;;:&quot;,&quot;(:&quot;,&quot;[:&quot;,&quot;!:&quot;,&quot;$:&quot;,&quot;#:&quot;,&quot;avg_cap_length&quot;,&quot;longest_cap_length&quot;,&quot;total_cap_length&quot;,&quot;spam_label&quot;)
-
-
-n &lt;- nrow(spamData)
-shuffled &lt;- spamData[sample(n),]
+<span class="kw">names</span>(spamData) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;make&quot;</span>,<span class="st">&quot;address&quot;</span>,<span class="st">&quot;all&quot;</span>,<span class="st">&quot;3d&quot;</span>,<span class="st">&quot;our&quot;</span>,<span class="st">&quot;over&quot;</span>,<span class="st">&quot;remove&quot;</span>,<span class="st">&quot;internet&quot;</span>,<span class="st">&quot;order&quot;</span>,<span class="st">&quot;mail&quot;</span>,<span class="st">&quot;receive&quot;</span>,<span class="st">&quot;will&quot;</span>,<span class="st">&quot;people&quot;</span>,<span class="st">&quot;report&quot;</span>,<span class="st">&quot;addresses&quot;</span>,<span class="st">&quot;free&quot;</span>,<span class="st">&quot;business&quot;</span>,<span class="st">&quot;email&quot;</span>,<span class="st">&quot;you&quot;</span>,<span class="st">&quot;credit&quot;</span>,<span class="st">&quot;your&quot;</span>,<span class="st">&quot;font&quot;</span>,<span class="st">&quot;000&quot;</span>,<span class="st">&quot;money&quot;</span>,<span class="st">&quot;hp&quot;</span>,<span class="st">&quot;hpl&quot;</span>,<span class="st">&quot;george&quot;</span>,<span class="st">&quot;650&quot;</span>,<span class="st">&quot;lab&quot;</span>,<span class="st">&quot;labs&quot;</span>,<span class="st">&quot;telnet&quot;</span>,<span class="st">&quot;857&quot;</span>,<span class="st">&quot;data&quot;</span>,<span class="st">&quot;415&quot;</span>,<span class="st">&quot;85&quot;</span>,<span class="st">&quot;technology&quot;</span>,<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;parts&quot;</span>,<span class="st">&quot;pm&quot;</span>,<span class="st">&quot;direct&quot;</span>,<span class="st">&quot;cs&quot;</span>,<span class="st">&quot;meeting&quot;</span>,<span class="st">&quot;original&quot;</span>,<span class="st">&quot;project&quot;</span>,<span class="st">&quot;re&quot;</span>,<span class="st">&quot;edu&quot;</span>,<span class="st">&quot;table&quot;</span>,<span class="st">&quot;conference&quot;</span>,<span class="st">&quot;;:&quot;</span>,<span class="st">&quot;(:&quot;</span>,<span class="st">&quot;[:&quot;</span>,<span class="st">&quot;!:&quot;</span>,<span class="st">&quot;$:&quot;</span>,<span class="st">&quot;#:&quot;</span>,<span class="st">&quot;avg_cap_length&quot;</span>,<span class="st">&quot;longest_cap_length&quot;</span>,<span class="st">&quot;total_cap_length&quot;</span>,<span class="st">&quot;spam_label&quot;</span>)
 
 
-set.seed(1)
+n &lt;-<span class="st"> </span><span class="kw">nrow</span>(spamData)
+shuffled &lt;-<span class="st"> </span>spamData[<span class="kw">sample</span>(n),]
 
-# Initialize the accs vector
-accs &lt;- rep(0,6)
 
-for (i in 1:6) {
-  # These indices indicate the interval of the test set
-  indices &lt;- (((i-1) * round((1/6)*nrow(shuffled))) + 1):((i*round((1/6) * nrow(shuffled))))
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+
+<span class="co"># Initialize the accs vector</span>
+accs &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">6</span>)
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {
+  <span class="co"># These indices indicate the interval of the test set</span>
+  indices &lt;-<span class="st"> </span>(((i<span class="op">-</span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">round</span>((<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>)<span class="op">*</span><span class="kw">nrow</span>(shuffled))) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">:</span>((i<span class="op">*</span><span class="kw">round</span>((<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>) <span class="op">*</span><span class="st"> </span><span class="kw">nrow</span>(shuffled))))
   
-  # Exclude them from the train set
-  train &lt;- shuffled[-indices,]
+  <span class="co"># Exclude them from the train set</span>
+  train &lt;-<span class="st"> </span>shuffled[<span class="op">-</span>indices,]
   
-  # Include them in the test set
-  test &lt;- shuffled[indices,]
+  <span class="co"># Include them in the test set</span>
+  test &lt;-<span class="st"> </span>shuffled[indices,]
   
-  # A model is learned using each training set
-  tree &lt;- rpart(spam_label ~ ., train, method = &quot;class&quot;)
+  <span class="co"># A model is learned using each training set</span>
+  tree &lt;-<span class="st"> </span><span class="kw">rpart</span>(spam_label <span class="op">~</span><span class="st"> </span>., train, <span class="dt">method =</span> <span class="st">&quot;class&quot;</span>)
   
-  # Make a prediction on the test set using tree
-  pred &lt;- predict(tree, test, type = &quot;class&quot;)
+  <span class="co"># Make a prediction on the test set using tree</span>
+  pred &lt;-<span class="st"> </span><span class="kw">predict</span>(tree, test, <span class="dt">type =</span> <span class="st">&quot;class&quot;</span>)
   
-  # Assign the confusion matrix to conf
-  conf &lt;- table(test$spam_label, pred)
+  <span class="co"># Assign the confusion matrix to conf</span>
+  conf &lt;-<span class="st"> </span><span class="kw">table</span>(test<span class="op">$</span>spam_label, pred)
   
-  # Assign the accuracy of this model to the ith index in accs
-  accs[i] &lt;- sum(diag(conf))/sum(conf)
+  <span class="co"># Assign the accuracy of this model to the ith index in accs</span>
+  accs[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(conf))<span class="op">/</span><span class="kw">sum</span>(conf)
 }
 
-print(accs)</code></pre>
+<span class="kw">print</span>(accs)</code></pre></div>
 <pre><code>## [1] 0.9022164 0.9022164 0.9152542 0.8748370 0.8826597 0.8877285</code></pre>
-<pre class="r"><code>print(mean(accs))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">mean</span>(accs))</code></pre></div>
 <pre><code>## [1] 0.894152</code></pre>
-<pre class="r"><code># Print out the mean of accs</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print out the mean of accs</span></code></pre></div>
 <p>Bias and variance are main challenges of machine learning. bias are wrong assumptions. variance is due to sampling.</p>
 <p>irriducilbe error: noise, shouldn’t be minimized. reducible error: bias and variance.</p>
-<pre class="r"><code># Example of assigning levels to a predictor
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Example of assigning levels to a predictor</span>
 
-#spam_classifier &lt;- function(x){
-#  prediction &lt;- rep(NA, length(x))
-#  prediction[x &gt; 4] &lt;- 1
-#  prediction[x &lt;= 4] &lt;- 0
-#  return(factor(prediction, levels = c(&quot;1&quot;, &quot;0&quot;)))
-#}</code></pre>
+<span class="co">#spam_classifier &lt;- function(x){</span>
+<span class="co">#  prediction &lt;- rep(NA, length(x))</span>
+<span class="co">#  prediction[x &gt; 4] &lt;- 1</span>
+<span class="co">#  prediction[x &lt;= 4] &lt;- 0</span>
+<span class="co">#  return(factor(prediction, levels = c(&quot;1&quot;, &quot;0&quot;)))</span>
+<span class="co">#}</span></code></pre></div>
 </div>
 <div id="decision-tree" class="section level1">
-<h1>Decision Tree</h1>
-<pre class="r"><code>if (!require(&quot;rpart.plot&quot;)) install.packages(&quot;rpart.plot&quot;)
-library(rpart.plot)
-if (!require(&quot;RColorBrewer&quot;)) install.packages(&quot;RColorBrewer&quot;)
-library(RColorBrewer)
-if (!require(&quot;rattle&quot;)) install.packages(&quot;rattle&quot;)
-library(rattle)
+<h1><span class="header-section-number">3</span> Decision Tree</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;rpart.plot&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;rpart.plot&quot;</span>)
+<span class="kw">library</span>(rpart.plot)
+<span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;RColorBrewer&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;RColorBrewer&quot;</span>)
+<span class="kw">library</span>(RColorBrewer)
+<span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;rattle&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;rattle&quot;</span>)
+<span class="kw">library</span>(rattle)
 
 
-train_indices &lt;- 1:round(0.7*n)
-train &lt;- shuffled[train_indices,]
-test_indices &lt;- (round(0.7*n)+1):n
-test &lt;- shuffled[test_indices, ]
+train_indices &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="kw">round</span>(<span class="fl">0.7</span><span class="op">*</span>n)
+train &lt;-<span class="st"> </span>shuffled[train_indices,]
+test_indices &lt;-<span class="st"> </span>(<span class="kw">round</span>(<span class="fl">0.7</span><span class="op">*</span>n)<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n
+test &lt;-<span class="st"> </span>shuffled[test_indices, ]
 
-tree &lt;- rpart(spam_label ~ ., train, method = &quot;class&quot;, parms = list(split = &quot;information&quot;))
+tree &lt;-<span class="st"> </span><span class="kw">rpart</span>(spam_label <span class="op">~</span><span class="st"> </span>., train, <span class="dt">method =</span> <span class="st">&quot;class&quot;</span>, <span class="dt">parms =</span> <span class="kw">list</span>(<span class="dt">split =</span> <span class="st">&quot;information&quot;</span>))
 
 
-pred &lt;- predict(tree, test, type = &quot;class&quot;)
+pred &lt;-<span class="st"> </span><span class="kw">predict</span>(tree, test, <span class="dt">type =</span> <span class="st">&quot;class&quot;</span>)
 
-conf = table(test$spam_label ,pred)
+conf =<span class="st"> </span><span class="kw">table</span>(test<span class="op">$</span>spam_label ,pred)
 
-acc = sum(diag(conf))/sum(conf)
+acc =<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(conf))<span class="op">/</span><span class="kw">sum</span>(conf)
 
-print(acc)</code></pre>
+<span class="kw">print</span>(acc)</code></pre></div>
 <pre><code>## [1] 0.8818841</code></pre>
-<pre class="r"><code>print(conf)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(conf)</code></pre></div>
 <pre><code>##    pred
 ##       0   1
 ##   0 769  66
 ##   1  97 448</code></pre>
-<pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<pre class="r"><code># normalize data on a 0-1 scale
-# knn_train$Age &lt;- (knn_train$Age - min_age) / (max_age - min_age)</code></pre>
-<pre class="r"><code>df &lt;- read.table(&quot;./adultCensus.data&quot;, header = FALSE, sep = &quot;,&quot;)
-df_test &lt;- read.table(&quot;./adultTest.test&quot;, header = FALSE, sep = &quot;,&quot;, skip = 1)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fancyRpartPlot</span>(tree)</code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># normalize data on a 0-1 scale</span>
+<span class="co"># knn_train$Age &lt;- (knn_train$Age - min_age) / (max_age - min_age)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;./adultCensus.data&quot;</span>, <span class="dt">header =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)
+df_test &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;./adultTest.test&quot;</span>, <span class="dt">header =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">skip =</span> <span class="dv">1</span>)
 
-names(df) &lt;- c(&quot;age&quot;,&quot;workclass&quot;,&quot;fnlwgt&quot;,&quot;education&quot;, &quot;education-num&quot;,&quot;maritalstatus&quot;,&quot;occupation&quot;,&quot;relationship&quot;,&quot;race&quot;,&quot;sex&quot;,&quot;capital-gain&quot;,&quot;capital-loss&quot;,&quot;hoursPerWeek&quot;,&quot;native-country&quot;,&quot;income&quot;)
+<span class="kw">names</span>(df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;workclass&quot;</span>,<span class="st">&quot;fnlwgt&quot;</span>,<span class="st">&quot;education&quot;</span>, <span class="st">&quot;education-num&quot;</span>,<span class="st">&quot;maritalstatus&quot;</span>,<span class="st">&quot;occupation&quot;</span>,<span class="st">&quot;relationship&quot;</span>,<span class="st">&quot;race&quot;</span>,<span class="st">&quot;sex&quot;</span>,<span class="st">&quot;capital-gain&quot;</span>,<span class="st">&quot;capital-loss&quot;</span>,<span class="st">&quot;hoursPerWeek&quot;</span>,<span class="st">&quot;native-country&quot;</span>,<span class="st">&quot;income&quot;</span>)
 
-names(df_test) &lt;- c(&quot;age&quot;,&quot;workclass&quot;,&quot;fnlwgt&quot;,&quot;education&quot;, &quot;education-num&quot;,&quot;maritalstatus&quot;,&quot;occupation&quot;,&quot;relationship&quot;,&quot;race&quot;,&quot;sex&quot;,&quot;capital-gain&quot;,&quot;capital-loss&quot;,&quot;hoursPerWeek&quot;,&quot;native-country&quot;,&quot;income&quot;)</code></pre>
-<pre class="r"><code>df[1,]</code></pre>
-<pre><code>##   age  workclass fnlwgt  education education-num  maritalstatus
-## 1  39  State-gov  77516  Bachelors            13  Never-married
-##      occupation   relationship   race   sex capital-gain capital-loss
-## 1  Adm-clerical  Not-in-family  White  Male         2174            0
-##   hoursPerWeek native-country income
-## 1           40  United-States  &lt;=50K</code></pre>
-<pre class="r"><code>df$fnlwgt &lt;- NULL
+<span class="kw">names</span>(df_test) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;workclass&quot;</span>,<span class="st">&quot;fnlwgt&quot;</span>,<span class="st">&quot;education&quot;</span>, <span class="st">&quot;education-num&quot;</span>,<span class="st">&quot;maritalstatus&quot;</span>,<span class="st">&quot;occupation&quot;</span>,<span class="st">&quot;relationship&quot;</span>,<span class="st">&quot;race&quot;</span>,<span class="st">&quot;sex&quot;</span>,<span class="st">&quot;capital-gain&quot;</span>,<span class="st">&quot;capital-loss&quot;</span>,<span class="st">&quot;hoursPerWeek&quot;</span>,<span class="st">&quot;native-country&quot;</span>,<span class="st">&quot;income&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="dv">1</span>,]</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["int"],"align":["right"]},{"label":["workclass"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["fnlwgt"],"name":[3],"type":["int"],"align":["right"]},{"label":["education"],"name":[4],"type":["fctr"],"align":["left"]},{"label":["education-num"],"name":[5],"type":["int"],"align":["right"]},{"label":["maritalstatus"],"name":[6],"type":["fctr"],"align":["left"]},{"label":["occupation"],"name":[7],"type":["fctr"],"align":["left"]},{"label":["relationship"],"name":[8],"type":["fctr"],"align":["left"]},{"label":["race"],"name":[9],"type":["fctr"],"align":["left"]},{"label":["sex"],"name":[10],"type":["fctr"],"align":["left"]},{"label":["capital-gain"],"name":[11],"type":["int"],"align":["right"]},{"label":["capital-loss"],"name":[12],"type":["int"],"align":["right"]},{"label":["hoursPerWeek"],"name":[13],"type":["int"],"align":["right"]},{"label":["native-country"],"name":[14],"type":["fctr"],"align":["left"]},{"label":["income"],"name":[15],"type":["fctr"],"align":["left"]}],"data":[{"1":"39","2":"State-gov","3":"77516","4":"Bachelors","5":"13","6":"Never-married","7":"Adm-clerical","8":"Not-in-family","9":"White","10":"Male","11":"2174","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df<span class="op">$</span>fnlwgt &lt;-<span class="st"> </span><span class="ot">NULL</span>
 
-tree &lt;- rpart(income ~ ., df, method = &quot;class&quot;, parms = list(split = &quot;gini&quot;))
+tree &lt;-<span class="st"> </span><span class="kw">rpart</span>(income <span class="op">~</span><span class="st"> </span>., df, <span class="dt">method =</span> <span class="st">&quot;class&quot;</span>, <span class="dt">parms =</span> <span class="kw">list</span>(<span class="dt">split =</span> <span class="st">&quot;gini&quot;</span>))
 
-all_probs = predict(tree, df_test, type = &quot;prob&quot;)[,2]
+all_probs =<span class="st"> </span><span class="kw">predict</span>(tree, df_test, <span class="dt">type =</span> <span class="st">&quot;prob&quot;</span>)[,<span class="dv">2</span>]
 
-all_probs %&gt;% head()</code></pre>
+all_probs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</code></pre></div>
 <pre><code>##          1          2          3          4          5          6 
 ## 0.04987988 0.30019374 0.30019374 0.98084291 0.04987988 0.04987988</code></pre>
-<pre class="r"><code>fancyRpartPlot(tree)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fancyRpartPlot</span>(tree)</code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <div id="roc-curve" class="section level2">
-<h2>ROC Curve</h2>
-<pre class="r"><code>if (!require(&quot;ROCR&quot;)) install.packages(&quot;ROCR&quot;)
-library(ROCR)
+<h2><span class="header-section-number">3.1</span> ROC Curve</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;ROCR&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;ROCR&quot;</span>)
+<span class="kw">library</span>(ROCR)
 
-pred = prediction(all_probs, df_test$income)
+pred =<span class="st"> </span><span class="kw">prediction</span>(all_probs, df_test<span class="op">$</span>income)
 
-perf = performance(pred, &quot;tpr&quot;, &quot;fpr&quot;)
+perf =<span class="st"> </span><span class="kw">performance</span>(pred, <span class="st">&quot;tpr&quot;</span>, <span class="st">&quot;fpr&quot;</span>)
 
-plot(perf)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-<pre class="r"><code>perf = performance(pred, &quot;auc&quot;)
+<span class="kw">plot</span>(perf)</code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">perf =<span class="st"> </span><span class="kw">performance</span>(pred, <span class="st">&quot;auc&quot;</span>)
 
-print(perf@y.values[[1]])</code></pre>
+<span class="kw">print</span>(perf<span class="op">@</span>y.values[[<span class="dv">1</span>]])</code></pre></div>
 <pre><code>## [1] 0.8451151</code></pre>
 </div>
 <div id="comparing-k-nn-and-decision-tree-models" class="section level2">
-<h2>Comparing K-NN and Decision Tree Models</h2>
-<pre class="r"><code>if (!require(&quot;class&quot;)) install.packages(&quot;class&quot;)
-library(class)
+<h2><span class="header-section-number">3.2</span> Comparing K-NN and Decision Tree Models</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;class&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;class&quot;</span>)
+<span class="kw">library</span>(class)
 
-train_indices &lt;- 1:round(0.7*n)
-train &lt;- shuffled[train_indices,]
-test_indices &lt;- (round(0.7*n)+1):n
-test &lt;- shuffled[test_indices, ]
+train_indices &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="kw">round</span>(<span class="fl">0.7</span><span class="op">*</span>n)
+train &lt;-<span class="st"> </span>shuffled[train_indices,]
+test_indices &lt;-<span class="st"> </span>(<span class="kw">round</span>(<span class="fl">0.7</span><span class="op">*</span>n)<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n
+test &lt;-<span class="st"> </span>shuffled[test_indices, ]
 
-knn_train &lt;- train
-knn_test &lt;- test
+knn_train &lt;-<span class="st"> </span>train
+knn_test &lt;-<span class="st"> </span>test
 
-knn_train_labels &lt;- knn_train$spam_label
-knn_train$spam_label &lt;- NULL
+knn_train_labels &lt;-<span class="st"> </span>knn_train<span class="op">$</span>spam_label
+knn_train<span class="op">$</span>spam_label &lt;-<span class="st"> </span><span class="ot">NULL</span>
 
-knn_test_labels &lt;- knn_test$spam_label
-knn_test$spam_label &lt;- NULL
-
-
-knn_train &lt;- apply(knn_train, 2, function(x) (x - min(x))/(max(x)-min(x)))
-knn_test &lt;- apply(knn_test, 2, function(x) (x - min(x))/(max(x)-min(x)))
+knn_test_labels &lt;-<span class="st"> </span>knn_test<span class="op">$</span>spam_label
+knn_test<span class="op">$</span>spam_label &lt;-<span class="st"> </span><span class="ot">NULL</span>
 
 
-pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = 5)
-conf = table(knn_test_labels, pred)
-print(conf)</code></pre>
+knn_train &lt;-<span class="st"> </span><span class="kw">apply</span>(knn_train, <span class="dv">2</span>, <span class="cf">function</span>(x) (x <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x))<span class="op">/</span>(<span class="kw">max</span>(x)<span class="op">-</span><span class="kw">min</span>(x)))
+knn_test &lt;-<span class="st"> </span><span class="kw">apply</span>(knn_test, <span class="dv">2</span>, <span class="cf">function</span>(x) (x <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x))<span class="op">/</span>(<span class="kw">max</span>(x)<span class="op">-</span><span class="kw">min</span>(x)))
+
+
+pred &lt;-<span class="st"> </span><span class="kw">knn</span>(<span class="dt">train =</span> knn_train, <span class="dt">test =</span> knn_test, <span class="dt">cl =</span> knn_train_labels, <span class="dt">k =</span> <span class="dv">5</span>)
+conf =<span class="st"> </span><span class="kw">table</span>(knn_test_labels, pred)
+<span class="kw">print</span>(conf)</code></pre></div>
 <pre><code>##                pred
 ## knn_test_labels   0   1
 ##               0 757  78
 ##               1  94 451</code></pre>
-<pre class="r"><code>range &lt;- 1:50
-accs &lt;- rep(0, length(range))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">range &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">50</span>
+accs &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(range))
 
-for (k in range){
-  pred &lt;- knn(knn_train, knn_test, knn_train_labels, k=k)
-  conf &lt;- table(knn_test_labels, pred)
-  accs[k] &lt;- sum(diag(conf)) / sum(conf)
-  if (k %% 10 == 0){
-    print(&quot;10&quot;)
+<span class="cf">for</span> (k <span class="cf">in</span> range){
+  pred &lt;-<span class="st"> </span><span class="kw">knn</span>(knn_train, knn_test, knn_train_labels, <span class="dt">k=</span>k)
+  conf &lt;-<span class="st"> </span><span class="kw">table</span>(knn_test_labels, pred)
+  accs[k] &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(conf)) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(conf)
+  <span class="cf">if</span> (k <span class="op">%%</span><span class="st"> </span><span class="dv">10</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){
+    <span class="kw">print</span>(<span class="st">&quot;10&quot;</span>)
   }
-}</code></pre>
+}</code></pre></div>
 <pre><code>## [1] &quot;10&quot;
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
-<pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
-<pre class="r"><code>which.max(accs)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(range, accs, <span class="dt">xlab =</span> <span class="st">&quot;k&quot;</span>)</code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">which.max</span>(accs)</code></pre></div>
 <pre><code>## [1] 10</code></pre>
-<pre class="r"><code>train_indices &lt;- 1:round(0.7*n)
-train &lt;- shuffled[train_indices,]
-test_indices &lt;- (round(0.7*n)+1):n
-test &lt;- shuffled[test_indices, ]</code></pre>
-<pre class="r"><code>set.seed(1)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train_indices &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="kw">round</span>(<span class="fl">0.7</span><span class="op">*</span>n)
+train &lt;-<span class="st"> </span>shuffled[train_indices,]
+test_indices &lt;-<span class="st"> </span>(<span class="kw">round</span>(<span class="fl">0.7</span><span class="op">*</span>n)<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n
+test &lt;-<span class="st"> </span>shuffled[test_indices, ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 
-knn_train &lt;- train
-knn_test &lt;- test
+knn_train &lt;-<span class="st"> </span>train
+knn_test &lt;-<span class="st"> </span>test
 
-knn_train_labels &lt;- knn_train$spam_label
-knn_train$spam_label &lt;- NULL
+knn_train_labels &lt;-<span class="st"> </span>knn_train<span class="op">$</span>spam_label
+knn_train<span class="op">$</span>spam_label &lt;-<span class="st"> </span><span class="ot">NULL</span>
 
-knn_test_labels &lt;- knn_test$spam_label
-knn_test$spam_label &lt;- NULL
+knn_test_labels &lt;-<span class="st"> </span>knn_test<span class="op">$</span>spam_label
+knn_test<span class="op">$</span>spam_label &lt;-<span class="st"> </span><span class="ot">NULL</span>
 
-#knn_train &lt;- apply(knn_train, 2, function(x) (x - mean(x))/sd(x))
-#knn_test &lt;- apply(knn_test, 2, function(x) (x - mean(x))/sd(x))
+<span class="co">#knn_train &lt;- apply(knn_train, 2, function(x) (x - mean(x))/sd(x))</span>
+<span class="co">#knn_test &lt;- apply(knn_test, 2, function(x) (x - mean(x))/sd(x))</span>
 
-knn_train &lt;- scale(knn_train)
-knn_test &lt;- scale(knn_test)
+knn_train &lt;-<span class="st"> </span><span class="kw">scale</span>(knn_train)
+knn_test &lt;-<span class="st"> </span><span class="kw">scale</span>(knn_test)
 
-pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = 5)
-conf = table(knn_test_labels, pred)
-print(conf)</code></pre>
+pred &lt;-<span class="st"> </span><span class="kw">knn</span>(<span class="dt">train =</span> knn_train, <span class="dt">test =</span> knn_test, <span class="dt">cl =</span> knn_train_labels, <span class="dt">k =</span> <span class="dv">5</span>)
+conf =<span class="st"> </span><span class="kw">table</span>(knn_test_labels, pred)
+<span class="kw">print</span>(conf)</code></pre></div>
 <pre><code>##                pred
 ## knn_test_labels   0   1
 ##               0 784  51
 ##               1  90 455</code></pre>
-<pre class="r"><code>range &lt;- 1:50
-accs &lt;- rep(0, length(range))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">range &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">50</span>
+accs &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(range))
 
-for (k in range){
-  pred &lt;- knn(knn_train, knn_test, knn_train_labels, k=k)
-  conf &lt;- table(knn_test_labels, pred)
-  accs[k] &lt;- sum(diag(conf)) / sum(conf)
-  if (k %% 10 == 0){
-    print(&quot;10&quot;)
+<span class="cf">for</span> (k <span class="cf">in</span> range){
+  pred &lt;-<span class="st"> </span><span class="kw">knn</span>(knn_train, knn_test, knn_train_labels, <span class="dt">k=</span>k)
+  conf &lt;-<span class="st"> </span><span class="kw">table</span>(knn_test_labels, pred)
+  accs[k] &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(conf)) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(conf)
+  <span class="cf">if</span> (k <span class="op">%%</span><span class="st"> </span><span class="dv">10</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){
+    <span class="kw">print</span>(<span class="st">&quot;10&quot;</span>)
   }
-}</code></pre>
+}</code></pre></div>
 <pre><code>## [1] &quot;10&quot;
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
-<pre class="r"><code>plot(range, accs, xlab = &quot;k&quot;)</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
-<pre class="r"><code>best = which.max(accs)</code></pre>
-<pre class="r"><code>pred &lt;- knn(train = knn_train, test = knn_test, cl = knn_train_labels, k = best, prob = TRUE)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(range, accs, <span class="dt">xlab =</span> <span class="st">&quot;k&quot;</span>)</code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">best =<span class="st"> </span><span class="kw">which.max</span>(accs)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred &lt;-<span class="st"> </span><span class="kw">knn</span>(<span class="dt">train =</span> knn_train, <span class="dt">test =</span> knn_test, <span class="dt">cl =</span> knn_train_labels, <span class="dt">k =</span> best, <span class="dt">prob =</span> <span class="ot">TRUE</span>)
 
-conf = table(knn_test_labels, pred)
-acc = sum(diag(conf))/sum(conf)
-print(conf)</code></pre>
+conf =<span class="st"> </span><span class="kw">table</span>(knn_test_labels, pred)
+acc =<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(conf))<span class="op">/</span><span class="kw">sum</span>(conf)
+<span class="kw">print</span>(conf)</code></pre></div>
 <pre><code>##                pred
 ## knn_test_labels   0   1
 ##               0 780  55
 ##               1  91 454</code></pre>
-<pre class="r"><code>print(paste(acc, &quot; knn accuracy&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">paste</span>(acc, <span class="st">&quot; knn accuracy&quot;</span>))</code></pre></div>
 <pre><code>## [1] &quot;0.894202898550725  knn accuracy&quot;</code></pre>
-<pre class="r"><code>probs_k &lt;- attr(pred, &quot;prob&quot;)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">probs_k &lt;-<span class="st"> </span><span class="kw">attr</span>(pred, <span class="st">&quot;prob&quot;</span>)
 
-tree &lt;- rpart(spam_label ~ ., train, method = &quot;class&quot;)
+tree &lt;-<span class="st"> </span><span class="kw">rpart</span>(spam_label <span class="op">~</span><span class="st"> </span>., train, <span class="dt">method =</span> <span class="st">&quot;class&quot;</span>)
 
-probs_t &lt;- predict(tree, test, type = &quot;class&quot;)
-conf = table(test$spam_label, probs_t)
-acc = sum(diag(conf))/sum(conf)
-print(conf)</code></pre>
+probs_t &lt;-<span class="st"> </span><span class="kw">predict</span>(tree, test, <span class="dt">type =</span> <span class="st">&quot;class&quot;</span>)
+conf =<span class="st"> </span><span class="kw">table</span>(test<span class="op">$</span>spam_label, probs_t)
+acc =<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(conf))<span class="op">/</span><span class="kw">sum</span>(conf)
+<span class="kw">print</span>(conf)</code></pre></div>
 <pre><code>##    probs_t
 ##       0   1
 ##   0 778  57
 ##   1 105 440</code></pre>
-<pre class="r"><code>print(paste(acc, &quot; tree accuracy&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">paste</span>(acc, <span class="st">&quot; tree accuracy&quot;</span>))</code></pre></div>
 <pre><code>## [1] &quot;0.882608695652174  tree accuracy&quot;</code></pre>
-<pre class="r"><code>probs_t &lt;- predict(tree, test, type = &quot;prob&quot;)[,2]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">probs_t &lt;-<span class="st"> </span><span class="kw">predict</span>(tree, test, <span class="dt">type =</span> <span class="st">&quot;prob&quot;</span>)[,<span class="dv">2</span>]
 
-pred_t = prediction(probs_t, test$spam_label)
-pred_k &lt;- prediction(probs_k, test$spam_label)
+pred_t =<span class="st"> </span><span class="kw">prediction</span>(probs_t, test<span class="op">$</span>spam_label)
+pred_k &lt;-<span class="st"> </span><span class="kw">prediction</span>(probs_k, test<span class="op">$</span>spam_label)
 
-perf_t = performance(pred_t, &quot;auc&quot;)
-perf_k = performance(pred_k, &quot;auc&quot;)
+perf_t =<span class="st"> </span><span class="kw">performance</span>(pred_t, <span class="st">&quot;auc&quot;</span>)
+perf_k =<span class="st"> </span><span class="kw">performance</span>(pred_k, <span class="st">&quot;auc&quot;</span>)
 
-#ROC_curves(perf_t, perf_k)
+<span class="co">#ROC_curves(perf_t, perf_k)</span>
 
-print(perf_t@y.values[[1]])</code></pre>
+<span class="kw">print</span>(perf_t<span class="op">@</span>y.values[[<span class="dv">1</span>]])</code></pre></div>
 <pre><code>## [1] 0.886733</code></pre>
-<pre class="r"><code>print(perf_k@y.values[[1]])</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(perf_k<span class="op">@</span>y.values[[<span class="dv">1</span>]])</code></pre></div>
 <pre><code>## [1] 0.4365995</code></pre>
 </div>
 <div id="voronoi-diagram-with-ggvoronoi" class="section level2">
-<h2>Voronoi Diagram with ggvoronoi</h2>
-<pre class="r"><code>if (!require(&quot;ggvoronoi&quot;)) install.packages(&quot;ggvoronoi&quot;)
-library(ggvoronoi)
+<h2><span class="header-section-number">3.3</span> Voronoi Diagram with ggvoronoi</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;ggvoronoi&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;ggvoronoi&quot;</span>)
+<span class="kw">library</span>(ggvoronoi)
 
-x &lt;- sample(1:150,50)
-y &lt;- sample(1:150,50)
-points &lt;- data.frame(x, y, distance = sqrt((x-75)^2 + (y-75)^2))
+x &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">150</span>,<span class="dv">50</span>)
+y &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">150</span>,<span class="dv">50</span>)
+points &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x, y, <span class="dt">distance =</span> <span class="kw">sqrt</span>((x<span class="op">-</span><span class="dv">75</span>)<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>(y<span class="op">-</span><span class="dv">75</span>)<span class="op">^</span><span class="dv">2</span>))
 
-ggplot(points) +
-  geom_voronoi(aes(x,y,fill=distance)) +
-  scale_fill_gradient(low=&quot;#4dffb8&quot;,high=&quot;navyblue&quot;,guide=F) +
-  geom_point(aes(x,y)) +
-  theme_void() +
-  coord_fixed()</code></pre>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<span class="kw">ggplot</span>(points) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_voronoi</span>(<span class="kw">aes</span>(x,y,<span class="dt">fill=</span>distance)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_gradient</span>(<span class="dt">low=</span><span class="st">&quot;#4dffb8&quot;</span>,<span class="dt">high=</span><span class="st">&quot;navyblue&quot;</span>,<span class="dt">guide=</span>F) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(x,y)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_void</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_fixed</span>()</code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 </div>
 <div id="regression" class="section level1">
-<h1>Regression</h1>
+<h1><span class="header-section-number">4</span> Regression</h1>
 </div>
 
 <p>Copyright &copy; 2019 Tomas Leriche. All rights reserved.</p>

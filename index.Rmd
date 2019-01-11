@@ -27,6 +27,10 @@ p <- ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
             geom_bar(position = "dodge")
 ggplotly(p)
 ```
+```{r}
+mtcars
+```
+
 ```{r, echo=FALSE}
 p = ggplot(diamonds, aes(x=price)) + 
     geom_density(aes(fill=color), alpha = 0.5) +

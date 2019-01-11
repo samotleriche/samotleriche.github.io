@@ -23,28 +23,60 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
 <script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
 <script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 
+
 <style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
-
 
 
 <style type="text/css">
@@ -169,6 +201,14 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
 
 
 
@@ -192,7 +232,7 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = true;
+    options.showAndHide = false;
     options.smoothScroll = true;
 
     // tocify
@@ -255,6 +295,12 @@ div.tocify {
   border-radius: 0px;
 }
 
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
 
 </style>
 
@@ -341,6 +387,14 @@ div.tocify {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">R Notebook 2</h1>
@@ -349,13 +403,13 @@ div.tocify {
 
 
 <p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> notebook. I’m using this to demonstrate using R and R Notebooks. The Example is based on the Exploring Kaggle Data Science Survery from <a href="https://projects.datacamp.com/projects/74">DataCamp</a>.</p>
-<pre class="r"><code>dim(data)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(data)</code></pre></div>
 <pre><code>## [1] 16716   228</code></pre>
-<pre class="r"><code>data &lt;- as.data.frame(data)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(data)
 
-typeof(data)</code></pre>
+<span class="kw">typeof</span>(data)</code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
-<pre class="r"><code>unique(data$FormalEducation)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">unique</span>(data<span class="op">$</span>FormalEducation)</code></pre></div>
 <pre><code>## [1] &quot;Bachelor&#39;s degree&quot;                                                
 ## [2] &quot;Master&#39;s degree&quot;                                                  
 ## [3] &quot;Doctoral degree&quot;                                                  
@@ -364,58 +418,49 @@ typeof(data)</code></pre>
 ## [6] &quot;I did not complete any formal education past high school&quot;         
 ## [7] &quot;Professional degree&quot;                                              
 ## [8] &quot;I prefer not to answer&quot;</code></pre>
-<pre class="r"><code>df &lt;- data %&gt;%
-  group_by(FormalEducation, GenderSelect) %&gt;%
-  filter(GenderSelect == &quot;Male&quot; | GenderSelect == &quot;Female&quot;) %&gt;%
-  summarise(count = n())</code></pre>
-<pre class="r"><code>ggplot(df,aes(GenderSelect, count)) + geom_col(aes(fill = FormalEducation))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(FormalEducation, GenderSelect) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(GenderSelect <span class="op">==</span><span class="st"> &quot;Male&quot;</span> <span class="op">|</span><span class="st"> </span>GenderSelect <span class="op">==</span><span class="st"> &quot;Female&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">n</span>())</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(df,<span class="kw">aes</span>(GenderSelect, count)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> FormalEducation))</code></pre></div>
 <p><img src="NoteBookKaggleData_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<pre class="r"><code>df &lt;- data %&gt;%
-  group_by(LanguageRecommendationSelect) %&gt;%
-  summarise(count = n()) %&gt;%
-  filter(count &gt; 90)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(LanguageRecommendationSelect) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(count <span class="op">&gt;</span><span class="st"> </span><span class="dv">90</span>)
   
-df &lt;- df[complete.cases(df), ]
+df &lt;-<span class="st"> </span>df[<span class="kw">complete.cases</span>(df), ]
 
-ggplot(df,aes(LanguageRecommendationSelect, count)) + geom_col(aes(fill = LanguageRecommendationSelect)) + scale_y_continuous(expand = c(0,0)) +
-  theme(legend.position=&quot;none&quot;) +
-  coord_flip()</code></pre>
+<span class="kw">ggplot</span>(df,<span class="kw">aes</span>(LanguageRecommendationSelect, count)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> LanguageRecommendationSelect)) <span class="op">+</span><span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="NoteBookKaggleData_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<pre class="r"><code>df &lt;- data
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>data
 
-df &lt;- df[c(&quot;LanguageRecommendationSelect&quot;,&quot;Age&quot;, &quot;GenderSelect&quot;)]
+df &lt;-<span class="st"> </span>df[<span class="kw">c</span>(<span class="st">&quot;LanguageRecommendationSelect&quot;</span>,<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;GenderSelect&quot;</span>)]
 
-df &lt;- df[complete.cases(df), ]
+df &lt;-<span class="st"> </span>df[<span class="kw">complete.cases</span>(df), ]
 
-df &lt;- df %&gt;%
-  mutate(Age = floor(Age/10) * 10)
+df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Age =</span> <span class="kw">floor</span>(Age<span class="op">/</span><span class="dv">10</span>) <span class="op">*</span><span class="st"> </span><span class="dv">10</span>)
 
-df &lt;- df %&gt;% group_by(Age, LanguageRecommendationSelect) %&gt;%
-  summarise(count = n()) %&gt;%
-  filter(LanguageRecommendationSelect == &quot;R&quot; | LanguageRecommendationSelect == &quot;Python&quot;)
+df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Age, LanguageRecommendationSelect) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(LanguageRecommendationSelect <span class="op">==</span><span class="st"> &quot;R&quot;</span> <span class="op">|</span><span class="st"> </span>LanguageRecommendationSelect <span class="op">==</span><span class="st"> &quot;Python&quot;</span>)
 
-df %&gt;% ggplot(aes(Age, count, fill = LanguageRecommendationSelect)) + geom_col(position = position_dodge())</code></pre>
+df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Age, count, <span class="dt">fill =</span> LanguageRecommendationSelect)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>(<span class="dt">position =</span> <span class="kw">position_dodge</span>())</code></pre></div>
 <p><img src="NoteBookKaggleData_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>Here I create a new dataframe and I split the WorkToolsSelect column by <em>“,”</em> and then <em>unnest()</em>.</p>
-<pre class="r"><code>tools &lt;- tools %&gt;%
-  mutate(worktools = strsplit(WorkToolsSelect, split = &quot;,&quot;)) %&gt;%
-  unnest()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tools &lt;-<span class="st"> </span>tools <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">worktools =</span> <span class="kw">strsplit</span>(WorkToolsSelect, <span class="dt">split =</span> <span class="st">&quot;,&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">unnest</span>()
 
-tools %&gt;% select(Respondent ,worktools)</code></pre>
-<pre><code>## # A tibble: 47,409 x 2
-##    Respondent worktools                              
-##         &lt;dbl&gt; &lt;chr&gt;                                  
-##  1          1 Amazon Web services                    
-##  2          1 Oracle Data Mining/ Oracle R Enterprise
-##  3          1 Perl                                   
-##  4          2 Amazon Machine Learning                
-##  5          2 Amazon Web services                    
-##  6          2 Cloudera                               
-##  7          2 Hadoop/Hive/Pig                        
-##  8          2 Impala                                 
-##  9          2 Java                                   
-## 10          2 Mathematica                            
-## # … with 47,399 more rows</code></pre>
+tools <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(Respondent ,worktools)</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Respondent"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["worktools"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"Amazon Web services"},{"1":"1","2":"Oracle Data Mining/ Oracle R Enterprise"},{"1":"1","2":"Perl"},{"1":"2","2":"Amazon Machine Learning"},{"1":"2","2":"Amazon Web services"},{"1":"2","2":"Cloudera"},{"1":"2","2":"Hadoop/Hive/Pig"},{"1":"2","2":"Impala"},{"1":"2","2":"Java"},{"1":"2","2":"Mathematica"},{"1":"2","2":"MATLAB/Octave"},{"1":"2","2":"Microsoft Excel Data Mining"},{"1":"2","2":"Microsoft SQL Server Data Mining"},{"1":"2","2":"NoSQL"},{"1":"2","2":"Python"},{"1":"2","2":"R"},{"1":"2","2":"SAS Base"},{"1":"2","2":"SAS JMP"},{"1":"2","2":"SQL"},{"1":"2","2":"Tableau"},{"1":"3","2":"C/C++"},{"1":"3","2":"Jupyter notebooks"},{"1":"3","2":"MATLAB/Octave"},{"1":"3","2":"Python"},{"1":"3","2":"R"},{"1":"3","2":"TensorFlow"},{"1":"4","2":"Jupyter notebooks"},{"1":"4","2":"Python"},{"1":"4","2":"SQL"},{"1":"4","2":"TensorFlow"},{"1":"5","2":"C/C++"},{"1":"5","2":"Cloudera"},{"1":"5","2":"Hadoop/Hive/Pig"},{"1":"5","2":"Java"},{"1":"5","2":"NoSQL"},{"1":"5","2":"R"},{"1":"5","2":"Unix shell / awk"},{"1":"6","2":"SQL"},{"1":"7","2":"Jupyter notebooks"},{"1":"7","2":"NoSQL"},{"1":"7","2":"Python"},{"1":"7","2":"R"},{"1":"7","2":"SQL"},{"1":"7","2":"Unix shell / awk"},{"1":"8","2":"Python"},{"1":"8","2":"Spark / MLlib"},{"1":"8","2":"Tableau"},{"1":"8","2":"TensorFlow"},{"1":"8","2":"Other"},{"1":"9","2":"Jupyter notebooks"},{"1":"9","2":"MATLAB/Octave"},{"1":"9","2":"Python"},{"1":"9","2":"SAS Base"},{"1":"9","2":"SQL"},{"1":"10","2":"C/C++"},{"1":"10","2":"IBM Cognos"},{"1":"10","2":"MATLAB/Octave"},{"1":"10","2":"Microsoft Excel Data Mining"},{"1":"10","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"10","2":"Microsoft SQL Server Data Mining"},{"1":"10","2":"Perl"},{"1":"10","2":"Python"},{"1":"10","2":"R"},{"1":"10","2":"SQL"},{"1":"10","2":"Unix shell / awk"},{"1":"11","2":"C/C++"},{"1":"11","2":"Jupyter notebooks"},{"1":"11","2":"Python"},{"1":"11","2":"TensorFlow"},{"1":"12","2":"MATLAB/Octave"},{"1":"12","2":"Python"},{"1":"13","2":"C/C++"},{"1":"13","2":"Java"},{"1":"13","2":"Jupyter notebooks"},{"1":"13","2":"MATLAB/Octave"},{"1":"13","2":"Python"},{"1":"13","2":"R"},{"1":"14","2":"Amazon Web services"},{"1":"14","2":"Java"},{"1":"14","2":"Jupyter notebooks"},{"1":"14","2":"MATLAB/Octave"},{"1":"14","2":"Microsoft Excel Data Mining"},{"1":"14","2":"SAS Enterprise Miner"},{"1":"14","2":"Spark / MLlib"},{"1":"15","2":"Hadoop/Hive/Pig"},{"1":"15","2":"Java"},{"1":"15","2":"Jupyter notebooks"},{"1":"15","2":"NoSQL"},{"1":"15","2":"Python"},{"1":"15","2":"R"},{"1":"15","2":"Spark / MLlib"},{"1":"15","2":"SQL"},{"1":"16","2":"IBM Cognos"},{"1":"16","2":"NoSQL"},{"1":"16","2":"Unix shell / awk"},{"1":"17","2":"Cloudera"},{"1":"17","2":"Flume"},{"1":"17","2":"Hadoop/Hive/Pig"},{"1":"17","2":"Impala"},{"1":"17","2":"Java"},{"1":"17","2":"Jupyter notebooks"},{"1":"17","2":"KNIME (free version)"},{"1":"17","2":"NoSQL"},{"1":"17","2":"Python"},{"1":"17","2":"R"},{"1":"17","2":"SAS Enterprise Miner"},{"1":"17","2":"Spark / MLlib"},{"1":"17","2":"SQL"},{"1":"18","2":"C/C++"},{"1":"18","2":"Cloudera"},{"1":"18","2":"Hadoop/Hive/Pig"},{"1":"18","2":"Impala"},{"1":"18","2":"Jupyter notebooks"},{"1":"18","2":"NoSQL"},{"1":"18","2":"Python"},{"1":"18","2":"R"},{"1":"18","2":"Spark / MLlib"},{"1":"18","2":"Unix shell / awk"},{"1":"18","2":"Other"},{"1":"19","2":"Python"},{"1":"19","2":"R"},{"1":"19","2":"SQL"},{"1":"20","2":"NoSQL"},{"1":"20","2":"Perl"},{"1":"20","2":"Python"},{"1":"20","2":"Other"},{"1":"21","2":"MATLAB/Octave"},{"1":"21","2":"Python"},{"1":"21","2":"R"},{"1":"21","2":"Unix shell / awk"},{"1":"21","2":"Other"},{"1":"22","2":"C/C++"},{"1":"22","2":"Jupyter notebooks"},{"1":"22","2":"Python"},{"1":"22","2":"TensorFlow"},{"1":"22","2":"Unix shell / awk"},{"1":"23","2":"MATLAB/Octave"},{"1":"23","2":"Python"},{"1":"23","2":"R"},{"1":"23","2":"SAS JMP"},{"1":"23","2":"SQL"},{"1":"23","2":"TIBCO Spotfire"},{"1":"24","2":"C/C++"},{"1":"24","2":"Jupyter notebooks"},{"1":"24","2":"MATLAB/Octave"},{"1":"24","2":"Python"},{"1":"24","2":"TensorFlow"},{"1":"25","2":"NA"},{"1":"26","2":"Python"},{"1":"27","2":"Amazon Web services"},{"1":"27","2":"Hadoop/Hive/Pig"},{"1":"27","2":"Julia"},{"1":"27","2":"Jupyter notebooks"},{"1":"27","2":"R"},{"1":"27","2":"SAS Base"},{"1":"27","2":"SAS Enterprise Miner"},{"1":"27","2":"SQL"},{"1":"27","2":"Unix shell / awk"},{"1":"28","2":"Amazon Web services"},{"1":"28","2":"Python"},{"1":"28","2":"R"},{"1":"28","2":"SAP BusinessObjects Predictive Analytics"},{"1":"28","2":"Unix shell / awk"},{"1":"29","2":"Jupyter notebooks"},{"1":"29","2":"Python"},{"1":"29","2":"R"},{"1":"29","2":"SQL"},{"1":"30","2":"Julia"},{"1":"30","2":"Jupyter notebooks"},{"1":"30","2":"Python"},{"1":"30","2":"R"},{"1":"30","2":"SQL"},{"1":"30","2":"TensorFlow"},{"1":"31","2":"C/C++"},{"1":"31","2":"Jupyter notebooks"},{"1":"31","2":"Microsoft Excel Data Mining"},{"1":"31","2":"NoSQL"},{"1":"31","2":"Python"},{"1":"31","2":"R"},{"1":"31","2":"SQL"},{"1":"31","2":"Unix shell / awk"},{"1":"32","2":"Amazon Machine Learning"},{"1":"33","2":"IBM SPSS Modeler"},{"1":"33","2":"IBM SPSS Statistics"},{"1":"33","2":"R"},{"1":"33","2":"Other"},{"1":"34","2":"Amazon Web services"},{"1":"34","2":"Java"},{"1":"34","2":"Jupyter notebooks"},{"1":"34","2":"MATLAB/Octave"},{"1":"34","2":"NoSQL"},{"1":"34","2":"Python"},{"1":"34","2":"R"},{"1":"34","2":"SQL"},{"1":"35","2":"R"},{"1":"36","2":"C/C++"},{"1":"36","2":"Jupyter notebooks"},{"1":"36","2":"MATLAB/Octave"},{"1":"36","2":"NoSQL"},{"1":"36","2":"Python"},{"1":"36","2":"SQL"},{"1":"37","2":"Python"},{"1":"38","2":"Hadoop/Hive/Pig"},{"1":"38","2":"Jupyter notebooks"},{"1":"38","2":"Python"},{"1":"38","2":"Spark / MLlib"},{"1":"38","2":"SQL"},{"1":"38","2":"Tableau"},{"1":"39","2":"Impala"},{"1":"39","2":"Jupyter notebooks"},{"1":"39","2":"NoSQL"},{"1":"39","2":"Python"},{"1":"39","2":"R"},{"1":"39","2":"Spark / MLlib"},{"1":"39","2":"SQL"},{"1":"39","2":"TensorFlow"},{"1":"40","2":"IBM SPSS Statistics"},{"1":"40","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"40","2":"Microsoft SQL Server Data Mining"},{"1":"40","2":"Minitab"},{"1":"40","2":"R"},{"1":"40","2":"SQL"},{"1":"41","2":"Python"},{"1":"41","2":"R"},{"1":"42","2":"Cloudera"},{"1":"42","2":"Impala"},{"1":"42","2":"Java"},{"1":"42","2":"Jupyter notebooks"},{"1":"42","2":"Microsoft Azure Machine Learning"},{"1":"42","2":"Python"},{"1":"42","2":"Other"},{"1":"43","2":"Hadoop/Hive/Pig"},{"1":"43","2":"Python"},{"1":"43","2":"R"},{"1":"43","2":"TensorFlow"},{"1":"44","2":"Cloudera"},{"1":"44","2":"Hadoop/Hive/Pig"},{"1":"44","2":"Impala"},{"1":"44","2":"Jupyter notebooks"},{"1":"44","2":"Python"},{"1":"44","2":"R"},{"1":"44","2":"Spark / MLlib"},{"1":"44","2":"SQL"},{"1":"44","2":"TensorFlow"},{"1":"44","2":"TIBCO Spotfire"},{"1":"44","2":"Unix shell / awk"},{"1":"45","2":"Jupyter notebooks"},{"1":"45","2":"MATLAB/Octave"},{"1":"45","2":"Microsoft Excel Data Mining"},{"1":"45","2":"Python"},{"1":"45","2":"R"},{"1":"46","2":"Amazon Machine Learning"},{"1":"46","2":"C/C++"},{"1":"46","2":"NoSQL"},{"1":"46","2":"R"},{"1":"47","2":"Java"},{"1":"47","2":"Python"},{"1":"47","2":"Tableau"},{"1":"48","2":"Hadoop/Hive/Pig"},{"1":"48","2":"Jupyter notebooks"},{"1":"48","2":"MATLAB/Octave"},{"1":"48","2":"Python"},{"1":"48","2":"R"},{"1":"48","2":"SQL"},{"1":"49","2":"Amazon Web services"},{"1":"49","2":"C/C++"},{"1":"49","2":"Hadoop/Hive/Pig"},{"1":"49","2":"Java"},{"1":"49","2":"Jupyter notebooks"},{"1":"49","2":"NoSQL"},{"1":"49","2":"Python"},{"1":"49","2":"R"},{"1":"49","2":"SQL"},{"1":"49","2":"TensorFlow"},{"1":"50","2":"NoSQL"},{"1":"50","2":"Python"},{"1":"50","2":"R"},{"1":"51","2":"Jupyter notebooks"},{"1":"51","2":"Python"},{"1":"51","2":"R"},{"1":"52","2":"C/C++"},{"1":"52","2":"Python"},{"1":"52","2":"R"},{"1":"53","2":"Amazon Web services"},{"1":"53","2":"Jupyter notebooks"},{"1":"53","2":"Python"},{"1":"53","2":"R"},{"1":"53","2":"TensorFlow"},{"1":"53","2":"Unix shell / awk"},{"1":"54","2":"C/C++"},{"1":"54","2":"Java"},{"1":"54","2":"Jupyter notebooks"},{"1":"54","2":"MATLAB/Octave"},{"1":"54","2":"NoSQL"},{"1":"54","2":"Python"},{"1":"54","2":"R"},{"1":"54","2":"Spark / MLlib"},{"1":"54","2":"SQL"},{"1":"54","2":"Tableau"},{"1":"54","2":"TensorFlow"},{"1":"54","2":"Other"},{"1":"54","2":"Other"},{"1":"55","2":"IBM SPSS Statistics"},{"1":"55","2":"R"},{"1":"55","2":"SAS Base"},{"1":"55","2":"SQL"},{"1":"56","2":"IBM SPSS Statistics"},{"1":"56","2":"Jupyter notebooks"},{"1":"56","2":"Mathematica"},{"1":"56","2":"MATLAB/Octave"},{"1":"56","2":"Microsoft Excel Data Mining"},{"1":"56","2":"Python"},{"1":"56","2":"R"},{"1":"56","2":"RapidMiner (free version)"},{"1":"56","2":"Unix shell / awk"},{"1":"57","2":"IBM SPSS Modeler"},{"1":"57","2":"Python"},{"1":"57","2":"R"},{"1":"57","2":"Tableau"},{"1":"58","2":"Jupyter notebooks"},{"1":"58","2":"Microsoft Excel Data Mining"},{"1":"58","2":"Python"},{"1":"58","2":"R"},{"1":"58","2":"SAS JMP"},{"1":"58","2":"Tableau"},{"1":"59","2":"Microsoft Excel Data Mining"},{"1":"59","2":"R"},{"1":"60","2":"Amazon Web services"},{"1":"60","2":"Julia"},{"1":"60","2":"Jupyter notebooks"},{"1":"60","2":"KNIME (free version)"},{"1":"60","2":"MATLAB/Octave"},{"1":"60","2":"Microsoft Azure Machine Learning"},{"1":"60","2":"Microsoft Excel Data Mining"},{"1":"60","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"60","2":"Microsoft SQL Server Data Mining"},{"1":"60","2":"Python"},{"1":"60","2":"QlikView"},{"1":"60","2":"R"},{"1":"60","2":"RapidMiner (free version)"},{"1":"60","2":"SQL"},{"1":"61","2":"MATLAB/Octave"},{"1":"61","2":"R"},{"1":"62","2":"C/C++"},{"1":"62","2":"Jupyter notebooks"},{"1":"62","2":"Perl"},{"1":"62","2":"Python"},{"1":"63","2":"IBM SPSS Statistics"},{"1":"63","2":"MATLAB/Octave"},{"1":"63","2":"R"},{"1":"64","2":"C/C++"},{"1":"64","2":"Jupyter notebooks"},{"1":"64","2":"MATLAB/Octave"},{"1":"64","2":"NoSQL"},{"1":"64","2":"Python"},{"1":"64","2":"TensorFlow"},{"1":"64","2":"Unix shell / awk"},{"1":"65","2":"Amazon Web services"},{"1":"65","2":"Hadoop/Hive/Pig"},{"1":"65","2":"IBM SPSS Modeler"},{"1":"65","2":"IBM SPSS Statistics"},{"1":"65","2":"Microsoft SQL Server Data Mining"},{"1":"65","2":"R"},{"1":"65","2":"SAS Enterprise Miner"},{"1":"65","2":"SQL"},{"1":"65","2":"Tableau"},{"1":"66","2":"Python"},{"1":"66","2":"SQL"},{"1":"66","2":"Tableau"},{"1":"67","2":"C/C++"},{"1":"67","2":"MATLAB/Octave"},{"1":"67","2":"Python"},{"1":"67","2":"R"},{"1":"67","2":"Unix shell / awk"},{"1":"68","2":"Cloudera"},{"1":"68","2":"Hadoop/Hive/Pig"},{"1":"68","2":"Java"},{"1":"68","2":"Python"},{"1":"68","2":"R"},{"1":"68","2":"Spark / MLlib"},{"1":"69","2":"Google Cloud Compute"},{"1":"69","2":"Jupyter notebooks"},{"1":"69","2":"Microsoft Azure Machine Learning"},{"1":"69","2":"Python"},{"1":"69","2":"TensorFlow"},{"1":"70","2":"R"},{"1":"70","2":"SAS Base"},{"1":"70","2":"SQL"},{"1":"71","2":"Python"},{"1":"71","2":"R"},{"1":"71","2":"TensorFlow"},{"1":"72","2":"Jupyter notebooks"},{"1":"72","2":"Python"},{"1":"72","2":"R"},{"1":"72","2":"SQL"},{"1":"72","2":"TensorFlow"},{"1":"73","2":"IBM Cognos"},{"1":"73","2":"IBM SPSS Modeler"},{"1":"73","2":"IBM SPSS Statistics"},{"1":"73","2":"Perl"},{"1":"73","2":"SQL"},{"1":"74","2":"Amazon Machine Learning"},{"1":"74","2":"Amazon Web services"},{"1":"74","2":"C/C++"},{"1":"74","2":"Google Cloud Compute"},{"1":"74","2":"Hadoop/Hive/Pig"},{"1":"74","2":"Jupyter notebooks"},{"1":"74","2":"NoSQL"},{"1":"74","2":"Python"},{"1":"74","2":"TensorFlow"},{"1":"75","2":"SQL"},{"1":"76","2":"Amazon Web services"},{"1":"76","2":"Jupyter notebooks"},{"1":"76","2":"Microsoft Excel Data Mining"},{"1":"76","2":"NoSQL"},{"1":"76","2":"Python"},{"1":"76","2":"SQL"},{"1":"77","2":"Jupyter notebooks"},{"1":"77","2":"MATLAB/Octave"},{"1":"77","2":"Python"},{"1":"77","2":"R"},{"1":"77","2":"SQL"},{"1":"78","2":"Amazon Machine Learning"},{"1":"78","2":"Amazon Web services"},{"1":"78","2":"Cloudera"},{"1":"78","2":"Hadoop/Hive/Pig"},{"1":"78","2":"IBM SPSS Modeler"},{"1":"78","2":"IBM SPSS Statistics"},{"1":"78","2":"Jupyter notebooks"},{"1":"78","2":"Microsoft Azure Machine Learning"},{"1":"78","2":"Microsoft Excel Data Mining"},{"1":"78","2":"NoSQL"},{"1":"78","2":"Python"},{"1":"78","2":"QlikView"},{"1":"78","2":"R"},{"1":"78","2":"SAP BusinessObjects Predictive Analytics"},{"1":"78","2":"SAS Base"},{"1":"78","2":"SAS Enterprise Miner"},{"1":"78","2":"Spark / MLlib"},{"1":"78","2":"SQL"},{"1":"78","2":"Tableau"},{"1":"78","2":"Unix shell / awk"},{"1":"79","2":"NoSQL"},{"1":"79","2":"Perl"},{"1":"79","2":"SQL"},{"1":"79","2":"Unix shell / awk"},{"1":"79","2":"Other"},{"1":"80","2":"Amazon Web services"},{"1":"80","2":"C/C++"},{"1":"80","2":"IBM Watson / Waton Analytics"},{"1":"80","2":"Jupyter notebooks"},{"1":"80","2":"MATLAB/Octave"},{"1":"80","2":"NoSQL"},{"1":"80","2":"Python"},{"1":"80","2":"SQL"},{"1":"80","2":"TensorFlow"},{"1":"80","2":"Unix shell / awk"},{"1":"81","2":"Cloudera"},{"1":"81","2":"KNIME (free version)"},{"1":"81","2":"Python"},{"1":"81","2":"R"},{"1":"81","2":"Spark / MLlib"},{"1":"81","2":"Tableau"},{"1":"82","2":"Jupyter notebooks"},{"1":"82","2":"Microsoft Azure Machine Learning"},{"1":"82","2":"Microsoft Excel Data Mining"},{"1":"82","2":"Microsoft SQL Server Data Mining"},{"1":"82","2":"R"},{"1":"82","2":"SQL"},{"1":"83","2":"Amazon Web services"},{"1":"83","2":"Google Cloud Compute"},{"1":"83","2":"Jupyter notebooks"},{"1":"83","2":"Python"},{"1":"83","2":"R"},{"1":"83","2":"Spark / MLlib"},{"1":"83","2":"SQL"},{"1":"83","2":"Stan"},{"1":"83","2":"TensorFlow"},{"1":"83","2":"Unix shell / awk"},{"1":"84","2":"Julia"},{"1":"84","2":"Other"},{"1":"85","2":"Amazon Machine Learning"},{"1":"85","2":"Amazon Web services"},{"1":"85","2":"SQL"},{"1":"86","2":"R"},{"1":"87","2":"Amazon Web services"},{"1":"87","2":"C/C++"},{"1":"87","2":"Jupyter notebooks"},{"1":"87","2":"MATLAB/Octave"},{"1":"87","2":"Python"},{"1":"87","2":"SQL"},{"1":"87","2":"TensorFlow"},{"1":"87","2":"Unix shell / awk"},{"1":"88","2":"Jupyter notebooks"},{"1":"88","2":"MATLAB/Octave"},{"1":"88","2":"Microsoft Excel Data Mining"},{"1":"88","2":"Python"},{"1":"88","2":"R"},{"1":"88","2":"SQL"},{"1":"88","2":"TensorFlow"},{"1":"89","2":"C/C++"},{"1":"89","2":"Oracle Data Mining/ Oracle R Enterprise"},{"1":"89","2":"R"},{"1":"89","2":"SAS Base"},{"1":"89","2":"SQL"},{"1":"90","2":"Amazon Web services"},{"1":"90","2":"Jupyter notebooks"},{"1":"90","2":"Python"},{"1":"90","2":"SQL"},{"1":"90","2":"Unix shell / awk"},{"1":"91","2":"Amazon Machine Learning"},{"1":"91","2":"Amazon Web services"},{"1":"91","2":"C/C++"},{"1":"91","2":"Jupyter notebooks"},{"1":"91","2":"MATLAB/Octave"},{"1":"91","2":"Microsoft Azure Machine Learning"},{"1":"91","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"91","2":"Python"},{"1":"91","2":"R"},{"1":"91","2":"TensorFlow"},{"1":"91","2":"Unix shell / awk"},{"1":"92","2":"IBM Watson / Waton Analytics"},{"1":"92","2":"Mathematica"},{"1":"92","2":"Microsoft Azure Machine Learning"},{"1":"92","2":"Python"},{"1":"92","2":"R"},{"1":"92","2":"SAP BusinessObjects Predictive Analytics"},{"1":"92","2":"SAS Base"},{"1":"92","2":"SAS JMP"},{"1":"92","2":"SQL"},{"1":"92","2":"TIBCO Spotfire"},{"1":"93","2":"C/C++"},{"1":"93","2":"MATLAB/Octave"},{"1":"93","2":"Python"},{"1":"93","2":"SAS Base"},{"1":"93","2":"SQL"},{"1":"93","2":"Tableau"},{"1":"93","2":"TensorFlow"},{"1":"94","2":"Amazon Web services"},{"1":"94","2":"Cloudera"},{"1":"94","2":"SAS Base"},{"1":"94","2":"SAS Enterprise Miner"},{"1":"94","2":"SAS JMP"},{"1":"94","2":"SQL"},{"1":"94","2":"Other"},{"1":"94","2":"Other"},{"1":"95","2":"Microsoft Excel Data Mining"},{"1":"95","2":"Python"},{"1":"95","2":"R"},{"1":"96","2":"C/C++"},{"1":"96","2":"Microsoft Excel Data Mining"},{"1":"96","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"96","2":"Microsoft SQL Server Data Mining"},{"1":"96","2":"Oracle Data Mining/ Oracle R Enterprise"},{"1":"96","2":"Python"},{"1":"96","2":"SQL"},{"1":"97","2":"Jupyter notebooks"},{"1":"97","2":"Python"},{"1":"97","2":"R"},{"1":"98","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"98","2":"R"},{"1":"98","2":"SQL"},{"1":"99","2":"Amazon Web services"},{"1":"99","2":"C/C++"},{"1":"99","2":"Hadoop/Hive/Pig"},{"1":"99","2":"Java"},{"1":"99","2":"NoSQL"},{"1":"99","2":"Python"},{"1":"99","2":"QlikView"},{"1":"99","2":"R"},{"1":"99","2":"Spark / MLlib"},{"1":"99","2":"SQL"},{"1":"99","2":"TensorFlow"},{"1":"99","2":"Unix shell / awk"},{"1":"99","2":"Other"},{"1":"100","2":"Python"},{"1":"100","2":"R"},{"1":"100","2":"TensorFlow"},{"1":"101","2":"Amazon Web services"},{"1":"101","2":"Jupyter notebooks"},{"1":"101","2":"Python"},{"1":"101","2":"R"},{"1":"101","2":"SQL"},{"1":"101","2":"TensorFlow"},{"1":"101","2":"Unix shell / awk"},{"1":"102","2":"Cloudera"},{"1":"102","2":"Hadoop/Hive/Pig"},{"1":"102","2":"Impala"},{"1":"102","2":"Python"},{"1":"102","2":"QlikView"},{"1":"102","2":"R"},{"1":"102","2":"SAS Base"},{"1":"102","2":"Tableau"},{"1":"103","2":"Microsoft Excel Data Mining"},{"1":"103","2":"R"},{"1":"103","2":"SQL"},{"1":"104","2":"KNIME (free version)"},{"1":"104","2":"Python"},{"1":"104","2":"R"},{"1":"104","2":"SQL"},{"1":"104","2":"Tableau"},{"1":"105","2":"C/C++"},{"1":"105","2":"IBM Watson / Waton Analytics"},{"1":"105","2":"Java"},{"1":"105","2":"Microsoft Azure Machine Learning"},{"1":"105","2":"NoSQL"},{"1":"105","2":"Python"},{"1":"105","2":"R"},{"1":"105","2":"SQL"},{"1":"105","2":"TensorFlow"},{"1":"105","2":"Unix shell / awk"},{"1":"106","2":"Python"},{"1":"106","2":"R"},{"1":"106","2":"RapidMiner (free version)"},{"1":"107","2":"Python"},{"1":"107","2":"R"},{"1":"108","2":"C/C++"},{"1":"108","2":"Microsoft SQL Server Data Mining"},{"1":"108","2":"Python"},{"1":"108","2":"R"},{"1":"108","2":"SQL"},{"1":"109","2":"C/C++"},{"1":"109","2":"MATLAB/Octave"},{"1":"109","2":"Python"},{"1":"109","2":"R"},{"1":"109","2":"SQL"},{"1":"109","2":"TensorFlow"},{"1":"110","2":"Hadoop/Hive/Pig"},{"1":"110","2":"NoSQL"},{"1":"110","2":"R"},{"1":"110","2":"SAS Base"},{"1":"110","2":"Spark / MLlib"},{"1":"110","2":"SQL"},{"1":"111","2":"Amazon Web services"},{"1":"111","2":"Hadoop/Hive/Pig"},{"1":"111","2":"Python"},{"1":"111","2":"Unix shell / awk"},{"1":"112","2":"Amazon Web services"},{"1":"112","2":"Jupyter notebooks"},{"1":"112","2":"Python"},{"1":"112","2":"R"},{"1":"112","2":"TensorFlow"},{"1":"112","2":"Unix shell / awk"},{"1":"113","2":"IBM SPSS Statistics"},{"1":"113","2":"MATLAB/Octave"},{"1":"113","2":"Python"},{"1":"113","2":"R"},{"1":"113","2":"SQL"},{"1":"113","2":"Tableau"},{"1":"114","2":"Amazon Web services"},{"1":"114","2":"Hadoop/Hive/Pig"},{"1":"114","2":"Jupyter notebooks"},{"1":"114","2":"Python"},{"1":"114","2":"R"},{"1":"114","2":"Spark / MLlib"},{"1":"114","2":"SQL"},{"1":"114","2":"TensorFlow"},{"1":"114","2":"Unix shell / awk"},{"1":"115","2":"Amazon Web services"},{"1":"115","2":"Microsoft Excel Data Mining"},{"1":"115","2":"Python"},{"1":"115","2":"SQL"},{"1":"115","2":"TensorFlow"},{"1":"116","2":"KNIME (free version)"},{"1":"116","2":"Unix shell / awk"},{"1":"117","2":"C/C++"},{"1":"117","2":"QlikView"},{"1":"117","2":"R"},{"1":"117","2":"SAP BusinessObjects Predictive Analytics"},{"1":"117","2":"SAS Base"},{"1":"117","2":"SQL"},{"1":"117","2":"Stan"},{"1":"117","2":"Tableau"},{"1":"118","2":"IBM Watson / Waton Analytics"},{"1":"118","2":"Python"},{"1":"118","2":"Spark / MLlib"},{"1":"118","2":"SQL"},{"1":"119","2":"Cloudera"},{"1":"119","2":"Flume"},{"1":"119","2":"Hadoop/Hive/Pig"},{"1":"119","2":"IBM SPSS Modeler"},{"1":"119","2":"IBM SPSS Statistics"},{"1":"119","2":"Impala"},{"1":"119","2":"Python"},{"1":"119","2":"R"},{"1":"119","2":"RapidMiner (free version)"},{"1":"119","2":"SAS Base"},{"1":"119","2":"SAS Enterprise Miner"},{"1":"119","2":"SAS JMP"},{"1":"119","2":"Spark / MLlib"},{"1":"119","2":"SQL"},{"1":"120","2":"C/C++"},{"1":"120","2":"Jupyter notebooks"},{"1":"120","2":"MATLAB/Octave"},{"1":"120","2":"Python"},{"1":"120","2":"TensorFlow"},{"1":"120","2":"Unix shell / awk"},{"1":"121","2":"Mathematica"},{"1":"121","2":"Python"},{"1":"121","2":"SQL"},{"1":"122","2":"R"},{"1":"123","2":"IBM SPSS Statistics"},{"1":"123","2":"R"},{"1":"124","2":"R"},{"1":"124","2":"Tableau"},{"1":"125","2":"Google Cloud Compute"},{"1":"125","2":"Microsoft Excel Data Mining"},{"1":"125","2":"Python"},{"1":"125","2":"R"},{"1":"125","2":"SQL"},{"1":"125","2":"Tableau"},{"1":"126","2":"Jupyter notebooks"},{"1":"126","2":"Python"},{"1":"127","2":"Amazon Web services"},{"1":"127","2":"Jupyter notebooks"},{"1":"127","2":"Python"},{"1":"127","2":"R"},{"1":"127","2":"Spark / MLlib"},{"1":"127","2":"SQL"},{"1":"127","2":"Other"},{"1":"128","2":"R"},{"1":"128","2":"SQL"},{"1":"128","2":"Tableau"},{"1":"128","2":"Unix shell / awk"},{"1":"129","2":"Python"},{"1":"129","2":"TensorFlow"},{"1":"130","2":"Jupyter notebooks"},{"1":"130","2":"Microsoft Azure Machine Learning"},{"1":"130","2":"Microsoft Excel Data Mining"},{"1":"130","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"130","2":"Microsoft SQL Server Data Mining"},{"1":"130","2":"Python"},{"1":"130","2":"TensorFlow"},{"1":"131","2":"C/C++"},{"1":"131","2":"Jupyter notebooks"},{"1":"131","2":"Oracle Data Mining/ Oracle R Enterprise"},{"1":"131","2":"Python"},{"1":"131","2":"SQL"},{"1":"131","2":"TensorFlow"},{"1":"132","2":"Angoss"},{"1":"132","2":"Google Cloud Compute"},{"1":"132","2":"Jupyter notebooks"},{"1":"132","2":"Python"},{"1":"132","2":"R"},{"1":"132","2":"SAS Enterprise Miner"},{"1":"132","2":"Spark / MLlib"},{"1":"132","2":"SQL"},{"1":"132","2":"Tableau"},{"1":"132","2":"TensorFlow"},{"1":"132","2":"Unix shell / awk"},{"1":"133","2":"IBM SPSS Modeler"},{"1":"133","2":"IBM SPSS Statistics"},{"1":"133","2":"Java"},{"1":"133","2":"Microsoft Excel Data Mining"},{"1":"133","2":"SQL"},{"1":"134","2":"Jupyter notebooks"},{"1":"134","2":"Python"},{"1":"134","2":"TensorFlow"},{"1":"135","2":"Microsoft Azure Machine Learning"},{"1":"135","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"135","2":"Microsoft SQL Server Data Mining"},{"1":"135","2":"R"},{"1":"135","2":"SQL"},{"1":"136","2":"Amazon Web services"},{"1":"136","2":"Jupyter notebooks"},{"1":"136","2":"Python"},{"1":"136","2":"R"},{"1":"136","2":"Spark / MLlib"},{"1":"136","2":"SQL"},{"1":"136","2":"TensorFlow"},{"1":"137","2":"Amazon Web services"},{"1":"137","2":"Java"},{"1":"137","2":"MATLAB/Octave"},{"1":"137","2":"Python"},{"1":"137","2":"QlikView"},{"1":"137","2":"R"},{"1":"137","2":"SQL"},{"1":"137","2":"TIBCO Spotfire"},{"1":"137","2":"Unix shell / awk"},{"1":"138","2":"Amazon Machine Learning"},{"1":"138","2":"Amazon Web services"},{"1":"138","2":"Jupyter notebooks"},{"1":"138","2":"NoSQL"},{"1":"138","2":"Python"},{"1":"138","2":"TensorFlow"},{"1":"138","2":"Unix shell / awk"},{"1":"139","2":"NA"},{"1":"140","2":"Minitab"},{"1":"141","2":"Amazon Web services"},{"1":"141","2":"Julia"},{"1":"141","2":"Jupyter notebooks"},{"1":"141","2":"Python"},{"1":"141","2":"R"},{"1":"141","2":"TensorFlow"},{"1":"142","2":"Amazon Machine Learning"},{"1":"142","2":"Amazon Web services"},{"1":"142","2":"Python"},{"1":"142","2":"R"},{"1":"142","2":"Tableau"},{"1":"143","2":"R"},{"1":"144","2":"C/C++"},{"1":"144","2":"Java"},{"1":"144","2":"MATLAB/Octave"},{"1":"144","2":"Python"},{"1":"144","2":"TensorFlow"},{"1":"145","2":"Python"},{"1":"145","2":"SQL"},{"1":"146","2":"Python"},{"1":"146","2":"SQL"},{"1":"147","2":"NoSQL"},{"1":"147","2":"R"},{"1":"147","2":"SQL"},{"1":"148","2":"Other"},{"1":"149","2":"Java"},{"1":"149","2":"Jupyter notebooks"},{"1":"149","2":"Microsoft R Server (Formerly Revolution Analytics)"},{"1":"149","2":"Microsoft SQL Server Data Mining"},{"1":"149","2":"NoSQL"},{"1":"149","2":"Python"},{"1":"149","2":"R"},{"1":"149","2":"SQL"},{"1":"149","2":"Tableau"},{"1":"150","2":"C/C++"},{"1":"150","2":"Java"},{"1":"150","2":"Jupyter notebooks"},{"1":"150","2":"MATLAB/Octave"},{"1":"150","2":"Microsoft Excel Data Mining"},{"1":"150","2":"Perl"},{"1":"150","2":"Python"},{"1":"150","2":"SQL"},{"1":"150","2":"TensorFlow"},{"1":"150","2":"Unix shell / awk"},{"1":"151","2":"Amazon Web services"},{"1":"151","2":"Microsoft Azure Machine Learning"},{"1":"151","2":"Microsoft Excel Data Mining"},{"1":"151","2":"NoSQL"},{"1":"151","2":"Python"},{"1":"151","2":"R"},{"1":"151","2":"Spark / MLlib"},{"1":"151","2":"SQL"},{"1":"152","2":"Jupyter notebooks"},{"1":"152","2":"Microsoft Excel Data Mining"},{"1":"152","2":"NoSQL"},{"1":"152","2":"Python"},{"1":"152","2":"SQL"},{"1":"152","2":"Tableau"},{"1":"153","2":"C/C++"},{"1":"153","2":"Flume"},{"1":"153","2":"Google Cloud Compute"},{"1":"153","2":"Julia"},{"1":"153","2":"Jupyter notebooks"},{"1":"153","2":"Python"},{"1":"153","2":"R"},{"1":"153","2":"SQL"},{"1":"153","2":"TensorFlow"},{"1":"154","2":"IBM Watson / Waton Analytics"},{"1":"154","2":"Orange"},{"1":"154","2":"Python"},{"1":"154","2":"R"},{"1":"154","2":"RapidMiner (free version)"},{"1":"154","2":"Tableau"},{"1":"155","2":"Jupyter notebooks"},{"1":"155","2":"TensorFlow"},{"1":"155","2":"Unix shell / awk"},{"1":"156","2":"Amazon Web services"},{"1":"156","2":"C/C++"},{"1":"156","2":"Java"},{"1":"156","2":"Jupyter notebooks"},{"1":"156","2":"Mathematica"},{"1":"156","2":"MATLAB/Octave"},{"1":"156","2":"NoSQL"},{"1":"156","2":"Python"},{"1":"156","2":"R"},{"1":"156","2":"SQL"},{"1":"157","2":"Amazon Web services"},{"1":"157","2":"Hadoop/Hive/Pig"},{"1":"157","2":"Python"},{"1":"157","2":"SQL"},{"1":"158","2":"Microsoft Excel Data Mining"},{"1":"158","2":"SQL"},{"1":"159","2":"C/C++"},{"1":"159","2":"Jupyter notebooks"},{"1":"159","2":"NoSQL"},{"1":"159","2":"Python"},{"1":"159","2":"SQL"},{"1":"160","2":"C/C++"},{"1":"160","2":"Jupyter notebooks"},{"1":"160","2":"Python"},{"1":"160","2":"SQL"},{"1":"160","2":"TensorFlow"},{"1":"161","2":"C/C++"},{"1":"161","2":"IBM Cognos"},{"1":"161","2":"Java"},{"1":"161","2":"Microsoft Excel Data Mining"},{"1":"161","2":"NoSQL"},{"1":"161","2":"Python"},{"1":"161","2":"R"},{"1":"161","2":"SQL"},{"1":"161","2":"TensorFlow"},{"1":"161","2":"TIBCO Spotfire"},{"1":"161","2":"Unix shell / awk"},{"1":"162","2":"Hadoop/Hive/Pig"},{"1":"162","2":"IBM SPSS Modeler"},{"1":"162","2":"IBM SPSS Statistics"},{"1":"162","2":"Python"},{"1":"162","2":"R"},{"1":"162","2":"TensorFlow"},{"1":"163","2":"C/C++"},{"1":"163","2":"Java"},{"1":"163","2":"MATLAB/Octave"},{"1":"163","2":"Python"},{"1":"164","2":"C/C++"},{"1":"164","2":"Jupyter notebooks"},{"1":"164","2":"Python"},{"1":"164","2":"Unix shell / awk"},{"1":"165","2":"Hadoop/Hive/Pig"},{"1":"165","2":"IBM Cognos"},{"1":"165","2":"IBM SPSS Modeler"},{"1":"165","2":"IBM SPSS Statistics"},{"1":"165","2":"MATLAB/Octave"},{"1":"165","2":"NoSQL"},{"1":"165","2":"Perl"},{"1":"165","2":"Python"},{"1":"165","2":"Spark / MLlib"},{"1":"165","2":"Unix shell / awk"},{"1":"166","2":"Hadoop/Hive/Pig"},{"1":"166","2":"Jupyter notebooks"},{"1":"166","2":"Python"},{"1":"166","2":"R"},{"1":"166","2":"Spark / MLlib"},{"1":"166","2":"SQL"},{"1":"166","2":"Tableau"},{"1":"167","2":"Amazon Web services"},{"1":"167","2":"Cloudera"},{"1":"167","2":"Google Cloud Compute"},{"1":"167","2":"Hadoop/Hive/Pig"},{"1":"167","2":"Impala"},{"1":"167","2":"Jupyter notebooks"},{"1":"167","2":"Python"},{"1":"167","2":"R"},{"1":"167","2":"SAS Base"},{"1":"167","2":"SQL"},{"1":"167","2":"Tableau"},{"1":"167","2":"TensorFlow"},{"1":"167","2":"Unix shell / awk"},{"1":"168","2":"Hadoop/Hive/Pig"},{"1":"168","2":"Jupyter notebooks"},{"1":"168","2":"Python"},{"1":"168","2":"SQL"},{"1":"168","2":"Tableau"},{"1":"169","2":"R"},{"1":"170","2":"Amazon Web services"},{"1":"171","2":"C/C++"},{"1":"171","2":"Java"},{"1":"171","2":"MATLAB/Octave"},{"1":"171","2":"Python"},{"1":"171","2":"SQL"},{"1":"172","2":"Microsoft Azure Machine Learning"},{"1":"172","2":"Microsoft Excel Data Mining"},{"1":"172","2":"SQL"},{"1":"173","2":"C/C++"},{"1":"173","2":"Microsoft Azure Machine Learning"},{"1":"173","2":"R"},{"1":"173","2":"SQL"},{"1":"173","2":"Tableau"},{"1":"174","2":"MATLAB/Octave"},{"1":"174","2":"Python"},{"1":"174","2":"Other"},{"1":"175","2":"Amazon Web services"},{"1":"175","2":"Java"},{"1":"175","2":"Jupyter notebooks"},{"1":"175","2":"Python"},{"1":"175","2":"SQL"},{"1":"175","2":"TensorFlow"},{"1":"175","2":"Unix shell / awk"},{"1":"176","2":"Amazon Web services"},{"1":"176","2":"R"},{"1":"177","2":"C/C++"},{"1":"177","2":"Jupyter notebooks"},{"1":"177","2":"MATLAB/Octave"},{"1":"177","2":"Python"},{"1":"177","2":"Other"},{"1":"178","2":"C/C++"},{"1":"178","2":"MATLAB/Octave"},{"1":"178","2":"R"},{"1":"179","2":"Amazon Web services"},{"1":"179","2":"Python"},{"1":"179","2":"R"},{"1":"180","2":"C/C++"},{"1":"180","2":"Java"},{"1":"180","2":"Jupyter notebooks"},{"1":"180","2":"Mathematica"},{"1":"180","2":"Perl"},{"1":"180","2":"Python"},{"1":"180","2":"R"},{"1":"180","2":"SQL"},{"1":"180","2":"Tableau"},{"1":"181","2":"Other"},{"1":"182","2":"Amazon Web services"},{"1":"182","2":"C/C++"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 
 <p>Copyright &copy; 2019 Tomas Leriche. All rights reserved.</p>
 
