@@ -19,13 +19,17 @@ navbar:
     - text: "More"
       icon: fa-gear
       menu:
-        - text: "Heading 1"
-        - text: "Page 1"
-          href: web-page.html
+        - text: "Data Camp Projects"
+        - text: "Nobel Prize Data"
+          href: Notebook.html
+        - text: "Kaggle 2017 Data"
+          href: NoteBookKaggleData.html
         - text: "---------"
-        - text: "Heading 2"
-        - text: "Page 2"
-          href: wepage2.html
+        - text: "Data Camp Learning"
+        - text: "Interactive Plots plotly"
+          href: NotebookTry.html
+        - text: "Using Keras in R"
+          href: NotebookTry.Rmd
   right:
     - icon: fa-envelope fa-lg
       href: http://github.com/samotleriche
