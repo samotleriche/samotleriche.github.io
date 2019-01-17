@@ -5,6 +5,7 @@ title: "R Notebook 2"
 This is an [R Markdown](http://rmarkdown.rstudio.com) notebook. I'm using this to demonstrate using R and R Notebooks. The Example is based on the Exploring Kaggle Data Science Survery from [DataCamp](https://projects.datacamp.com/projects/74).
 
 ```{r, SUPERT, include=FALSE}
+# {.tabset .tabset-fade .tabset-pills}
 library(tidyverse)
 data <- read_csv("multipleChoiceResponses.csv")
 ```
@@ -15,21 +16,165 @@ dim(data)
 
 ```{r}
 data <- as.data.frame(data)
+```
 
+```{r}
+data %>%
+  group_by(MLMethodNextYearSelect) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(9) %>%
+  filter(!is.na(MLMethodNextYearSelect)) %>%
+  
+  ggplot(aes(reorder(MLMethodNextYearSelect,count), count, fill = MLMethodNextYearSelect)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_brewer(palette = "Set2") +
+  theme_bw() +
+  theme(legend.position = "none") +
+  xlab("ML Tool Next Year")
+
+data %>%
+  group_by(MLToolNextYearSelect) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(9) %>%
+  filter(!is.na(MLToolNextYearSelect)) %>%
+  
+  
+  ggplot(aes(reorder(MLToolNextYearSelect,count), count, fill = MLToolNextYearSelect)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_brewer(palette = "Set2") +
+  theme_bw() +
+  theme(legend.position = "none") +
+  xlab("ML Tool Next Year")
+
+```
+
+
+```{r named}
 typeof(data)
-
-unique(data$FormalEducation)
 
 df <- data %>%
   group_by(FormalEducation, GenderSelect) %>%
   filter(GenderSelect == "Male" | GenderSelect == "Female") %>%
   summarise(count = n())
   
+edutotal <- df %>%
+  group_by(FormalEducation) %>%
+  summarise(total = sum(count))
+
+df <- inner_join(df, edutotal, by = 'FormalEducation')
+
+df <- df %>%
+  group_by(FormalEducation, GenderSelect) %>%
+  summarize(prop = count/total) %>%
+  arrange(prop) %>%
+  
+  ggplot(aes(reorder(FormalEducation,prop), prop, fill = GenderSelect)) +
+    geom_col(position = "dodge") +
+    coord_flip(ylim=c(0,1)) +
+    theme(legend.position="none") +
+    xlab("") + 
+    ggtitle("Men/Women") +
+    scale_y_continuous(expand = c(0, 0)) +
+    theme(axis.text.x = element_text(angle=0,
+                                    vjust=0,
+                                    hjust=0))
+    
+  
+df
+
+```
+# Data Exploration
+```{r}
+df <- data %>%
+  group_by(FormalEducation, GenderSelect) %>%
+  filter(GenderSelect == "Male" | GenderSelect == "Female") %>%
+  summarise(count = n())
+ggplot(df,aes(GenderSelect, count)) + geom_col(aes(fill = FormalEducation))
 ```
 
 ```{r}
-ggplot(df,aes(GenderSelect, count)) + geom_col(aes(fill = FormalEducation))
+data %>%
+  group_by(GenderSelect, StudentStatus) %>%
+  filter(GenderSelect == "Female" | GenderSelect == "Male") %>%
+  summarize(count = n())
+
+
+data %>% group_by(LearningPlatformSelect) %>%
+  summarise(count = n())
+
+learning <- data
+respondent <- 1:nrow(learning)
+
+learning <- cbind(respondent, learning)
+
+
+learning <- learning %>%
+  select(respondent, GenderSelect, Country, Age, EmploymentStatus, LearningPlatformSelect) %>%
+  mutate(learntools = strsplit(LearningPlatformSelect, split = ",")) %>%
+  unnest()
+
+
+learning <- learning  %>% 
+    group_by(learntools)  %>% 
+    summarise(numres = n())
+
+learning <- learning %>%
+  filter(numres > 1000) %>%
+  arrange(desc(numres)) %>%
+  filter(!is.na(learntools)) 
+  
+  
+ggplot(learning, aes(reorder(learntools, numres), numres, fill = learntools)) +    
+    geom_col() +
+    coord_flip() +
+    theme(legend.position="none") +
+    xlab("Learning Tool") +
+    ylab("Count")
+
 ```
+
+```{r}
+unique(data$LearningDataScienceTime)
+
+df <- data %>%
+  group_by(LearningDataScienceTime, GenderSelect) %>%
+  summarise(count = n()) %>%
+  arrange(LearningDataScienceTime) %>%
+  filter(GenderSelect == "Male" | GenderSelect == "Female") %>%
+  filter(!is.na(LearningDataScienceTime))
+
+ggplot(df,aes(reorder(LearningDataScienceTime,count), count, fill = GenderSelect)) +
+  geom_col(position = "dodge") +
+  coord_flip()
+```
+```{r}
+df <- df %>% group_by(LearningDataScienceTime) %>%
+  mutate(total = sum(count))
+
+df <- df %>% 
+  mutate(prop = count/mean(total))
+
+df$LearningDataScienceTime <- as.factor(df$LearningDataScienceTime)
+
+df %>%
+  ggplot(aes(LearningDataScienceTime, prop, fill = GenderSelect)) +
+  geom_col(position = "dodge")
+
+
+
+```
+
+```{r}
+name <- function(variables) {
+  
+  
+}
+```
+
 
 ```{r}
 df <- data %>%
@@ -68,7 +213,7 @@ df
 
 tools <- df
 ```
-Here I create a new dataframe and I split the WorkToolsSelect column by *","* and then _unnest()_.  
+## Split and Unnest()
 ```{r}
 tools <- tools %>%
   mutate(worktools = strsplit(WorkToolsSelect, split = ",")) %>%
@@ -77,14 +222,108 @@ tools <- tools %>%
 tools %>% select(Respondent ,worktools)
 ```
 
+## Most Popular Language
+```{r}
+library(RColorBrewer)
+tools_count <- tools
+
+# group by work_tools and show counts
+tools_count <- tools_count  %>% 
+    group_by(worktools)  %>% 
+    summarise(numres = n())
+
+tools_count <- tools_count %>%
+  filter(numres > 1000) %>%
+  arrange(desc(numres))
+  
+  
+ggplot(tools_count, aes(reorder(worktools, numres), numres, fill = worktools)) +    
+    geom_col() +
+    coord_flip() +
+    theme(legend.position="none")
+
+  #theme(axis.text.x = element_text(angle=20,
+  #                                  vjust=0.5,
+  #                                  hjust=1))
+    
 
 
+```
+## Pie Chart
+
+```{r}
+pie_tools <- tools_count
+pie_tools <- pie_tools %>% filter(numres > 2000)
+
+pie_tools %>% 
+  ggplot(aes("", numres, fill = worktools)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start=0) + 
+  theme(axis.text.x=element_blank())
+
+```
+
+## People Using R, Python, or Both
 
 
+```{r}
+debate_tools <- df
+
+# Creating a new column called language preference
+debate_tools <- debate_tools  %>% 
+   mutate(language_preference = case_when(grepl("R", WorkToolsSelect) & ! grepl("Python", WorkToolsSelect) ~ "R",
+                                         grepl("Python", WorkToolsSelect) & ! grepl("R", WorkToolsSelect) ~ "Python",
+                                         grepl("R", WorkToolsSelect) & grepl("Python", WorkToolsSelect) ~ "Both"))
+
+rp_battle <- debate_tools %>% 
+  group_by(language_preference) %>%
+  summarize(count = n())
+
+rp_battle
+
+rp_battle <- rp_battle[complete.cases(rp_battle), ]
+# or you could use 
+#rp_battle <- filter(rp_battle, !is.na(language_preference))
+
+rp_battle %>% ggplot(aes(language_preference, count, fill = language_preference)) + geom_col() + coord_flip() +
+  scale_fill_brewer(palette = "Set2") +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+## Who Recommends What?
+```{r}
+recommendations <- debate_tools
+debate_tools  <- debate_tools %>% filter(!is.na(LanguageRecommendationSelect))
+
+recommendations <- recommendations  %>% 
+    group_by(language_preference, LanguageRecommendationSelect)  %>% 
+    summarize(count = n())
 
 
+recommendations <- recommendations %>% arrange(desc(count)) %>%
+  mutate(rank = row_number()) %>%
+  filter(rank <= 4)  %>%
+  arrange(language_preference)
 
 
+```
+
+## Facet_wrap Plot
+
+```{r}
+ggplot(recommendations, aes(LanguageRecommendationSelect, count, fill = LanguageRecommendationSelect)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ rank, scales = "free_y") +
+  scale_fill_brewer(palette = "Set2") +
+  theme_bw() +
+  theme(legend.position = "none") + 
+  ggtitle("rank")
+```
+
+## Summation
+
+It looks like python is the clear winner by popularity, but R isn't too far behind. 
 
 
 

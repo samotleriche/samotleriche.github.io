@@ -355,14 +355,20 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Heading 1</li>
+    <li class="dropdown-header">Data Camp Projects</li>
     <li>
-      <a href="web-page.html">Page 1</a>
+      <a href="Notebook.html">Nobel Prize Data</a>
+    </li>
+    <li>
+      <a href="NoteBookKaggleData.html">Kaggle 2017 Data</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Heading 2</li>
+    <li class="dropdown-header">Data Camp Learning</li>
     <li>
-      <a href="wepage2.html">Page 2</a>
+      <a href="NotebookTry.html">Interactive Plots plotly</a>
+    </li>
+    <li>
+      <a href="NotebookTry.Rmd">Using Keras in R</a>
     </li>
   </ul>
 </li>
@@ -406,8 +412,9 @@ div.tocify {
 <span class="co">#install.packages(&quot;devtools&quot;)</span>
 
 <span class="co">#devtools::install_github(&quot;josiahparry/geniusR&quot;)</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;geniusR&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;geniusR&quot;</span>)
-<span class="kw">library</span>(geniusR)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;geniusR&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;geniusR&quot;</span>)</code></pre></div>
+<pre><code>## Loading required package: geniusR</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(geniusR)
 <span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;tidyverse&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)
 <span class="kw">library</span>(tidyverse)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">swift =<span class="st"> </span><span class="kw">genius_album</span>(<span class="dt">artist =</span> <span class="st">&quot;Taylor Swift&quot;</span>, <span class="dt">album =</span> <span class="st">&quot;Reputation&quot;</span>)</code></pre></div>
@@ -460,8 +467,18 @@ tidy_riri =<span class="st"> </span>tidy_riri <span class="op">%&gt;%</span>
 <p><img src="web-page_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <div id="over-time" class="section level1">
 <h1><span class="header-section-number">1</span> Over Time</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;rvest&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;rvest&quot;</span>)
-<span class="kw">library</span>(rvest)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;rvest&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;rvest&quot;</span>)</code></pre></div>
+<pre><code>## Loading required package: rvest</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;rvest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     pluck</code></pre>
+<pre><code>## The following object is masked from &#39;package:readr&#39;:
+## 
+##     guess_encoding</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
 riridisc =<span class="st"> &#39;https://en.wikipedia.org/wiki/Rihanna_discography&#39;</span>
 
 disc &lt;-<span class="st"> </span>riridisc <span class="op">%&gt;%</span>

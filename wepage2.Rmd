@@ -14,7 +14,7 @@ library(tidyverse)
 
 ```
 
-## Varied uses of ggplot2
+#Uses of ggplot2
 
 ```{r echo = FALSE}
 ggplot(mpg, aes(displ, hwy)) +
@@ -569,7 +569,7 @@ grid <- grid %>%
   add_predictions(sim1_mod)
 grid
 ```
-
+# Prime Find Func
 ```{r, looo, echo=TRUE}
 primary <- function(x) {
   if (min(x %% 2:(x-1)) > 0) {
@@ -581,6 +581,8 @@ primary <- function(x) {
 
 array = c(1:1000)
 
+primeArray <- matrix()
+
 count = 0
 
 for (x in array) {
@@ -588,24 +590,59 @@ for (x in array) {
     next
   }
   if (primary(x) > 0) {
-    print(x)
+    primeArray <- append(primeArray, x)
     count = count + 1
   }
   
 }
+primeArray <- primeArray[!is.na(primeArray)]
 count
-
+primeArray
 ```
 
+
+# Order()
+```{r}
+
+v <- c(12, 11, 5, 22, 5)
+
+b <- c("abc", "bcv", "aab")
+
+order(v)
+
+v <- v[order(v)]
+
+v
+
+b <- b[order(b)]
+
+b
+
+```
 
 
 ```{r}
+a <- c(1,4,2,3)
 
+order(a)
 ```
 
+# Lists()
+
+```{r}
+a <- matrix(1:6, nrow = 2, byrow = TRUE)
 
 
+c <- list("a" = a, "b" = 5:7)
 
+c
+
+c$b[2]
+c[["b"]][[2]]
+
+d <- list("e" = c, "f" = c)
+d
+```
 
 
 
