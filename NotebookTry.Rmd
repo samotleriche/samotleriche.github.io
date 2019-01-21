@@ -2,15 +2,251 @@
 title: "R Notebook 3"
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+These are exercises related to the _Interactive Data Visualization with Plotly_ course on [DataCamp](datacamp.com)
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+```{r, message=FALSE}
+if (!require("dplyr")) install.packages("dplyr")
+library(dplyr)
+library(plotly)
+library(rattle)
+
+```
+#Static Graph 1
+```{r}
+head(wine)
+library(ggplot2)
+g <- wine %>% ggplot(aes(Flavanoids, Proline, color = Type, size = Hue)) +
+  geom_point()
+g
+```
+
+#Interactive Graph 1
+```{r}
+
+ggplotly(g)
+```
+
+#Static Graph 2
+
+```{r}
+ggplot(wine, aes(Phenols, fill = "red")) +
+  geom_bar(binwidth = 0.15)
+```
+
+#Interactive Graph 2
+```{r}
+wine %>%
+  plot_ly(x = ~Phenols, hoverinfo = "y") %>%
+  add_histogram(opacity = 0.7, color = I("pink"), nbinsx = 25)
+```
+
+#Data Wrangling
+```{r}
+# Data Citation:
+# P. Cortez, A. Cerdeira, F. Almeida, T. Matos and J. Reis. 
+# Accessed from UCI website.
+# Modeling wine preferences by data mining from physicochemical properties. In Decision Support Systems, Elsevier, 47(4):547-553, 2009.
+winequality <- read.csv("winequality-red.csv",header = TRUE,sep = ";")
+#str(winequality)
+
+winequality$type <- "red" 
+
+
+winequality2 <- read.csv("winequality-white.csv", header = TRUE, sep = ";")
+#str(winequality2)
+
+winequality2$type <- "white"
+
+totalwine <- rbind(winequality, winequality2)
+
+totalwine$type <- factor(totalwine$type)
+
+str(totalwine)
+
+totalwine <- totalwine[c(1:11,13,12)]
+
+totalwine$quality <- as.character(totalwine$quality)
+```
+
+#Interactive Graph Bars
+```{r}
+totalwine %>%
+  count(type, quality) %>%
+  plot_ly(x = ~type, y = ~n, color = ~quality) %>%
+  add_bars() %>%
+  layout(barmode = "stack")
+
+  
+```
 
 
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+```{r}
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+for (x in 1:nrow(totalwine)){
+  if (totalwine$quality[x] == "9" | totalwine$quality[x] == "8" | totalwine$quality[x]== "7"){
+    totalwine$quality[x] <- "High"
+  }else if (totalwine$quality[x] == "3" | totalwine$quality[x] == "4" | totalwine$quality[x] == "5"){
+    totalwine$quality[x] <- "Low"
+  }else{
+    totalwine$quality[x] <- "Medium"
+  }
+}
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+totalwine$quality <- factor(totalwine$quality, ordered = TRUE,levels = c("Low", "Medium", "High"))
+
+```
+
+
+#Interactive Graph 3 Proportions
+```{r}
+totalwine %>%
+  count(type, quality) %>%
+  group_by(type) %>%
+  mutate(prop = n / sum(n)) %>%
+  plot_ly(x = ~type, y = ~prop, color = ~quality) %>%
+  add_bars(opacity = 0.5) %>%
+  layout(barmode = "stack")
+```
+
+# Interactive Scatter Plot
+```{r}
+
+totalwine %>%
+  filter(residual.sugar > 15 & residual.sugar < 30 & fixed.acidity > 5.5 & fixed.acidity < 9) %>%
+  plot_ly(x = ~residual.sugar, y = ~fixed.acidity, symbol = ~quality ) %>%
+  add_markers(marker = list(opacity=0.5, size = 10))
+```
+
+# Interactive Bar Chart
+```{r}
+totalwine %>%
+  plot_ly(x = ~quality, y = ~alcohol) %>%
+  add_boxplot()
+```
+
+# Interactive Graph 
+
+```{r}
+wine %>%
+  plot_ly(x = ~Flavanoids, y = ~Alcohol, symbol = ~Type, hoverinfo = "text",
+          text = ~paste("Flavanoids: ", Flavanoids, "<br>", "Alcohol: ", Alcohol, "<br>", "Phenols: ", Phenols)) %>%
+  add_markers(colors = c("orange", "green", "blue"), marker = list(size = 12, opacity = 0.5)) %>%
+  layout(xaxis = list(title = "Flavanoids Conc.", type = "log"),
+         yaxis = list(title = "Alcohol Percentage"),
+         title = "Title Here")
+  
+```
+
+# Interactive Graph Customize Grid
+
+```{r}
+
+rands <- sample_n(totalwine, 1000)
+
+rands %>%
+  plot_ly(x = ~free.sulfur.dioxide, y = ~total.sulfur.dioxide) %>%
+  add_markers(marker = list(opacity = 0.5)) %>%
+  layout(xaxis = list(title = "Free SO2 (ppm)", showgrid = FALSE),
+         yaxis = list(title = "Total SO2 (ppm)"),
+         paper_bgcolor = toRGB("grey90"),
+         plot_bgcolor = toRGB("pink"))
+```
+
+# Adding Layers (Smoother)
+
+```{r}
+m <- loess(total.sulfur.dioxide ~ free.sulfur.dioxide, data = rands, span = 1.5)
+pol <- lm(total.sulfur.dioxide ~ poly(free.sulfur.dioxide, 2), data = rands)
+
+rands %>%
+  plot_ly(x = ~free.sulfur.dioxide, y = ~total.sulfur.dioxide) %>%
+  add_markers(showlegend = FALSE) %>%
+  add_lines(y = ~fitted(pol), name = "Polynomial") %>%
+  add_lines(y = ~fitted(m), name = "LOESS")
+  
+```
+
+# Density Layering
+
+```{r}
+d1 <- filter(rands, type == "white")
+d2 <- filter(rands, type == "red")
+
+density1 <- density(d1$citric.acid)
+density2 <- density(d2$citric.acid)
+
+plot_ly(opacity = 0.5) %>%
+  add_lines(x = ~density1$x, y = ~density1$y, name = "white", fill = 'tozeroy') %>%
+  add_lines(x = ~density2$x, y = ~density2$y, name = "red", fill = 'tozeroy') %>%
+  layout(xaxis = list(title = 'Citric.acid', showgrid = FALSE),
+         yaxis = list(title = 'Density'))
+```
+
+# Subplots
+
+```{r}
+p1 <- wine %>%
+  filter(Type == c(3)) %>%
+  plot_ly(x = ~Alcohol, y = ~Malic) %>%
+  add_markers(name = ~Type)
+
+p2 <- wine %>%
+  filter(Type == c(1,2)) %>%
+  plot_ly(x = ~Alcohol, y = ~Malic) %>%
+  add_markers(name = ~Type)
+
+subplot(p1, p2, nrows = 1, shareY = TRUE, shareX = TRUE)
+```
+
+# Subplots Correct
+
+```{r}
+cardata <- mtcars
+cardata$cyl <- factor(cardata$cyl)
+
+cardata %>%
+  group_by(cyl) %>%
+  do(
+    plot = plot_ly(data = ., x = ~mpg, y = ~hp) %>%
+       add_markers(name = ~carb) %>%
+      subplot(nrows = 2)
+    )
+```
+
+
+# Binned Scatterplot
+
+```{r}
+totalwine %>%
+  plot_ly(x = ~residual.sugar, y = ~alcohol) %>%
+  add_histogram2d(nbinsx = 100, nbinsy = 50)
+```
+
+# Election Data
+```{r}
+turnout <- read.csv("turnout.txt", header = TRUE, sep = ",")
+
+str(turnout)
+```
+
+```{r}
+turnout %>%
+plot_geo(locationmode = 'USA-states') %>%
+  add_trace(
+    z = ~turnout,
+    locations = ~state.abbr
+  ) %>%
+  layout(geo = list(scope = 'usa'))
+```
+
+
+
+
+
+
+
+
+
+
 

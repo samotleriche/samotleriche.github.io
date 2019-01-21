@@ -12,16 +12,12 @@ navbar:
       href: wepage2.html
     - text: "Data Analysis in R"
       href: DataAnalysis.html
-    - text: "Notebook"
-      href: NoteBook.html
-    - text: "Notebook 2"
-      href: NoteBookKaggleData.html
     - text: "More"
       icon: fa-gear
       menu:
         - text: "Data Camp Projects"
         - text: "Nobel Prize Data"
-          href: Notebook.html
+          href: NoteBook.html
         - text: "Kaggle 2017 Data"
           href: NoteBookKaggleData.html
         - text: "---------"
