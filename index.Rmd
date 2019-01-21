@@ -1,18 +1,16 @@
 ---
 ---
-<img src="./profile.jpeg" style="width:25%; border:10px solid; margin-right: 20px" align="left">
+<img src="profile.jpg" style="width:25%; border:10px solid; margin-right: 20px" align="left">
 
-I have created this website using the R programming language. If you're like me, you had no idea that was possible (But it is!). I am using it to not only host my resume in a convenient place online, but also to make use of the [Github](www.github.com) pages to host some examples of projects I have been doing in the R programming language. Until very recently (Dec. 2018), I was working as a Graduate Research Assistant at the [University of New Mexico, Anderson School of Management](https://www.mgt.unm.edu/). I conducted research related to alternative medicine for Dr. Karen Patterson and also helped to organize the two professional development workshops in Research on Stigmatization. [OMT](https://aom.org/).
-I graduated from the [University of Puget Sound](https://www.pugetsound.edu/) with a BSc in Molecular and Cellular Biology in 2014. Then in 2016 I returned to my home state and began working toward my MSc in Information Systems and Assurance  [University of New Mexico, Anderson School of Management](https://msisa.mgt.unm.edu/default.asp?dd=masters), where I worked as a Graduate Research Assistant until graduating in Dec. 2018. My focus during my master's was on databases and data analysis, two subjects that had been an interest of mine since the last couple years of my Undergraduate degree. 
+I have created this website using the R programming language. If you're like me, you had no idea that was possible (But it is!). I am using it to not only host my resume in a convenient place online, but also to make use of the [Github](www.github.com) pages to host some examples of projects I have been doing in the R programming language. Until very recently (Dec. 2018), I was working as a Graduate Research Assistant at the [University of New Mexico, Anderson School of Management](https://www.mgt.unm.edu/). I conducted research related to alternative medicine for Dr. Karen Patterson and also helped to organize two professional development workshops in Research on Stigmatization [(Academy of Management)](https://aom.org/).
 
+I graduated from the [University of Puget Sound](https://www.pugetsound.edu/) with a BSc in Molecular and Cellular Biology in 2014. Afterwards, I worked in the medical field as an EMT-B before returned to my home state to begin working toward my MSc in Information Systems and Assurance  [University of New Mexico, Anderson School of Management](https://msisa.mgt.unm.edu/default.asp?dd=masters). I worked as a Graduate Research Assistant until graduating in Dec. 2018. My concentrations during my master's were databases and data analysis.
 
-My Resume is available [here](files/Z.pdf).
+My current interests include programming in R (and secondly in Python), iOS development, and staying up-to-date on the latest in machine learning and data analysis in general.
 
-```{r include=FALSE}
+# My Resume is available [here](files/Z.pdf).
 
-```
-
-```{r}
+```{r, include=FALSE}
 #rmarkdown::render_site()
 if (!require("leaflet")) install.packages("leaflet")
 library(leaflet)
