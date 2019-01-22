@@ -34,7 +34,7 @@ navbar:
         - text: "---------"
         - text: "Bookdown Example"
           icon: fa-book
-          href: https://sarivera.github.io
+          href: https://cassarivera.github.io
   right:
     - icon: fa-envelope fa-lg
       href: http://github.com/samotleriche

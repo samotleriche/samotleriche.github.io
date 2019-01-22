@@ -386,7 +386,7 @@ div.tocify {
     </li>
     <li class="divider"></li>
     <li>
-      <a href="https://sarivera.github.io">
+      <a href="https://cassarivera.github.io">
         <span class="fa fa-book"></span>
          
         Bookdown Example
@@ -521,7 +521,7 @@ acc =<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag<
 ##   0 769  66
 ##   1  97 448</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fancyRpartPlot</span>(tree)</code></pre></div>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># normalize data on a 0-1 scale</span>
 <span class="co"># knn_train$Age &lt;- (knn_train$Age - min_age) / (max_age - min_age)</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;./adultCensus.data&quot;</span>, <span class="dt">header =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)
@@ -546,7 +546,7 @@ all_probs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw
 <pre><code>##          1          2          3          4          5          6 
 ## 0.04987988 0.30019374 0.30019374 0.98084291 0.04987988 0.04987988</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fancyRpartPlot</span>(tree)</code></pre></div>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <div id="roc-curve" class="section level2">
 <h2><span class="header-section-number">3.1</span> ROC Curve</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;ROCR&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;ROCR&quot;</span>)
@@ -557,7 +557,7 @@ pred =<span class="st"> </span><span class="kw">prediction</span>(all_probs, df_
 perf =<span class="st"> </span><span class="kw">performance</span>(pred, <span class="st">&quot;tpr&quot;</span>, <span class="st">&quot;fpr&quot;</span>)
 
 <span class="kw">plot</span>(perf)</code></pre></div>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">perf =<span class="st"> </span><span class="kw">performance</span>(pred, <span class="st">&quot;auc&quot;</span>)
 
 <span class="kw">print</span>(perf<span class="op">@</span>y.values[[<span class="dv">1</span>]])</code></pre></div>
@@ -611,7 +611,7 @@ accs &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(range, accs, <span class="dt">xlab =</span> <span class="st">&quot;k&quot;</span>)</code></pre></div>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">which.max</span>(accs)</code></pre></div>
 <pre><code>## [1] 10</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train_indices &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="kw">round</span>(<span class="fl">0.7</span><span class="op">*</span>n)
@@ -659,7 +659,7 @@ accs &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">
 ## [1] &quot;10&quot;
 ## [1] &quot;10&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(range, accs, <span class="dt">xlab =</span> <span class="st">&quot;k&quot;</span>)</code></pre></div>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">best =<span class="st"> </span><span class="kw">which.max</span>(accs)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred &lt;-<span class="st"> </span><span class="kw">knn</span>(<span class="dt">train =</span> knn_train, <span class="dt">test =</span> knn_test, <span class="dt">cl =</span> knn_train_labels, <span class="dt">k =</span> best, <span class="dt">prob =</span> <span class="ot">TRUE</span>)
 
@@ -716,7 +716,7 @@ points &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x, y, <s
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(x,y)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_void</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_fixed</span>()</code></pre></div>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 </div>
 <div id="regression" class="section level1">

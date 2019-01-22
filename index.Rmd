@@ -8,13 +8,13 @@ output:
 # About Me
 <span style="color:green;font-family: 'Times'; font-size: 20px;"> **I**</span> created this website using the **R** programming language. If you're like me, you had no idea that was possible (But it is!). I'm using it to host my résumé in a convenient place online and also to make use of [Github](www.github.com) Pages to host some examples of projects I have been doing in the R programming language. Until recently (Graduated Dec. 2018), I was working as a Graduate Research Assistant at the **[University of New Mexico, Anderson School of Management](https://www.mgt.unm.edu/)**. I conducted research related to alternative medicine for Dr. Karen Patterson and also helped to organize two professional development workshops in Research on Stigmatization [(Academy of Management)](https://aom.org/).
 
-<span style="color:green;font-family: 'Times'; font-size: 20px;"> **I**</span> graduated from the [University of Puget Sound](https://www.pugetsound.edu/) with a BSc in Molecular and Cellular Biology in 2014. Afterwards, I worked in the medical field as an EMT-B before returned to my home state to begin working toward my MSc in Information Systems and Assurance  [University of New Mexico, Anderson School of Management](https://msisa.mgt.unm.edu/default.asp?dd=masters). I worked as a Graduate Research Assistant until graduating in Dec. 2018. My concentrations during my master's were databases and data analysis.
+<span style="color:green;font-family: 'Times'; font-size: 20px;"> **I**</span> graduated from the [University of Puget Sound](https://www.pugetsound.edu/) with a BSc in Molecular and Cellular Biology in 2014. Afterwards, I worked in the medical field as an EMT-B before returned to my home state to begin working toward my MSc in [Information Systems and Assurance](https://msisa.mgt.unm.edu/default.asp?dd=masters). I worked as a Graduate Research Assistant until graduating in Dec. 2018. My concentrations during my master's were databases and data analysis.
 
 My current interests include programming in **R** (and secondly in **Python**), **iOS** development, and staying up-to-date on the latest in **machine learning** and data analysis in general.
 
 # Résumé
 
-My résumé is available <span style="color:green;font-family: 'Times'; font-size: 20px;"> [Here](files/Z.pdf)</span>.
+My résumé is available <span style="color:green;font-family: 'Times'; font-size: 20px;"> [Here](resume.pdf)</span>.
 
 ```{r, include=FALSE}
 #rmarkdown::render_site()

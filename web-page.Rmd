@@ -3,7 +3,7 @@
 
 # Text Analysis
 
-Some of my favorite areas of data analysis are **text mining** and **sentiment analysis**. I included work I did for an assignemnt in a graduate level course I took during my Master's (basically ch.2 material of [Text Mining with R](https://www.tidytextmining.com/). We would eventually work through the entire book and we also conducted the analysis using SAS. I also included some other examples.
+Some of my favorite areas of data analysis are **text mining** and **sentiment analysis**. I included work I did for an assignemnt in a graduate level course I took during my Master's (basically ch.2 material of [Text Mining with R](https://www.tidytextmining.com/)). We would eventually work through the entire book and we also conducted the analysis using SAS. I also included some other examples.
 
 ```{r}
 #if (!require("devtools")) install.packages("devtools")
