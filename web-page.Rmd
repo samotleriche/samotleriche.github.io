@@ -1,6 +1,9 @@
 ---
-title: "Text Analysis"
 ---
+
+# Text Analysis
+
+Some of my favorite areas of data analysis are **text mining** and **sentiment analysis**. I included work I did for an assignemnt in a graduate level course I took during my Master's (basically ch.2 material of [Text Mining with R](https://www.tidytextmining.com/). We would eventually work through the entire book and we also conducted the analysis using SAS. I also included some other examples.
 
 ```{r}
 #if (!require("devtools")) install.packages("devtools")
@@ -9,13 +12,316 @@ title: "Text Analysis"
 #devtools::install_github("josiahparry/geniusR")
 ```
 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Read Data
+Goal: Identify product aspects in a review and classify their sentiments.
+```{r, message=FALSE}
+if (!require("readxl")) install.packages("readxl")
+if (!require("tidytext")) install.packages("tidytext")
+if (!require("dplyr")) install.packages("dplyr")
+if (!require("ggplot2")) install.packages("ggplot2")
+if (!require("stringr")) install.packages("stringr")
+if (!require("tidyr")) install.packages("tidyr")
+# first we import our data file
+
+library(readxl)
+# this path will work as long as the data.xlsx is in the same directory as this markdown file.
+commentData = read_excel("./data.xlsx")
+
+if (!require("tibble")) install.packages("tibble")
+library(tibble)
+#this gets us the comments for each of the 6 reviews (3 good, 3 bad)
+textData = commentData[,1:10]
+# here I add a column to number the reviews.
+textData
+```
+
+```{r,echo=FALSE}
+# add the index to keep track 
+if (ncol(textData) == 10) {
+  textData = add_column(textData, index = (1:11111), .before = 1)
+}
+textData
+```
+
 ```{r}
+library(tidytext)
+# here we can see the sentiments by word and lexicon 27,314 rows
+sentiments
+
+# there are 4 general-purpose lexicons to choose from.
+# AFINN
+# bing
+# nrc
+# and loughran
+
+get_sentiments("afinn")
+get_sentiments("bing")
+get_sentiments("nrc")
+
+get_sentiments("loughran")
+```
+
+```{r}
+
+#unnest_tokens makes it so that there is one-token-per-document-per-row
+tokenizedData = unnest_tokens(textData, word, text)
+
+# 1.8 million rows
+tokenizedData
+
+```
+
+# Remove Stop Words
+```{r}
+
+
+library(dplyr)
+
+
+tidyData = tokenizedData %>%
+  anti_join(stop_words, by = 'word')
+
+tidyData
+# 734,462
+```
+# Count Words from Reviews
+Here we count the words from all reviews
+We then count the words and sort by most frequent to least.
+```{r}
+tidyData %>%
+  count(word, sort = TRUE)
+
+# we can see that br is the most frequent word.....
+# examining the data we can see this is because it was collected by a web scrapper
+# and it included the <br />  which designates a new line in HTML
+
+```
+
+# Plotting with ggplot2
+
+```{r}
+
+library(ggplot2)
+# the plot is ignoring the br word and showing frequencies above 1,100
+tidyData %>%
+  count(word, sort = TRUE) %>%
+  filter(n > 1100 & n < 20000) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip()
+
+```
+
+#Sentiment Analysis
+```{r}
+
+library(stringr)
+# lets count 'joy' words in the reviews
+
+nrc_joy = get_sentiments("nrc") %>%
+  filter(sentiment == "joy")
+
+# the joy words from the nrc lexicon
+
+
+# here I savee the -4 afinn lexicon words to inner join later
+afinn = get_sentiments("afinn") %>%
+  filter(score == -4)
+
+# here we can filter where we count the joy words by filtering for score
+
+tidyData %>%
+  filter(score == 1) %>%
+  inner_join(nrc_joy, by = "word") %>%
+  count(word, sort = TRUE)
+
+# here we notice that five star rating have more joy words
+
+tidyData %>%
+  filter(score == 5) %>%
+  inner_join(nrc_joy, by = "word") %>%
+  count(word, sort = TRUE)
+
+#interestingly we can see that the 5 star reviews use more or the negative words 
+# from the afinn lexicon than 1 star reviews.
+
+tidyData %>%
+  filter(score == 5) %>%
+  inner_join(afinn, by = "word") %>%
+  count(word, sort = TRUE)
+
+
+tidyData %>%
+  filter(score == 1) %>%
+  inner_join(afinn, by = "word") %>%
+  count(word, sort = TRUE)
+```
+
+# Plotting
+```{r}
+library(tidyr)
+library(ggplot2)
+
+review_sentiments = tidyData %>%
+  inner_join(get_sentiments("bing"), by = "word") %>%
+  count(score, sentiment) %>%
+  spread(sentiment, n, fill =0) %>%
+  mutate(sentiment = positive - negative)
+
+
+
+# here I plot the data of the 111,111 reviews and group them by score, we can see that 
+# the scores almost perfectly match an increasing amount of positive word values
+# here, for each reveiw, the negative words score count were removed form the positive
+# words score count. we notice that score of 5 did indeed have majority positive words. 
+
+ggplot(review_sentiments,aes(score, sentiment, fill = score)) +
+  geom_col(show.legend = FALSE)
+
+```
+
+# Closer Look at Lexicons
+```{r}
+# there are more negative words in the nrc lexicon
+get_sentiments("nrc") %>%
+  filter(sentiment %in% c("positive", "negative")) %>%
+  count(sentiment)
+
+# also in nrc
+get_sentiments("bing") %>%
+  count(sentiment)
+
+# the most common positive and negative words in all the reviews. 
+
+countBing = tidyData %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment,sort = TRUE) %>%
+  ungroup()
+
+countBing
+
+```
+
+# Plotting Words
+Plotting the negative and positive words
+```{r}
+
+countBing %>%
+  group_by(sentiment) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(y = "Contribution to sentiment",
+       x = NULL) +
+  coord_flip()
+
+# we see some interesting classifications plot is probably not negative in the case
+# of movie reviews...
+
+# it might not be a good lexicon for reviews afterall
+
+```
+
+# Removing Words
+removing words that shouldnt be called negative or positive
+```{r}
+# this is how we can make our own stop word library!!! super cool
+
+custom_stop_words = bind_rows(data_frame(word = c("plot","br"), 
+                                          lexicon = c("custom")), 
+                               stop_words)
+
+# we can remove br in this fashion
+
+
+custom_stop_words
+
+```
+
+# Word Cloud
+
+Word cloud for top 100 words in all our 111,111 reviews.
+```{r}
+if (!require("wordcloud")) install.packages("wordcloud")
+library(wordcloud)
+
+tidyData %>%
+  anti_join(custom_stop_words) %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words = 100))
+
+
+```
+
+# Word Cloud 2
+
+Using a different word cloud library.
+```{r}
+if (!require("reshape2")) install.packages("reshape2")
+
+library(reshape2)
+
+tidyData %>%
+  anti_join(custom_stop_words) %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  acast(word ~ sentiment, value.var = "n", fill=0) %>%
+  comparison.cloud(colors = c("blue", "red"),
+                   max.words = 100)
+
+
+```
+
+# Ngrams
+```{r}
+
+# this results in 85,326 "sentences" not sure how its less than the number of reviews...
+tidySentences = data_frame(text = commentData$text) %>%
+  unnest_tokens(sentence, text, token= "sentences")
+
+tidySentences$sentence[2]
+
+```
+```{r}
+
+bingnegative = get_sentiments("bing") %>% 
+  filter(sentiment == "negative")
+
+# words in each review
+wordcounts = tidyData %>%
+  group_by(index, score) %>%
+  summarize(words = n())
+
+
+# show the negative words ration of each review
+tidyData1 = tidyData %>%
+  semi_join(bingnegative) %>%
+  group_by(index, score) %>%
+  summarize(negativewords = n()) %>%
+  left_join(wordcounts, by = c("index", "score")) %>%
+  mutate(ratio = negativewords/words) %>%
+  filter(index != 0) %>%
+  top_n(1) %>%
+  ungroup()
+
+```
+
+# Song Lyric Analysis
+```{r, message=FALSE}
 if (!require("geniusR")) install.packages("geniusR")
 library(geniusR)
 if (!require("tidyverse")) install.packages("tidyverse")
 library(tidyverse)
-
-
 ```
 
 ```{r, booo}
@@ -102,7 +408,7 @@ riri_lyrics = riri_lyrics %>%
 library(tidytext)
 tidy_riri <- riri_lyrics %>%
   unnest_tokens(word, lyric) %>%
-  anti_join(stop_words)
+  anti_join(stop_words, by = "word")
 ```
 
 ```{r}
@@ -123,7 +429,6 @@ words_by_year <- tidy_riri %>%
 
 nested_words <- words_by_year %>%
   nest(-word)
-
 ```
 
 

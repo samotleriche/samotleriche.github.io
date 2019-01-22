@@ -4,16 +4,20 @@ navbar:
   title: "Tomas Leriche"
   type: inverse
   left:
-    - text: "Home"
+    - text: "About Me"
+      icon: fa-id-card-o
       href: index.html
-    - text: "Graphing"
+    - text: "Text Mining"
+      icon: fa-file-text-o
       href: web-page.html
-    - text: "wepage2"
-      href: wepage2.html
-    - text: "Data Analysis in R"
+    - text: "Interactive Plots"
+      icon: fa-book
+      href: NotebookTry.html
+    - text: "Data Analysis R"
+      icon: fa-code
       href: DataAnalysis.html
     - text: "More"
-      icon: fa-gear
+      icon: fa-navicon
       menu:
         - text: "Data Camp Projects"
         - text: "Nobel Prize Data"
@@ -22,10 +26,15 @@ navbar:
           href: NoteBookKaggleData.html
         - text: "---------"
         - text: "Data Camp Learning"
-        - text: "Interactive Plots plotly"
-          href: NotebookTry.html
+        - text: "My R Notes"
+          icon: fa-coffee
+          href: wepage2.html
         - text: "Using Keras in R"
-          href: NotebookTry.Rmd
+          href: NotebookTry2.html
+        - text: "---------"
+        - text: "Bookdown Example"
+          icon: fa-book
+          href: https://sarivera.github.io
   right:
     - icon: fa-envelope fa-lg
       href: http://github.com/samotleriche
