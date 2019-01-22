@@ -1,8 +1,8 @@
 ---
-title: "R Notebook 3"
+title: "Interactive Graphs in R"
 ---
 
-These are exercises related to the _Interactive Data Visualization with Plotly_ course on [DataCamp](datacamp.com)
+These are examples related to the _Interactive Data Visualization with Plotly_ course on [DataCamp](datacamp.com)
 
 ```{r, message=FALSE}
 if (!require("dplyr")) install.packages("dplyr")
@@ -238,6 +238,24 @@ plot_geo(locationmode = 'USA-states') %>%
     locations = ~state.abbr
   ) %>%
   layout(geo = list(scope = 'usa'))
+```
+
+
+# Interactive 3D graph
+```{r, echo = FALSE}
+kd = with(MASS::geyser, MASS::kde2d(duration, waiting, n =50))
+p = plot_ly(x = kd$x, y = kd$y, z = kd$z) %>% add_surface()
+p
+```
+# Interactive Bar Graph
+```{r, echo = FALSE}
+
+
+popdata = population[population$population > 200000000,]
+
+p <- plot_ly(popdata, x = ~population, color = ~country, type = "box")
+
+p
 ```
 
 

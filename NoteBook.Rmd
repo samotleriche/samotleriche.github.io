@@ -1,5 +1,5 @@
 ---
-title: "R Notebook"
+title: "Nobel Prize Data Analysis"
 ---
 
 _This_ is an [R Markdown](http://rmarkdown.rstudio.com). I'm using it to show some examples of work done using R.

@@ -1,18 +1,22 @@
 ---
+output:
+  html_document:
+    number_sections: false
 ---
-<img src="./profile.jpeg" style="width:25%; border:10px solid; margin-right: 20px" align="left">
+<img src="profile.jpg" style="width:25%; border:10px solid; border-color: #2196f3; margin-right: 20px" align="left">
 
-I have created this website using the R programming language. If you're like me, you had no idea that was possible (But it is!). I am using it to not only host my resume in a convenient place online, but also to make use of the [Github](www.github.com) pages to host some examples of projects I have been doing in the R programming language. Until very recently (Dec. 2018), I was working as a Graduate Research Assistant at the [University of New Mexico, Anderson School of Management](https://www.mgt.unm.edu/). I conducted research related to alternative medicine for Dr. Karen Patterson and also helped to organize the two professional development workshops in Research on Stigmatization. [OMT](https://aom.org/).
-I graduated from the [University of Puget Sound](https://www.pugetsound.edu/) with a BSc in Molecular and Cellular Biology in 2014. Then in 2016 I returned to my home state and began working toward my MSc in Information Systems and Assurance  [University of New Mexico, Anderson School of Management](https://msisa.mgt.unm.edu/default.asp?dd=masters), where I worked as a Graduate Research Assistant until graduating in Dec. 2018. My focus during my master's was on databases and data analysis, two subjects that had been an interest of mine since the last couple years of my Undergraduate degree. 
+# About Me
+<span style="color:green;font-family: 'Times'; font-size: 20px;"> **I**</span> created this website using the **R** programming language. If you're like me, you had no idea that was possible (But it is!). I'm using it to host my résumé in a convenient place online and also to make use of [Github](www.github.com) Pages to host some examples of projects I have been doing in the R programming language. Until recently (Graduated Dec. 2018), I was working as a Graduate Research Assistant at the **[University of New Mexico, Anderson School of Management](https://www.mgt.unm.edu/)**. I conducted research related to alternative medicine for Dr. Karen Patterson and also helped to organize two professional development workshops in Research on Stigmatization [(Academy of Management)](https://aom.org/).
 
+<span style="color:green;font-family: 'Times'; font-size: 20px;"> **I**</span> graduated from the [University of Puget Sound](https://www.pugetsound.edu/) with a BSc in Molecular and Cellular Biology in 2014. Afterwards, I worked in the medical field as an EMT-B before returned to my home state to begin working toward my MSc in Information Systems and Assurance  [University of New Mexico, Anderson School of Management](https://msisa.mgt.unm.edu/default.asp?dd=masters). I worked as a Graduate Research Assistant until graduating in Dec. 2018. My concentrations during my master's were databases and data analysis.
 
-My Resume is available [here](files/Z.pdf).
+My current interests include programming in **R** (and secondly in **Python**), **iOS** development, and staying up-to-date on the latest in **machine learning** and data analysis in general.
 
-```{r include=FALSE}
+# Résumé
 
-```
+My résumé is available <span style="color:green;font-family: 'Times'; font-size: 20px;"> [Here](files/Z.pdf)</span>.
 
-```{r}
+```{r, include=FALSE}
 #rmarkdown::render_site()
 if (!require("leaflet")) install.packages("leaflet")
 library(leaflet)
@@ -24,146 +28,23 @@ if (!require("sqldf")) install.packages("sqldf")
 library(sqldf)
 ```
 
+ * Map made in R showing UNM interactive map.
 ```{r}
-library(plotly)
-```
-
-```{r}
-library(ggplot2)
-
-# This example uses the ChickWeight dataset, which comes with ggplot2
-# First plot
-p1 <- ggplot(ChickWeight, aes(x=Time, y=weight, colour=Diet, group=Chick)) +
-    geom_line() +
-    ggtitle("Growth curve for individual chicks")
-
-# Second plot
-p2 <- ggplot(ChickWeight, aes(x=Time, y=weight, colour=Diet)) +
-    geom_point(alpha=.3) +
-    geom_smooth(alpha=.2, size=1) +
-    ggtitle("Fitted growth curve per diet")
-
-# Third plot
-p3 <- ggplot(subset(ChickWeight, Time==21), aes(x=weight, colour=Diet)) +
-    geom_density() +
-    ggtitle("Final weight, by diet")
-
-# Fourth plot
-p4 <- ggplot(subset(ChickWeight, Time==21), aes(x=weight, fill=Diet)) +
-    geom_histogram(colour="black", binwidth=50) +
-    facet_grid(Diet ~ .) +
-    ggtitle("Final weight, by diet") +
-    theme(legend.position="none")        # No legend (redundant in this graph)
-```
-
-
-```{r include=FALSE}
-# Multiple plot function
-#
-# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
-# - cols:   Number of columns in layout
-# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
-#
-# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-# then plot 1 will go in the upper left, 2 will go in the upper right, and
-# 3 will go all the way across the bottom.
-#
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  library(grid)
-
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-
-  numPlots = length(plots)
-
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                    ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-
- if (numPlots==1) {
-    print(plots[[1]])
-
-  } else {
-    # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
-```
-
-```{r}
-multiplot(p1, p2, p3, p4, cols=2)
-#> `geom_smooth()` using method = 'loess'
-```
-
-```{r, echo=FALSE}
-
-p <- ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
-            geom_bar(position = "dodge")
-ggplotly(p)
-```
-```{r}
-mtcars
-```
-
-```{r, echo=FALSE}
-p = ggplot(diamonds, aes(x=price)) + 
-    geom_density(aes(fill=color), alpha = 0.5) +
-    ggtitle("Kernel Density by Group")
-
-ggplotly(p)
-```
-
-```{r, echo = FALSE}
-kd = with(MASS::geyser, MASS::kde2d(duration, waiting, n =50))
-p = plot_ly(x = kd$x, y = kd$y, z = kd$z) %>% add_surface()
-p
-```
-```{r, echo = FALSE}
-
-
-popdata = population[population$population > 200000000,]
-
-p <- plot_ly(popdata, x = ~population, color = ~country, type = "box")
-
-p
-```
-
-```{r}
-library(leaflet)
-```
-
-```{r, echo=FALSE}
+# Here is some R code to make an interactive map view.
 rand_lng <- function(n = 2) rnorm(n, -106.6197812, .005)
 rand_lat <- function(n = 2) rnorm(n, 35.0863187, .005)
-
 x = rand_lng()
 y = rand_lat()
-
 Rlogo <- file.path("imgs","unmlogo.jpeg")
 m <- leaflet() %>% addTiles()
 # a map with the default OSM tile layer
 m %>% fitBounds(0, 40, 10, 50) %>%
       setView(-106.6197812, 35.0853187, zoom = 16) %>%
       addPopups(-106.6197812, 35.0863187, "Here is the <b>Anderson School of Management</b>, UNM") %>%
-      addPopups(x, y, "Random popups") %>%
+      addPopups(x, y, "htmlwidget example") %>%
       addMarkers(x, y) %>%
       addMarkers(
-              x, y, popup = paste("A random letter", sample(LETTERS, 10))
+              x, y, popup = paste("...with leaflet package", sample(LETTERS, 10))
             ) %>% 
       addMarkers(
   -106.6180812, 35.0843187, icon = list(
@@ -173,43 +54,11 @@ m %>% fitBounds(0, 40, 10, 50) %>%
   addCircles(x, y, radius = runif(2, 2, 75)) %>%
   addPolylines(x, y) %>%
   clearBounds()
-  
-
-
 ```
 
-```{r, include=FALSE}
-if (!require("reticulate")) install.packages("reticulate")
-library(reticulate)
+# Currently Learning
 
+* https://www.datacamp.com/community/tutorials/keras-r-deep-learning
+  * https://keras.rstudio.com/
 
-```
-#Python in R.
-```{python}
-
-print(1 + 1)
-
-var = [2,5,6,3,]
-
-print(sum(var))
-
-vat = 0
-
-print(var[0:])
-
-print()
-
-```
-
-##hello
-
-
-```{r}
-5*5
-factorial(5)
-
-
-```
-
-#Header 2
 
