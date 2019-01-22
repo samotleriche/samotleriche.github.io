@@ -386,7 +386,7 @@ div.tocify {
     </li>
     <li class="divider"></li>
     <li>
-      <a href="https://sarivera.github.io">
+      <a href="https://cassarivera.github.io">
         <span class="fa fa-book"></span>
          
         Bookdown Example
@@ -431,7 +431,7 @@ div.tocify {
 
 <div id="text-analysis" class="section level1">
 <h1><span class="header-section-number">1</span> Text Analysis</h1>
-<p>Some of my favorite areas of data analysis are <strong>text mining</strong> and <strong>sentiment analysis</strong>. I included work I did for an assignemnt in a graduate level course I took during my Master’s (basically ch.2 material of <a href="https://www.tidytextmining.com/">Text Mining with R</a>. We would eventually work through the entire book and we also conducted the analysis using SAS. I also included some other examples.</p>
+<p>Some of my favorite areas of data analysis are <strong>text mining</strong> and <strong>sentiment analysis</strong>. I included work I did for an assignemnt in a graduate level course I took during my Master’s (basically ch.2 material of <a href="https://www.tidytextmining.com/">Text Mining with R</a>). We would eventually work through the entire book and we also conducted the analysis using SAS. I also included some other examples.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)</span>
 <span class="co">#install.packages(&quot;devtools&quot;)</span>
 
@@ -703,10 +703,9 @@ countBing =<span class="st"> </span>tidyData <span class="op">%&gt;%</span>
 
 custom_stop_words =<span class="st"> </span><span class="kw">bind_rows</span>(<span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;plot&quot;</span>,<span class="st">&quot;br&quot;</span>), 
                                           <span class="dt">lexicon =</span> <span class="kw">c</span>(<span class="st">&quot;custom&quot;</span>)), 
-                               stop_words)</code></pre></div>
-<pre><code>## Warning: `data_frame()` is deprecated, use `tibble()`.
-## This warning is displayed once per session.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># we can remove br in this fashion</span>
+                               stop_words)
+
+<span class="co"># we can remove br in this fashion</span>
 
 
 custom_stop_words</code></pre></div>
@@ -719,14 +718,8 @@ custom_stop_words</code></pre></div>
 <div id="word-cloud" class="section level1">
 <h1><span class="header-section-number">11</span> Word Cloud</h1>
 <p>Word cloud for top 100 words in all our 111,111 reviews.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;wordcloud&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;wordcloud&quot;</span>)</code></pre></div>
-<pre><code>## Loading required package: wordcloud</code></pre>
-<pre><code>## 
-## Attaching package: &#39;wordcloud&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:gplots&#39;:
-## 
-##     textplot</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(wordcloud)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;wordcloud&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;wordcloud&quot;</span>)
+<span class="kw">library</span>(wordcloud)
 
 tidyData <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">anti_join</span>(custom_stop_words) <span class="op">%&gt;%</span>
@@ -738,14 +731,9 @@ tidyData <span class="op">%&gt;%</span>
 <div id="word-cloud-2" class="section level1">
 <h1><span class="header-section-number">12</span> Word Cloud 2</h1>
 <p>Using a different word cloud library.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;reshape2&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;reshape2&quot;</span>)</code></pre></div>
-<pre><code>## Loading required package: reshape2</code></pre>
-<pre><code>## 
-## Attaching package: &#39;reshape2&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
-## 
-##     smiths</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reshape2)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;reshape2&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;reshape2&quot;</span>)
+
+<span class="kw">library</span>(reshape2)
 
 tidyData <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">anti_join</span>(custom_stop_words) <span class="op">%&gt;%</span>
@@ -754,8 +742,8 @@ tidyData <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">acast</span>(word <span class="op">~</span><span class="st"> </span>sentiment, <span class="dt">value.var =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">fill=</span><span class="dv">0</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">comparison.cloud</span>(<span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;red&quot;</span>),
                    <span class="dt">max.words =</span> <span class="dv">100</span>)</code></pre></div>
-<pre><code>## Joining, by = &quot;word&quot;</code></pre>
-<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;
+## Joining, by = &quot;word&quot;</code></pre>
 <p><img src="web-page_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
 <div id="ngrams" class="section level1">
